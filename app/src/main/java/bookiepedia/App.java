@@ -3,12 +3,19 @@
  */
 package bookiepedia;
 
+import bookiepedia.dynamodb.ESPNdao;
+import org.json.JSONObject;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+
+    private static ESPNdao espn = new ESPNdao();
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        try {
+            JSONObject espnJson = espn.requestQuery();
+            System.out.println(espnJson);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
