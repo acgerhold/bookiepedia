@@ -1,5 +1,6 @@
 package bookiepedia.dynamodb;
 
+import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
@@ -11,11 +12,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +23,7 @@ public class ESPNdao {
 
     private final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC-05:00"));
     private final DateTimeFormatter mmddyy = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+    private static final String NULL_ATTRIBUTE_REPLACER = "Unavailable";
     private DataQualityScanner dataQualityScanner;
 
     public JSONObject requestQuery() throws Exception {
@@ -74,6 +74,7 @@ public class ESPNdao {
                 .map(league -> league.getString("id"))
                 .findFirst()
                 .get()
+//                .orElse(NULL_ATTRIBUTE_REPLACER)
         );
         // League Name
         schedule.setLeagueName(Stream.of(espnResponse)
@@ -82,10 +83,11 @@ public class ESPNdao {
                 .map(league -> league.getString("abbreviation"))
                 .findFirst()
                 .get()
+//                .orElse(NULL_ATTRIBUTE_REPLACER)
         );
         // Timestamp
         schedule.setTimestamp(now.toString());
-        // Schedule ID
+        // Schedule ID (ex. S46-05252024)
         schedule.setScheduleId(schedule.getLeagueId() + "-" + now.format(mmddyy));
         // Event ID List *
         schedule.setEventIdList((Stream.of(espnResponse)
@@ -103,7 +105,7 @@ public class ESPNdao {
 
         String scheduleJson = mapper.writeValueAsString(schedule);
 
-        dataQualityScanner = new DataQualityScanner(scheduleJson);
+        dataQualityScanner = new DataQualityScanner(scheduleJson, 70);
         dataQualityScanner.scan();
 
         return scheduleJson;

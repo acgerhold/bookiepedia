@@ -2,6 +2,7 @@ package bookiepedia.dynamodb.models;
 
 import java.util.List;
 
+// @DynamoDBTable(tableName = "schedule')
 public class Schedule {
 
     private String scheduleId;

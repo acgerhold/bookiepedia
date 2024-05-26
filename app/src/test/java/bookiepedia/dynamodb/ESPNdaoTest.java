@@ -1,36 +1,58 @@
 package bookiepedia.dynamodb;
 
+import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
+import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.ScheduleDataQualityException;
 import bookiepedia.dynamodb.models.Schedule;
+import bookiepedia.models.ScheduleModel;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+//import static org.mockito.Mockito.*
+
 
 public class ESPNdaoTest {
 
+//    @Mock
+    private DataQualityScanner dataQualityScanner;
+    private ESPNdao espnDAO;
+
+    @BeforeEach
+    public void setUp() {
+//        openMocks(this);
+        espnDAO = new ESPNdao();
+    }
+
     @Test
-    public void scheduleDataQuality() throws Exception {
+    public void printSchedule() throws Exception {
+        // Schedule Example - Values printed to terminal
 
-        ESPNdao espn = new ESPNdao();
-        JSONObject result = espn.requestQuery();
+        // GIVEN
+        JSONObject result = espnDAO.requestQuery();
 
+        // WHEN
+        String s = espnDAO.extractSchedule(result);
+
+        // THEN
         ObjectMapper mapper = new ObjectMapper();
+        Schedule schedule = mapper.readValue(s, Schedule.class);
 
-        String str = espn.extractSchedule(result);
-        Schedule s = mapper.readValue(str, Schedule.class);
-
-        System.out.println("Schedule Name: " + s.getScheduleName());
-        System.out.println("Schedule ID: " + s.getScheduleId());
-        System.out.println("League: " + s.getLeagueName() + s.getLeagueId());
-        System.out.println("Timestamp: " + s.getTimestamp());
+        System.out.println("Schedule Name: " + schedule.getScheduleName());
+        System.out.println("Schedule ID: " + schedule.getScheduleId());
+        System.out.println("League: " + schedule.getLeagueName());
+        System.out.println("League ID: " + schedule.getLeagueId());
+        System.out.println("Timestamp: " + schedule.getTimestamp());
+        System.out.println("Date Range: " + schedule.getDateRange());
         System.out.println("Events: ");
-        for (String event : s.getEventIdList()) {
+        for (String event : schedule.getEventIdList()) {
             System.out.println(event);
         }
     }
+
 }
