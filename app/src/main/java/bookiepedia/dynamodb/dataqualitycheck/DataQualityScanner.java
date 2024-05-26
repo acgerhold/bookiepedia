@@ -43,7 +43,7 @@ public class DataQualityScanner {
         int counter = 0;
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() == null) {
-                // entry.getValue().equals(INVALID_ATTRIBUTE) works to count "Unavailable" instead of null
+                // entry.getValue().equals(INVALID_ATTRIBUTE) works to count "Unavailable" instead of null (DataQualityScannerTest)
                 // Need to find way
                 nullAttributes.add(entry.getKey());
                 counter++;
