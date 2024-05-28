@@ -6,6 +6,7 @@ import bookiepedia.dynamodb.models.Schedule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -15,6 +16,9 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,17 +93,42 @@ public class ESPNdao {
         schedule.setTimestamp(now.toString());
         // Schedule ID (ex. S46-05252024)
         schedule.setScheduleId(schedule.getLeagueId() + "-" + now.format(mmddyy));
-        // Event ID List *
-        schedule.setEventIdList((Stream.of(espnResponse)
+        // Event ID List
+        // jsonarray(events) > jsonobject(0,1,2 ...) > getString("id")
+        List<String> eventIds = new ArrayList<>();
+        List<String> list2 = new ArrayList<>();
+
+        //AtomicInteger counter = new AtomicInteger(0);
+//        Stream.of(espnResponse)
+//                .map(response -> response.getJSONArray("events"))
+//                .forEach(events -> {
+//                    JSONObject obj = events.getJSONObject(counter.getAndIncrement());
+//                    list2.add(obj.getString("id"));
+//                });
+        AtomicInteger counter = new AtomicInteger(0);
+        Stream.of(espnResponse)
                 .map(response -> response.getJSONArray("events"))
-                .map(events -> events.getJSONObject(0)))
-                // How will I adjust this for multiple games?
-                // Couldn't figure out how to iterate through the JSONArray, events, using a stream.
-                // Have to be accessing a JSONObject first (JSONObject(0)) to call getString(key)
-                // Though, might be able to get away with calling JSONObject(0) because 'id' is always the 0th index
-                .map(event -> event.getString("id"))
-                .collect(Collectors.toList())
-        );
+                .forEach(events -> {
+                    int index = counter.getAndIncrement();
+                    if (index < events.length()) {
+                        JSONObject obj = events.getJSONObject(index);
+                        list2.add(obj.getString("id"));
+                    }
+                });
+
+        System.out.println(list2);
+
+        JSONArray list = new JSONArray(espnResponse.getJSONArray("events"));
+        System.out.println("size :" + list.length());
+        for (int i = 0; i < list.length(); i++) {
+            JSONObject obj = list.getJSONObject(i);
+            eventIds.add(obj.getString("id"));
+        }
+        schedule.setEventIdList(eventIds);
+        // Schedule Name
+        schedule.setScheduleName(NULL_ATTRIBUTE_REPLACER);
+        // Schedule Date Range
+        schedule.setDateRange(NULL_ATTRIBUTE_REPLACER);
 
         ObjectMapper mapper = new ObjectMapper();
 

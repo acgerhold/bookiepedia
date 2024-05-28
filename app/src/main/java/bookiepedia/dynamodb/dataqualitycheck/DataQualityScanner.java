@@ -42,9 +42,8 @@ public class DataQualityScanner {
         Map<String, Object> map = new JSONObject(model).toMap();
         int counter = 0;
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            if (entry.getValue() == null) {
-                // entry.getValue().equals(INVALID_ATTRIBUTE) works to count "Unavailable" instead of null (DataQualityScannerTest)
-                // Need to find way
+            if (entry.getValue().equals(INVALID_ATTRIBUTE)) {
+                // Need to add .orElse(INVALID_ATTRIBUTE) to streams
                 nullAttributes.add(entry.getKey());
                 counter++;
             }
@@ -75,4 +74,7 @@ public class DataQualityScanner {
         System.out.println(dataQualityPercentage);
     }
 
+    public double getQualityPercentage() {
+        return this.dataQualityPercentage;
+    }
 }
