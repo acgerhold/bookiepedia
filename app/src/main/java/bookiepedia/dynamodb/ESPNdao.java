@@ -141,18 +141,79 @@ public class ESPNdao {
         eventListObjects
                 .forEach(event -> {
                     Event e = new Event();
-                    e.setEventId(event.getJSONArray("competitions")
-                            .getJSONObject(0)
-                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    // ID
+                    e.setEventNameShort(event.optString("id", INVALID_ATTRIBUTE_REPLACER)
                     );
-                    e.setEventName(event.getJSONArray("competitions")
-                            .getJSONObject(0)
-                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    // Event Name
+                    e.setEventName(event.optString("name", INVALID_ATTRIBUTE_REPLACER)
                     );
+                    // Event Name (Short)
+                    e.setEventNameShort(event.optString("shortName", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Headline
                     e.setEventHeadline(event.getJSONArray("competitions")
                             .getJSONObject(0)
-                            .optString("name", INVALID_ATTRIBUTE_REPLACER)
+                            .getJSONArray("notes")
+                            .getJSONObject(0)
+                            .optString("headline", INVALID_ATTRIBUTE_REPLACER)
                     );
+                    // League ID
+                    e.setLeagueId(espnResponse.getJSONArray("leagues")
+                            .getJSONObject(0)
+                            .optString("id", INVALID_ATTRIBUTE_REPLACER));
+                    // Event Date
+                    e.setEventDate(event.optString("date", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Event Season
+                    e.setEventSeasonId(event.getJSONObject("season")
+                            .optString("type", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Home Team
+                    e.setTeamHome(event.getJSONArray("competitions")
+                            .getJSONObject(0)
+                            .getJSONArray("competitors")
+                            .getJSONObject(0)
+                            .getJSONObject("team")
+                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Away Team
+                    e.setTeamAway(event.getJSONArray("competitions")
+                            .getJSONObject(0)
+                            .getJSONArray("competitors")
+                            .getJSONObject(1)
+                            .getJSONObject("team")
+                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Event Status ID
+                    e.setEventStatusId(event.getJSONObject("status")
+                            .getJSONObject("type")
+                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Event Status
+                    e.setEventStatus(e.getEventStatusId());
+                    // IF (eventStatusId == 1) > "TBD"
+                    // IF (eventStatusId == 3) > "Final"
+                    // IF (eventStatusId == 2) > Period (Q or P) + clock + displayClock
+                    // Winning Team
+                    e.setTeamWinner(event.getJSONObject("competitions")
+                            .getJSONArray("competitors")
+                            // IF (eventStatusID == 3) >
+                            // IF (.getJSONObject(0) > .optString(winner) = true > .optString("id");
+                            .getJSONObject(0)
+                            .optString("id", INVALID_ATTRIBUTE_REPLACER)
+                    );
+                    // Home Team Score (Current or Final)
+                    e.setScoreHome(event.getJSONArray("competitions")
+                            .getJSONObject(0)
+                            .getJSONArray("competitors")
+                            // Need a way to select the home team - Using ID or homeAway?
+                            .getJSONObject(0)
+                            // .optInt will probably throw error, in String format in JSON
+                            .optInt("score", -1)
+                    );
+                    // Away Team Score (Current or Final)
+
+
 
                     try {
                         String eventJson = mapper.writeValueAsString(e);

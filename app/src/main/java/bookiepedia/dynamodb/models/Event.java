@@ -16,11 +16,7 @@ public class Event {
     // leagues > 0 > id (46)
     private String eventDate;
     // events > 0,1,2 ... > date (2024-05-22T00:00Z)
-    private String eventDateDetail;
-    // events > 0,1,2 ... > competitions > 0 > status > type > detail (Tue, May 21st at 8:00 PM EDT)
-    private String eventDateDetailShort;
-    // events > 0,1,2 ... > competitions > 0 > status > type > shortDetail (5/21 - 8:00 PM EDT)
-    private String eventSeason;
+    private String eventSeasonId;
     // events > 0,1,2 ... > season > type (3 - postseason)
     private String teamHome;
     // event > 0,1,2 ... > competitions > 0 > competitors > 0,1 > homeAway
@@ -86,16 +82,8 @@ public class Event {
         return eventDate;
     }
 
-    public String getEventDateDetail() {
-        return eventDateDetail;
-    }
-
-    public String getEventDateDetailShort() {
-        return eventDateDetailShort;
-    }
-
-    public String getEventSeason() {
-        return eventSeason;
+    public String getEventSeasonId() {
+        return eventSeasonId;
     }
 
     public String getLeagueId() {
@@ -168,16 +156,8 @@ public class Event {
         this.eventDate = eventDate;
     }
 
-    public void setEventDateDetail(String eventDateDetail) {
-        this.eventDateDetail = eventDateDetail;
-    }
-
-    public void setEventDateDetailShort(String eventDateDetailShort) {
-        this.eventDateDetailShort = eventDateDetailShort;
-    }
-
-    public void setEventSeason(String eventSeason) {
-        this.eventSeason = eventSeason;
+    public void setEventSeasonId(String eventSeason) {
+        this.eventSeasonId = eventSeason;
     }
 
     public void setTeamHome(String teamHome) {
