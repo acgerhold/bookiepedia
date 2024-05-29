@@ -16,13 +16,13 @@ public class DataQualityScanner {
     private double dataQualityPercentage;
     private final String model;
     private final double threshold;
-    private final List<String> nullAttributes;
-    private static final String INVALID_ATTRIBUTE = "Unavailable";
+    private final List<String> invalidAttributes;
+    private static final String INVALID_ATTRIBUTE_REPLACER = "Unavailable";
 
     public DataQualityScanner(String model, double threshold) {
         this.model = model;
         this.threshold = threshold;
-        this.nullAttributes = new ArrayList<>();
+        this.invalidAttributes = new ArrayList<>();
     }
 
     public void scan() {
@@ -42,9 +42,8 @@ public class DataQualityScanner {
         Map<String, Object> map = new JSONObject(model).toMap();
         int counter = 0;
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            if (entry.getValue().equals(INVALID_ATTRIBUTE)) {
-                // Need to add .orElse(INVALID_ATTRIBUTE) to streams
-                nullAttributes.add(entry.getKey());
+            if (entry.getValue().equals(INVALID_ATTRIBUTE_REPLACER) || entry.getValue().equals(-1)) {
+                invalidAttributes.add(entry.getKey());
                 counter++;
             }
         }
@@ -60,18 +59,20 @@ public class DataQualityScanner {
                 case "extractEvents":
                     throw new EventDataQualityException(String.valueOf(dataQualityPercentage));
             }
+
             throw new DataQualityException(String.valueOf(dataQualityPercentage));
         }
+
         // Print any null/invalid attributes regardless of data quality %
-        if (!nullAttributes.isEmpty()) {
-            System.out.println("Invalid Attributes: " + nullAttributes);
+        if (!invalidAttributes.isEmpty()) {
+            System.out.println("Invalid Attributes: " + invalidAttributes);
         }
 
         printQualityPercentage();
     }
 
     public void printQualityPercentage() {
-        System.out.println(dataQualityPercentage);
+        System.out.println("Data Quality - " + dataQualityPercentage + "%");
     }
 
     public double getQualityPercentage() {

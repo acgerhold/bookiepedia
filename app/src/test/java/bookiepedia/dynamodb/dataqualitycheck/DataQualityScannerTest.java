@@ -1,6 +1,5 @@
 package bookiepedia.dynamodb.dataqualitycheck;
 
-import bookiepedia.dynamodb.ESPNdao;
 import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
 import bookiepedia.models.ScheduleModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +18,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 public class DataQualityScannerTest {
 
     @Mock
-    private ESPNdao espnDAO;
+    private bookiepedia.dynamodb.espnDAO.espnDAO espnDAO;
     private DataQualityScanner dataQualityScanner;
 
     @BeforeEach

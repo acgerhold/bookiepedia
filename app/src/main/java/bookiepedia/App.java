@@ -3,14 +3,12 @@
  */
 package bookiepedia;
 
-import bookiepedia.dynamodb.ESPNdao;
+import bookiepedia.dynamodb.espnDAO.espnDAO;
 import org.json.JSONObject;
-
-import java.util.stream.Stream;
 
 public class App {
 
-    private static ESPNdao espn = new ESPNdao();
+    private static espnDAO espn = new espnDAO();
 
     public static void main(String[] args) {
         try {
