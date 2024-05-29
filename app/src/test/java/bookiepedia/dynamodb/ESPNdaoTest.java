@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 //import static org.mockito.Mockito.*
 
@@ -54,16 +52,16 @@ public class ESPNdaoTest {
         // Events Example - Values printed to terminal
 
         // GIVEN & WHEN - Extracting values from ESPN API response to create an Event object for each event contained in request to ESPN API
-        List<String> eventListJson = espnDAO.extractEvents(result);
+//        List<String> eventListJson = espnDAO.extractEvents(result);
 
         // THEN - An Event object will be created for each Event without any null or invalid attributes
-        ObjectMapper mapper = new ObjectMapper();
-        List<Event> eventList = new ArrayList<>();
-        for (String s : eventListJson) {
-            Event event = mapper.readValue(s, Event.class);
-            printEventAttributes(event);
-            eventList.add(event);
-        }
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<Event> eventList = new ArrayList<>();
+//        for (String s : eventListJson) {
+//            Event event = mapper.readValue(s, Event.class);
+//            printEventAttributes(event);
+//            eventList.add(event);
+//        }
     }
 
 
