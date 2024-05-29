@@ -6,6 +6,8 @@ package bookiepedia;
 import bookiepedia.dynamodb.ESPNdao;
 import org.json.JSONObject;
 
+import java.util.stream.Stream;
+
 public class App {
 
     private static ESPNdao espn = new ESPNdao();
@@ -13,9 +15,10 @@ public class App {
     public static void main(String[] args) {
         try {
             JSONObject espnJson = espn.requestQuery();
+
             System.out.println(espnJson);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e);
         }
     }
 }

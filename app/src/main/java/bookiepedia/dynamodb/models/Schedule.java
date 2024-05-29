@@ -2,6 +2,7 @@ package bookiepedia.dynamodb.models;
 
 import java.util.List;
 
+// @DynamoDBTable(tableName = "schedule')
 public class Schedule {
 
     private String scheduleId;
@@ -12,7 +13,7 @@ public class Schedule {
     // leagues > 0 > abbreviation
     private String timestamp;
     // day > date
-    private List<Event> eventList;
+    private List<String> eventIdList;
     // events > 0,1,2 ... > id
     private String dateRange;
     // MIN(event.date : eventlist) + "-" + MAX(event.date : eventlist)
@@ -38,8 +39,8 @@ public class Schedule {
         return timestamp;
     }
 
-    public List<Event> getEventList() {
-        return eventList;
+    public List<String> getEventIdList() {
+        return eventIdList;
     }
 
     public String getDateRange() {
@@ -68,8 +69,8 @@ public class Schedule {
         this.timestamp = timestamp;
     }
 
-    public void setEventList(List<Event> eventList) {
-        this.eventList = eventList;
+    public void setEventIdList(List<String> eventIdList) {
+        this.eventIdList = eventIdList;
     }
 
     public void setDateRange(String dateRange) {

@@ -43,7 +43,8 @@ public class Event {
     // displayClock = events > 0,1,2 ... > status > displayClock
     // clock =  events > 0,1,2 ... > status > String.valueOf(clock)
     private String teamWinner;
-    // TBD
+    // IF(winner == true) { teamWinner = id }
+    // winner = events > 0,1,2 ... > competitions > 0 > competitors > 0,1 > winner
     private Integer scoreHome;
     // IF(homeAway == "home") { scoreHome = score }
     // score = events > 0,1,2 ... > competitions > 0 > competitors > 0,1 > Integer.valueOf(score)
