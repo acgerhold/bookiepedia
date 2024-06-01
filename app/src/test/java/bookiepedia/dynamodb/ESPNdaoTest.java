@@ -5,6 +5,7 @@ import bookiepedia.dynamodb.espnDAO.espnDAO;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
+import bookiepedia.dynamodb.models.assets.Team;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
@@ -31,6 +32,22 @@ public class ESPNdaoTest {
         result = espnDAO.requestQuery();
     }
 
+
+    @Test
+    public void extractTeams_teamNotInDynamoDB_savesNewTeamObject() {
+        // Test that a new Team object is created if the Team ID is not found in DynamoDB
+    }
+
+    @Test
+    public void extractTeams_teamInDynamoDB_methodNotCalled() {
+        // Test that there are no interactions with extractTeams() if the Team ID is found in DynamoDB
+    }
+
+    @Test
+    public void extractTeams_creatingTeamObject_perfectDataQuality() {
+
+    }
+
     @Test
     public void printSchedule() throws Exception {
         // Schedule Example - Values printed to terminal
@@ -48,7 +65,7 @@ public class ESPNdaoTest {
     }
 
     @Test
-    public void printEventsInSchedule() throws Exception {
+    public void printEvents() throws Exception {
         // Events Example - Values printed to terminal
 
         // GIVEN & WHEN - Extracting values from ESPN API response to create an Event object for each event contained in request to ESPN API
@@ -64,6 +81,31 @@ public class ESPNdaoTest {
         }
         System.out.println("-");
     }
+
+    @Test
+    public void printTeams() throws Exception {
+        // Team Example - Values printed to terminal
+
+        // GIVEN & WHEN - Extracting values from ESPN API response to create a Team object not found in DynamoDB
+        JSONObject event = result.getJSONArray("events").getJSONObject(0);
+        JSONObject team = event.getJSONArray("competitions")
+                .getJSONObject(0)
+                .getJSONArray("competitors")
+                .getJSONObject(0)
+                .getJSONObject("team");
+        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
+
+        // THEN - A Team object will be created for both teams that will be stored in DynamoDB
+        ObjectMapper mapper = new ObjectMapper();
+
+        String teamJson = espnDAO.extractTeam(team, "46");
+        Team t = mapper.readValue(teamJson, Team.class);
+
+        System.out.println("Team(s)");
+        printTeamAttributes(t);
+    }
+
+
 
     // HELPERS
     public void printScheduleAttributes(Schedule schedule) {
@@ -90,6 +132,16 @@ public class ESPNdaoTest {
         System.out.println("Total Score     : " + event.getScoreTotal());
         System.out.println("Winning Team ID : " + event.getTeamWinner());
         System.out.println("Links           : " + event.getLinks() + "\n");
+    }
+    public void printTeamAttributes(Team team) {
+        System.out.println("League ID       : " + team.getLeagueId());
+        System.out.println("Team ID         : " + team.getTeamId());
+        System.out.println("Team Name       : " + team.getTeamName());
+        System.out.println("Team Name Abr   : " + team.getTeamNameAbr());
+        System.out.println("Team Logo URL   : " + team.getTeamLogo());
+        System.out.println("Team Color      : " + team.getTeamColor());
+        System.out.println("Alternate Color : " + team.getTeamAlternateColor());
+        System.out.println("Team Links      : " + team.getTeamLinks() + "\n");
     }
 
 }

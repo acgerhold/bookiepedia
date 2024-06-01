@@ -29,7 +29,7 @@ public class espnDAO {
     private static final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC-05:00"));
     private static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
     private final DateTimeFormatter mm_dd_yy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    private static final long RANGE_DAYS = 14;
+    private static final long RANGE_DAYS = 10;
     private static final String START_DATE = now.format(yyyyMMdd);
     private static final String END_DATE = now.plusDays(RANGE_DAYS).format(yyyyMMdd);
     private static final double THRESHOLD = 70;
@@ -43,7 +43,7 @@ public class espnDAO {
         // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
         // No date parameters returns schedule for current day
         String url = String.format("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=%s-%s",
-                "20240530", END_DATE);
+                START_DATE, END_DATE);
 
         // Calling the API
         URL obj = new URL(url);
@@ -157,14 +157,14 @@ public class espnDAO {
                     e.setTeamHome(homeTeam.getJSONObject("team").optString("id", INVALID_STRING_REPLACER));
 
 //                    if (dynamoDbMapper.load(e.getTeamHome() == null)) {
-//                        extractTeams(homeTeam.getJSONObject("team"));
+//                        extractTeams(homeTeam.getJSONObject("team"), e.getLeagueId());
 //                    }
 
                     // Away Team
                     e.setTeamAway(awayTeam.getJSONObject("team").optString("id", INVALID_STRING_REPLACER));
 
 //                    if (dynamoDbMapper.load(e.getTeamHome() == null)) {
-//                        extractTeams(homeTeam.getJSONObject("team"));
+//                        extractTeams(homeTeam.getJSONObject("team"), e.getLeagueId());
 //                    }
 
                     // Event Status ID
@@ -234,11 +234,43 @@ public class espnDAO {
         return eventList;
     }
 
-    public void extractTeams(JSONObject team) {
+    public String extractTeam(JSONObject team, String leagueId) throws JsonProcessingException {
 
         Team t = new Team();
 
+        // League ID
+        t.setLeagueId(leagueId);
+        // Team ID
+        t.setTeamId(team.optString("id", INVALID_STRING_REPLACER));
+        // Team Name
+        t.setTeamName(team.optString("displayName", INVALID_STRING_REPLACER));
+        // Team Name Abbreviated
+        t.setTeamNameAbr(team.optString("abbreviation", INVALID_STRING_REPLACER));
+        // Team Logo
+        t.setTeamLogo(team.optString("logo", INVALID_STRING_REPLACER));
+        // Team Color Code
+        t.setTeamColor(team.optString("color", INVALID_STRING_REPLACER));
+        // Team Alternate Color Code
+        t.setTeamAlternateColor(team.optString("alternateColor", INVALID_STRING_REPLACER));
+        // Team Links
+        JSONArray links = team.getJSONArray("links");
+        List<String> linksList = IntStream.range(0, links.length())
+                .mapToObj(links::getJSONObject)
+                .map(link -> link.optString("href", INVALID_STRING_REPLACER))
+                .collect(Collectors.toList());
+        t.setTeamLinks(linksList);
 
+        ObjectMapper mapper = new ObjectMapper();
 
+        // Create JSON of new Team object
+        // * Temporary, only for testing
+        String teamJson = mapper.writeValueAsString(t);
+
+        DataQualityScanner dataQualityScanner = new DataQualityScanner(teamJson, THRESHOLD);
+        dataQualityScanner.scan();
+
+        // * Temporary
+        return teamJson;
     }
+
 }
