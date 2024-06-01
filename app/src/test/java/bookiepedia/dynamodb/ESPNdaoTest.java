@@ -83,12 +83,12 @@ public class ESPNdaoTest {
         System.out.println("Event (short)   : " + event.getEventNameShort());
         System.out.println("Event Date      : " + event.getEventDate());
         System.out.println("Event Season ID : " + event.getEventSeasonId());
-        System.out.println("Home Team       : " + event.getTeamHome());
+        System.out.println("Home Team ID    : " + event.getTeamHome());
         System.out.println("Score           : " + event.getScoreHome());
-        System.out.println("Away Team       : " + event.getTeamAway());
+        System.out.println("Away Team ID    : " + event.getTeamAway());
         System.out.println("Score           : " + event.getScoreAway());
         System.out.println("Total Score     : " + event.getScoreTotal());
-        System.out.println("Winner          : " + event.getTeamWinner());
+        System.out.println("Winning Team ID : " + event.getTeamWinner());
         System.out.println("Links           : " + event.getLinks() + "\n");
     }
 
