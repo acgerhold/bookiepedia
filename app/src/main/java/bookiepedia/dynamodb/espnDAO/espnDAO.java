@@ -4,6 +4,7 @@ import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
+import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -271,6 +272,33 @@ public class espnDAO {
 
         // * Temporary
         return teamJson;
+    }
+
+    public String extractLeague(JSONObject league) throws JsonProcessingException {
+
+        League l = new League();
+
+        // League ID
+        l.setLeagueId(league.optString("id", INVALID_STRING_REPLACER));
+        // League Name
+        l.setLeagueName(league.optString("abbreviation", INVALID_STRING_REPLACER));
+        // Season Status ID
+        l.setSeasonStatusId(league.getJSONObject("season").getJSONObject("type").optString("id", INVALID_STRING_REPLACER));
+        // Season Status
+        l.setSeasonStatus(league.getJSONObject("season").getJSONObject("type").optString("name", INVALID_STRING_REPLACER));
+        // Season Year
+        l.setSeasonYear(league.getJSONObject("season").optString("year", INVALID_STRING_REPLACER));
+        // League Logo
+        l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String leagueJson = mapper.writeValueAsString(l);
+
+        DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
+        dataQualityScanner.scan();
+
+        return leagueJson;
     }
 
 }

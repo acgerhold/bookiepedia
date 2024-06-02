@@ -5,6 +5,7 @@ import bookiepedia.dynamodb.espnDAO.espnDAO;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
+import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -105,6 +106,25 @@ public class ESPNdaoTest {
         printTeamAttributes(t);
     }
 
+    @Test
+    public void printLeagues() throws Exception {
+        // Team Example - Values printed to terminal
+
+        // GIVEN & WHEN - Extracting values from ESPN API response to create a Team object not found in DynamoDB
+        JSONObject league = result.getJSONArray("leagues").getJSONObject(0);
+
+        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
+
+        // THEN - A Team object will be created for both teams that will be stored in DynamoDB
+        ObjectMapper mapper = new ObjectMapper();
+
+        String leagueJson = espnDAO.extractLeague(league);
+        League l = mapper.readValue(leagueJson, League.class);
+
+        System.out.println("League(s)");
+        printLeagueAttributes(l);
+    }
+
 
 
     // HELPERS
@@ -142,6 +162,15 @@ public class ESPNdaoTest {
         System.out.println("Team Color      : " + team.getTeamColor());
         System.out.println("Alternate Color : " + team.getTeamAlternateColor());
         System.out.println("Team Links      : " + team.getTeamLinks() + "\n");
+    }
+
+    public void printLeagueAttributes(League league) {
+        System.out.println("League ID        : " + league.getLeagueId());
+        System.out.println("League Name      : " + league.getLeagueName());
+        System.out.println("Season Status ID : " + league.getSeasonStatusId());
+        System.out.println("Season Status    : " + league.getSeasonStatus());
+        System.out.println("Season Year      : " + league.getSeasonYear());
+        System.out.println("Season Logo      : " + league.getLeagueLogo() + "\n");
     }
 
 }

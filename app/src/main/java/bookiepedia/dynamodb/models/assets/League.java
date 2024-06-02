@@ -10,10 +10,8 @@ public class League {
     // leagues > 0 > season > type > id
     private String seasonStatus;
     // leagues > 0 > season > type > name
-    private String seasonStartDate;
-    // leagues > 0 > season > startDate
-    private String seasonEndDate;
-    // leagues > 0 > season > endDate
+    private String seasonYear;
+    // leagues > 0 > season > year
     private String leagueLogo;
     // leagues > 0 > logos > 1 > href
 
@@ -36,12 +34,8 @@ public class League {
         return seasonStatus;
     }
 
-    public String getSeasonStartDate() {
-        return seasonStartDate;
-    }
-
-    public String getSeasonEndDate() {
-        return seasonEndDate;
+    public String getSeasonYear() {
+        return seasonYear;
     }
 
     public String getLeagueLogo() {
@@ -66,13 +60,7 @@ public class League {
         this.seasonStatus = seasonStatus;
     }
 
-    public void setSeasonStartDate(String seasonStartDate) {
-        this.seasonStartDate = seasonStartDate;
-    }
-
-    public void setSeasonEndDate(String seasonEndDate) {
-        this.seasonEndDate = seasonEndDate;
-    }
+    public void setSeasonYear(String seasonYear) { this.seasonYear = seasonYear; }
 
     public void setLeagueLogo(String leagueLogo) {
         this.leagueLogo = leagueLogo;
