@@ -1,5 +1,6 @@
 package bookiepedia.dynamodb.models;
 
+import java.util.List;
 import java.util.Map;
 
 public class Event {
@@ -16,11 +17,7 @@ public class Event {
     // leagues > 0 > id (46)
     private String eventDate;
     // events > 0,1,2 ... > date (2024-05-22T00:00Z)
-    private String eventDateDetail;
-    // events > 0,1,2 ... > competitions > 0 > status > type > detail (Tue, May 21st at 8:00 PM EDT)
-    private String eventDateDetailShort;
-    // events > 0,1,2 ... > competitions > 0 > status > type > shortDetail (5/21 - 8:00 PM EDT)
-    private String eventSeason;
+    private String eventSeasonId;
     // events > 0,1,2 ... > season > type (3 - postseason)
     private String teamHome;
     // event > 0,1,2 ... > competitions > 0 > competitors > 0,1 > homeAway
@@ -53,14 +50,14 @@ public class Event {
     // score = events > 0,1,2 ... > competitions > 0 > competitors > 0,1 > Integer.valueOf(score)
     private Integer scoreTotal;
     // scoreTotal = scoreHome + scoreAway;
-    private Map<String, Map<String, Integer>> currentOdds;
+    //private Map<String, Map<String, Integer>> currentOdds;
     // API includes some current odds/projections from ESPN Bet:
     // odds/projections for totals, projections for spreads, neither for moneyline ??
     // Can use this as a placeholder before implementing The Odds API
     // May be able to blend the two API responses, similar format, ID's for bookmakers
     // Will later be refactored to an "Odds" object/model
     // TBD
-    private String gamecastLink;
+    private List<String> links;
     // Can I embed these links instead of opening new tab?
     // events > 0,1,2 ... > links > 0 > href ("https://www.espn.com/nba…401671998/pacers-celtics")
 
@@ -86,16 +83,8 @@ public class Event {
         return eventDate;
     }
 
-    public String getEventDateDetail() {
-        return eventDateDetail;
-    }
-
-    public String getEventDateDetailShort() {
-        return eventDateDetailShort;
-    }
-
-    public String getEventSeason() {
-        return eventSeason;
+    public String getEventSeasonId() {
+        return eventSeasonId;
     }
 
     public String getLeagueId() {
@@ -134,12 +123,12 @@ public class Event {
         return scoreTotal;
     }
 
-    public Map<String, Map<String, Integer>> getCurrentOdds() {
-        return currentOdds;
-    }
+    //public Map<String, Map<String, Integer>> getCurrentOdds() {
+        //return currentOdds;
+    //}
 
-    public String getGamecastLink() {
-        return gamecastLink;
+    public List<String> getLinks() {
+        return links;
     }
 
     // SETTERS
@@ -168,16 +157,8 @@ public class Event {
         this.eventDate = eventDate;
     }
 
-    public void setEventDateDetail(String eventDateDetail) {
-        this.eventDateDetail = eventDateDetail;
-    }
-
-    public void setEventDateDetailShort(String eventDateDetailShort) {
-        this.eventDateDetailShort = eventDateDetailShort;
-    }
-
-    public void setEventSeason(String eventSeason) {
-        this.eventSeason = eventSeason;
+    public void setEventSeasonId(String eventSeason) {
+        this.eventSeasonId = eventSeason;
     }
 
     public void setTeamHome(String teamHome) {
@@ -212,11 +193,11 @@ public class Event {
         this.scoreTotal = scoreTotal;
     }
 
-    public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
-        this.currentOdds = currentOdds;
-    }
+    //public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
+        //this.currentOdds = currentOdds;
+    //}
 
-    public void setGamecastLink(String gamecastLink) {
-        this.gamecastLink = gamecastLink;
+    public void setLinks(List<String> links) {
+        this.links = links;
     }
 }

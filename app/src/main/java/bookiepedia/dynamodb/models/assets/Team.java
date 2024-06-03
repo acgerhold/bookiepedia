@@ -1,5 +1,7 @@
 package bookiepedia.dynamodb.models.assets;
 
+import java.util.List;
+
 public class Team {
 
     private String leagueId;
@@ -14,10 +16,8 @@ public class Team {
     // events > 0/1 > competitions > competitors > 0/1 > team > logo
     private String teamColor;
     // events > 0/1 > competitions > competitors > 0/1 > team > abbreviation
-    private String teamRosterLink;
-    // events > 0/1 > competitions > competitors > 0/1 > team > links > 1 > href
-    private String teamScheduleLink;
-    // events > 0/1 > competitions > competitors > 0/1 > team > links > 3 > href
+    private String teamAlternateColor;
+    private List<String> teamLinks;
 
 
     // GETTERS
@@ -46,12 +46,12 @@ public class Team {
         return teamColor;
     }
 
-    public String getTeamRosterLink() {
-        return teamRosterLink;
+    public String getTeamAlternateColor() {
+        return teamAlternateColor;
     }
 
-    public String getTeamScheduleLink() {
-        return teamScheduleLink;
+    public List<String> getTeamLinks() {
+        return teamLinks;
     }
 
     // SETTERS
@@ -80,11 +80,11 @@ public class Team {
         this.teamColor = teamColor;
     }
 
-    public void setTeamRosterLink(String teamRosterLink) {
-        this.teamRosterLink = teamRosterLink;
+    public void setTeamAlternateColor(String teamAlternateColor) {
+        this.teamAlternateColor = teamAlternateColor;
     }
 
-    public void setTeamScheduleLink(String teamScheduleLink) {
-        this.teamScheduleLink = teamScheduleLink;
+    public void setTeamLinks(List<String> teamLinks) {
+        this.teamLinks = teamLinks;
     }
 }
