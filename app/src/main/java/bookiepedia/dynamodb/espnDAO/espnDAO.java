@@ -1,6 +1,7 @@
 package bookiepedia.dynamodb.espnDAO;
 
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
+import bookiepedia.dynamodb.espnDAO.constants.espnRequestConstants;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
@@ -16,26 +17,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 public class espnDAO {
 
-    private static final LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC-05:00"));
-    private static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-    private final DateTimeFormatter mm_dd_yy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    private static final long RANGE_DAYS = 10;
-    private static final String START_DATE = now.format(yyyyMMdd);
-    private static final String END_DATE = now.plusDays(RANGE_DAYS).format(yyyyMMdd);
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
-
 
     public JSONObject requestQuery() throws IOException {
 
@@ -44,7 +34,7 @@ public class espnDAO {
         // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
         // No date parameters returns schedule for current day
         String url = String.format("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=%s-%s",
-                START_DATE, END_DATE);
+                espnRequestConstants.START_DATE, espnRequestConstants.END_DATE);
 
         // Calling the API
         URL obj = new URL(url);
@@ -72,8 +62,7 @@ public class espnDAO {
         return new JSONObject(response.toString());
     }
 
-    // Decide how to handle the JsonProcessingExceptions
-    public String extractSchedule(JSONObject espnResponse) throws JsonProcessingException {
+    public String extractSchedule(JSONObject espnResponse) {
 
         Schedule schedule = new Schedule();
 
@@ -92,25 +81,30 @@ public class espnDAO {
                         .collect(Collectors.toList()));
         // Schedule ID
         schedule.setScheduleId(String.format("%s-%s-%s",
-                schedule.getLeagueId(), START_DATE, END_DATE));
+                schedule.getLeagueId(), espnRequestConstants.START_DATE, espnRequestConstants.END_DATE));
         // Schedule Name
         schedule.setScheduleName(String.format("%s Events: %s - %s",
-                schedule.getLeagueName(), START_DATE, END_DATE));
+                schedule.getLeagueName(), espnRequestConstants.START_DATE, espnRequestConstants.END_DATE));
         // Schedule Date Range
         schedule.setDateRange(String.format("%s-%s",
-                START_DATE, END_DATE));
+                espnRequestConstants.START_DATE, espnRequestConstants.END_DATE));
         // Schedule Timestamp
         schedule.setTimestamp(
-                now.toString());
+                espnRequestConstants.NOW.toString());
 
         ObjectMapper mapper = new ObjectMapper();
+        String scheduleJson;
 
-        // Create JSON of new Schedule object
-        String scheduleJson = mapper.writeValueAsString(schedule);
+        try {
+            // Create JSON of new Schedule object
+            scheduleJson = mapper.writeValueAsString(schedule);
 
-        // Scan Schedule JSON's data quality
-        DataQualityScanner dataQualityScanner = new DataQualityScanner(scheduleJson, THRESHOLD);
-        dataQualityScanner.scan();
+            // Scan Schedule JSON's data quality
+            DataQualityScanner dataQualityScanner = new DataQualityScanner(scheduleJson, THRESHOLD);
+            dataQualityScanner.scan();
+        } catch (JsonProcessingException jpe) {
+            throw new RuntimeException(jpe);
+        }
 
         return scheduleJson;
     }
@@ -125,7 +119,7 @@ public class espnDAO {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        // Lists that will contain each created Event's JSON and their data quality scores
+        // List that will contain each created Event's JSON and their data quality scores
         List<String> eventList = new ArrayList<>();
         List<Double> dataQualityScores = new ArrayList<>();
         // Stream the list of Event JSONObjects to extract data for Event object attributes
@@ -134,6 +128,7 @@ public class espnDAO {
 
                     Event e = new Event();
 
+                    // Organize different collections of data within response
                     JSONObject competition = event.getJSONArray("competitions").getJSONObject(0);
                     JSONArray competitors = competition.getJSONArray("competitors");
                     JSONObject homeTeam = competitors.getJSONObject(0);
@@ -157,6 +152,7 @@ public class espnDAO {
                     // Home Team
                     e.setTeamHome(homeTeam.getJSONObject("team").optString("id", INVALID_STRING_REPLACER));
 
+//                    This is where I will likely use extractTeams()
 //                    if (dynamoDbMapper.load(e.getTeamHome() == null)) {
 //                        extractTeams(homeTeam.getJSONObject("team"), e.getLeagueId());
 //                    }
@@ -235,7 +231,9 @@ public class espnDAO {
         return eventList;
     }
 
-    public String extractTeam(JSONObject team, String leagueId) throws JsonProcessingException {
+    public String extractTeam(JSONObject team, String leagueId) {
+        // This will likely end up as a void method and be called within extractEvents() @Ln156
+        // Takes extra parameter 'leagueId' that will be available in extractEvents()
 
         Team t = new Team();
 
@@ -262,41 +260,57 @@ public class espnDAO {
         t.setTeamLinks(linksList);
 
         ObjectMapper mapper = new ObjectMapper();
+        String teamJson;
 
-        // Create JSON of new Team object
-        // * Temporary, only for testing
-        String teamJson = mapper.writeValueAsString(t);
+        try {
+            // Create JSON of new Team object
+            // * Temporary, only for testing
+            teamJson = mapper.writeValueAsString(t);
 
-        DataQualityScanner dataQualityScanner = new DataQualityScanner(teamJson, THRESHOLD);
-        dataQualityScanner.scan();
+            // Scan for data quality
+            DataQualityScanner dataQualityScanner = new DataQualityScanner(teamJson, THRESHOLD);
+            dataQualityScanner.scan();
+        } catch (JsonProcessingException jpe) {
+            throw new RuntimeException(jpe);
+        }
 
         // * Temporary
         return teamJson;
     }
 
-    public String extractLeague(JSONObject league) throws JsonProcessingException {
+    public String extractLeague(JSONObject league) {
+        // This method will also probably end up as a void method that gets called in extractSchedule()
 
         League l = new League();
+
+        JSONObject season = league.getJSONObject("season");
 
         // League ID
         l.setLeagueId(league.optString("id", INVALID_STRING_REPLACER));
         // League Name
         l.setLeagueName(league.optString("abbreviation", INVALID_STRING_REPLACER));
         // Season Status ID
-        l.setSeasonStatusId(league.getJSONObject("season").getJSONObject("type").optString("id", INVALID_STRING_REPLACER));
+        l.setSeasonStatusId(season.getJSONObject("type").optString("id", INVALID_STRING_REPLACER));
         // Season Status
-        l.setSeasonStatus(league.getJSONObject("season").getJSONObject("type").optString("name", INVALID_STRING_REPLACER));
+        l.setSeasonStatus(season.getJSONObject("type").optString("name", INVALID_STRING_REPLACER));
         // Season Year
-        l.setSeasonYear(league.getJSONObject("season").optString("year", INVALID_STRING_REPLACER));
+        l.setSeasonYear(season.optString("year", INVALID_STRING_REPLACER));
         // League Logo
         l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
 
         ObjectMapper mapper = new ObjectMapper();
+        String leagueJson;
 
-        String leagueJson = mapper.writeValueAsString(l);
+        try {
+            // Create JSON of new League object
+            leagueJson = mapper.writeValueAsString(l);
 
-        DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
-        dataQualityScanner.scan();
+            // Scan for data quality
+            DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
+            dataQualityScanner.scan();
+        } catch (JsonProcessingException jpe) {
+            throw new RuntimeException(jpe);
+        }
 
         return leagueJson;
     }

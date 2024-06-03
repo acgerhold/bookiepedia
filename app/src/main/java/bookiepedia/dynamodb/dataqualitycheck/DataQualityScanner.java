@@ -2,7 +2,9 @@ package bookiepedia.dynamodb.dataqualitycheck;
 
 import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
 import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.EventDataQualityException;
+import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.LeagueDataQualityException;
 import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.ScheduleDataQualityException;
+import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.TeamDataQualityException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -58,6 +60,10 @@ public class DataQualityScanner {
                     throw new ScheduleDataQualityException(String.valueOf(dataQualityPercentage));
                 case "extractEvents":
                     throw new EventDataQualityException(String.valueOf(dataQualityPercentage));
+                case "extractTeam":
+                    throw new TeamDataQualityException(String.valueOf(dataQualityPercentage));
+                case "extractLeague":
+                    throw new LeagueDataQualityException(String.valueOf(dataQualityPercentage));
             }
 
             throw new DataQualityException(String.valueOf(dataQualityPercentage));

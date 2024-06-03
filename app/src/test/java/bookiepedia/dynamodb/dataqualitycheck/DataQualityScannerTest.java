@@ -2,7 +2,6 @@ package bookiepedia.dynamodb.dataqualitycheck;
 
 import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
 import bookiepedia.models.ScheduleModel;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ public class DataQualityScannerTest {
 
 
     @Test
-    public void extractSchedule_lowDataQuality_throwsScheduleDataQualityException() throws JsonProcessingException {
+    public void extractSchedule_lowDataQuality_throwsScheduleDataQualityException() {
 
         // GIVEN - A Schedule JSONObject with 71% data quality and 75% threshold
         double threshold = 75.00;
@@ -56,7 +55,7 @@ public class DataQualityScannerTest {
     }
 
     @Test
-    public void extractSchedule_highDataQuality_returnsSchedule() throws JsonProcessingException {
+    public void extractSchedule_highDataQuality_returnsScheduleJson() {
 
         // GIVEN - A Schedule JSONObject with 100% data quality and 75% threshold
         double threshold = 75.00;
@@ -80,5 +79,35 @@ public class DataQualityScannerTest {
 
         // THEN - The schedule will have 100% data quality and no invalid attributes
         assertEquals(100.0, dataQualityScanner.getQualityPercentage());
+    }
+
+    @Test
+    public void extractEvents_lowDataQuality_throwsEventDataQualityException() {
+
+    }
+
+    @Test
+    public void extractEvents_highDataQuality_returnsListOfEventJSONs() {
+
+    }
+
+    @Test
+    public void extractTeams_lowDataQuality_throwsTeamDataQualityException() {
+
+    }
+
+    @Test
+    public void extractTeams_highDataQuality_returnsTeamJSON() {
+
+    }
+
+    @Test
+    public void extractLeagues_lowDataQuality_throwsLeagueDataQualityException() {
+
+    }
+
+    @Test
+    public void extractLeagues_highDataQuality_returnsLeagueJSON() {
+
     }
 }
