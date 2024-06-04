@@ -1,4 +1,4 @@
-package bookiepedia.models;
+package bookiepedia.models.assets;
 
 import java.util.List;
 

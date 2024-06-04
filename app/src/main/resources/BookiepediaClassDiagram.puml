@@ -5,104 +5,104 @@ package dynamodb {
 
     package dataqualitycheck {
         class DataQualityScanner {
-            - double dataQualityPercentage
-            - final String model
-            - final double threshold
-            - final List<String> invalidAttributes
-            - static final String INVALID_ATTRIBUTE_REPLACER = "Unavailable"
+            - dataQualityPercentage : double
+            - model : String
+            - threshold : double
+            - invalidAttributes : List<String>
+            - static final INVALID_ATTRIBUTE_REPLACER : String
 
-            + DataQualityScanner(String model, double threshold)
-            + scan(): void
-            + printQualityPercentage(): void
-            + getQualityPercentage(): double
+            + DataQualityScanner(model : String, threshold : double) : void
+            + scan() : void
+            + printQualityPercentage() : void
+            + getQualityPercentage() : double
         }
     }
 
     package espnDAO {
         class espnDAO {
-            - static double THRESHOLD
-            - static String INVALID_STRING_REPLACER
+            - static THRESHOLD : double
+            - static INVALID_STRING_REPLACER : String
 
-            + JSONObject requestQuery() throws IOException
-            + String extractSchedule(JSONObject espnResponse)
-            + List<String> extractEvents(JSONObject espnResponse)
-            + String extractTeam(JSONObject team, String leagueId)
-            + String extractLeague(JSONObject league)
+            + requestQuery() throws IOException : JSONObject
+            + extractSchedule(espnResponse : JSONObject) : String
+            + extractEvents(espnResponse : JSONObject) : List<String>
+            + extractTeam(team : JSONObject, leagueId : String) : String
+            + extractLeague(league : JSONObject) : String
         }
 
         package constants {
             class espnRequestConstants {
-                + static final String NBA
-                + static final String NHL
-                + static final DateTimeFormatter yyyyMMdd
-                + static final DateTimeFormatter mm_dd_yy
-                + static final LocalDateTime NOW
-                + static final String START_DATE
-                + static final long RANGE_DAYS
-                + static final String END_DATE
+                + static final NBA : String
+                + static final NHL : String
+                + static final yyyyMMdd : DateTimeFormatter
+                + static final mm_dd_yy : DateTimeFormatter
+                + static final NOW : LocalDateTime
+                + static final START_DATE : String
+                + static final RANGE_DAYS : long
+                + static final END_DATE : String
             }
         }
     }
 
     package models {
         class Event {
-            - String eventId
-            - String eventName
-            - String eventNameShort
-            - String eventHeadline
-            - String leagueId
-            - String eventDate
-            - String eventSeasonId
-            - String teamHome
-            - String teamAway
-            - String eventStatusId
-            - String eventStatus
-            - String teamWinner
-            - Integer scoreHome
-            - Integer scoreAway
-            - Integer scoreTotal
-            - List<String> links
+            - eventId : String
+            - eventName : String
+            - eventNameShort : String
+            - eventHeadline : String
+            - leagueId : String
+            - eventDate : String
+            - eventSeasonId : String
+            - teamHome : String
+            - teamAway : String
+            - eventStatusId : String
+            - eventStatus : String
+            - teamWinner : String
+            - scoreHome : Integer
+            - scoreAway : Integer
+            - scoreTotal : Integer
+            - links : List<String>
 
-            + String getField()
-            + void setField(String value)
+            + getField() : Object
+            + setField(value : String) : void
         }
         class Schedule {
-            - String scheduleId
-            - String leagueId
-            - String leagueName
-            - String timestamp
-            - List<String> eventIdList
-            - String dateRange
-            - String scheduleName
+            - scheduleId : String
+            - leagueId : String
+            - leagueName : String
+            - timestamp : String
+            - eventIdList : List<String>
+            - dateRange : String
+            - scheduleName : String
 
-            + String getField()
-            + void setField(String value)
+            + getField() : Object
+            + setField(value : String) : void
         }
 
         package assets {
             class League {
-                - String leagueId
-                - String leagueName
-                - String seasonStatusId
-                - String seasonStatus
-                - String seasonYear
-                - String leagueLogo
+                - leagueId : String
+                - leagueName : String
+                - seasonStatusId : String
+                - seasonStatus : String
+                - seasonYear : String
+                - leagueLogo : String
 
-                + String getField()
-                + void setField(String value)
+                + getField() : Object
+                + setField(value : String) : void
             }
             class Team {
-                - String leagueId
-                - String teamId
-                - String teamName
-                - String teamNameAbr
-                - String teamLogo
-                - String teamColor
-                - String teamAlternateColor
-                - List<String> teamLinks
+                - leagueId : String
+                - teamId : String
+                - teamName : String
+                - teamNameAbr : String
+                - teamLogo : String
+                - teamColor : String
+                - teamAlternateColor : String
+                - teamLinks : List<String>
 
-                + String getField()
-                + void setField(String value)
+                + getField() : Object
+                + setField(value : String) : void
             }
         }
     }
@@ -136,16 +136,67 @@ package exceptions {
 package models {
 
     class ScheduleModel {
-        - final String scheduleId
-        - final String leagueId
-        - final String leagueName
-        - final String timestamp
-        - final List<String> eventIdList
-        - final String dateRange
-        - final String scheduleName
+        - scheduleId : String
+        - leagueId : String
+        - leagueName : String
+        - timestamp : String
+        - eventIdList : List<String>
+        - dateRange : String
+        - scheduleName : String
 
-        + String getField()
-        + static Builder builder()
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    class EventModel {
+        - eventId : String
+        - eventName : String
+        - eventNameShort : String
+        - eventHeadline : String
+        - leagueId : String
+        - eventDate : String
+        - eventSeasonId : String
+        - teamHome : String
+        - teamAway : String
+        - eventStatusId : String
+        - eventStatus : String
+        - teamWinner : String
+        - scoreHome : Integer
+        - scoreAway : Integer
+        - scoreTotal : Integer
+        - links : List<String>
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    package assets {
+
+        class LeagueModel {
+            - leagueId : String
+            - leagueName : String
+            - seasonStatusId : String
+            - seasonStatus : String
+            - seasonYear : String
+            - leagueLogo : String
+
+            + getField() : Object
+            + builder() : Builder
+        }
+
+        class TeamModel {
+            - leagueId : String
+            - teamId : String
+            - teamName : String
+            - teamNameAbr : String
+            - teamLogo : String
+            - teamColor : String
+            - teamAlternateColor : String
+            - teamLinks : List<String>
+
+            + getField() : Object
+            + builder() : Builder
+        }
     }
 }
 
@@ -156,18 +207,19 @@ dynamodb.espnDAO.espnDAO -> dynamodb.models.Event
 dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.Team
 dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.League
 
-dynamodb.models.Schedule -- dynamodb.models.Event
-dynamodb.models.Schedule --> dynamodb.models.assets.League
-dynamodb.models.assets.Team -- dynamodb.models.assets.League
+
 
 dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
-dynamodb.dataqualitycheck.exceptions.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
-dynamodb.dataqualitycheck.exceptions.DataQualityException --> exceptions.dataqualityexception.modelexceptions.EventDataQualityException
-dynamodb.dataqualitycheck.exceptions.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
-dynamodb.dataqualitycheck.exceptions.DataQualityException --> exceptions.dataqualityexception.modelexceptions.TeamDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.EventDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.TeamDataQualityException
 
 models.ScheduleModel -- dynamodb.models.Schedule
+models.EventModel -- dynamodb.models.Event
+models.assets.LeagueModel -- dynamodb.models.assets.League
+models.assets.TeamModel -- dynamodb.models.assets.Team
 
 @enduml
