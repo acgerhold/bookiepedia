@@ -66,6 +66,7 @@ package dynamodb {
             + getField() : Object
             + setField(value : String) : void
         }
+
         class Schedule {
             - scheduleId : String
             - leagueId : String
@@ -79,7 +80,37 @@ package dynamodb {
             + setField(value : String) : void
         }
 
+        class Bet {
+            - betId : String
+            - userId : String
+            - eventId : String
+            - amountWagered : BigDecimal
+            - odds : BigDecimal
+            - teamBetOn : String
+            - projection : BigDecimal
+            - bettingMarket : String
+            - bookmakerId : String
+            - datePlaced : String
+            - gainOrLoss : BigDecimal
+            - teamHome : String
+            - scoreHome : Integer
+            - teamHomeLogo : String
+            - teamAway : String
+            - scoreAway : Integer
+            - teamAwayLogo : String
+            - teamWinner : String
+            - scoreTotal : Integer
+            - eventName : String
+            - eventHeadline : String
+            - eventDate : String
+            - eventStatus : String
+
+            + getField() : Object
+            + setField(value : String) : void
+        }
+
         package assets {
+
             class League {
                 - leagueId : String
                 - leagueName : String
@@ -91,6 +122,7 @@ package dynamodb {
                 + getField() : Object
                 + setField(value : String) : void
             }
+
             class Team {
                 - leagueId : String
                 - teamId : String
@@ -100,6 +132,42 @@ package dynamodb {
                 - teamColor : String
                 - teamAlternateColor : String
                 - teamLinks : List<String>
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+        }
+
+        package bettinghistory {
+
+            class WeeklyHistory {
+                - weeklyHistoryId : String
+                - userId : String
+                - weeklyHistoryName : String
+                - date : String
+                - weeklyBetCount : Integer
+                - weeklyAmountWagered : BigDecimal
+                - weeklyGain : BigDecimal
+                - weeklyLoss : BigDecimal
+                - weeklyBetIdList : List<String>
+                - weeklySummary : Map<String, BigDecimal>
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+
+            class YearlyHistory {
+                - yearlyHistoryId : String
+                - userId : String
+                - yearlyHistoryName : String
+                - date : String
+                - weeklyHistoryIds : List<String>
+                - yearlyBetCount : Integer
+                - yearlyAmountWagered : BigDecimal
+                - yearlyGain : BigDecimal
+                - yearlyLoss : BigDecimal
+                - yearlyBetIdList : List<String>
+                - yearlySummary : Map<String, BigDecimal>
 
                 + getField() : Object
                 + setField(value : String) : void
@@ -170,6 +238,35 @@ package models {
         + builder() : Builder
     }
 
+    class BetModel {
+        - betId : String
+        - userId : String
+        - eventId : String
+        - amountWagered : BigDecimal
+        - odds : BigDecimal
+        - teamBetOn : String
+        - projection : BigDecimal
+        - bettingMarket : String
+        - bookmakerId : String
+        - datePlaced : String
+        - gainOrLoss : BigDecimal
+        - teamHome : String
+        - scoreHome : Integer
+        - teamHomeLogo : String
+        - teamAway : String
+        - scoreAway : Integer
+        - teamAwayLogo : String
+        - teamWinner : String
+        - scoreTotal : Integer
+        - eventName : String
+        - eventHeadline : String
+        - eventDate : String
+        - eventStatus : String
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
     package assets {
 
         class LeagueModel {
@@ -197,21 +294,63 @@ package models {
             + getField() : Object
             + builder() : Builder
         }
+
+        class BookmakerModel {
+
+        }
+    }
+
+    package bettinghistory {
+
+        class WeeklyHistoryModel {
+            - weeklyHistoryId : String
+            - userId : String
+            - weeklyHistoryName : String
+            - date : String
+            - weeklyBetCount : Integer
+            - weeklyAmountWagered : BigDecimal
+            - weeklyGain : BigDecimal
+            - weeklyLoss : BigDecimal
+            - weeklyBetIdList : List<String>
+            - weeklySummary : Map<String, BigDecimal>
+
+            + getField() : Object
+            + builder() : Builder
+        }
+
+        class YearlyHistoryModel {
+            - yearlyHistoryId : String
+            - userId : String
+            - yearlyHistoryName : String
+            - date : String
+            - weeklyHistoryIds : List<String>
+            - yearlyBetCount : Integer
+            - yearlyAmountWagered : BigDecimal
+            - yearlyGain : BigDecimal
+            - yearlyLoss : BigDecimal
+            - yearlyBetIdList : List<String>
+            - yearlySummary : Map<String, BigDecimal>
+
+            + getField() : Object
+            + builder() : Builder
+        }
     }
 }
 
 dynamodb.espnDAO.espnDAO --> dynamodb.espnDAO.constants.espnRequestConstants
 
-dynamodb.espnDAO.espnDAO -> dynamodb.models.Schedule
-dynamodb.espnDAO.espnDAO -> dynamodb.models.Event
-dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.Team
-dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.League
-
-
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Bet
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.League
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.Bookmaker
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.WeeklyHistory
+dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.YearlyHistory
 
 dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
-
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
+
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.EventDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
@@ -219,7 +358,11 @@ exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualitye
 
 models.ScheduleModel -- dynamodb.models.Schedule
 models.EventModel -- dynamodb.models.Event
+models.BetModel -- dynamodb.models.Bet
 models.assets.LeagueModel -- dynamodb.models.assets.League
 models.assets.TeamModel -- dynamodb.models.assets.Team
+models.assets.BookmakerModel -- dynamodb.models.assets.Bookmaker
+models.bettinghistory.WeeklyHistoryModel -- dynamodb.models.bettinghistory.WeeklyHistory
+models.bettinghistory.YearlyHistoryModel -- dynamodb.models.bettinghistory.YearlyHistory
 
 @enduml
