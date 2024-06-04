@@ -1,0 +1,166 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package dynamodb {
+
+    package dataqualitycheck {
+        class DataQualityScanner {
+            - double dataQualityPercentage
+            - final String model
+            - final double threshold
+            - final List<String> invalidAttributes
+            - static final String INVALID_ATTRIBUTE_REPLACER = "Unavailable"
+
+            + DataQualityScanner(String model, double threshold)
+            + scan(): void
+            + printQualityPercentage(): void
+            + getQualityPercentage(): double
+        }
+
+        package exceptions {
+            class DataQualityException {
+                - dataQualityPercentage : double
+                - model : String
+                - threshold : double
+                - invalidAttributes : List<String>
+
+                + scan() : void
+                + getQualityPercentage() : double
+            }
+
+            package modelexceptions {
+                exception EventDataQualityException {}
+                exception LeagueDataQualityException {}
+                exception ScheduleDataQualityException {}
+                exception TeamDataQualityException {}
+            }
+        }
+    }
+
+    package espnDAO {
+        class espnDAO {
+            - static double THRESHOLD
+            - static String INVALID_STRING_REPLACER
+
+            + JSONObject requestQuery() throws IOException
+            + String extractSchedule(JSONObject espnResponse)
+            + List<String> extractEvents(JSONObject espnResponse)
+            + String extractTeam(JSONObject team, String leagueId)
+            + String extractLeague(JSONObject league)
+        }
+
+        package constants {
+            class espnRequestConstants {
+                + static final String NBA
+                + static final String NHL
+                + static final DateTimeFormatter yyyyMMdd
+                + static final DateTimeFormatter mm_dd_yy
+                + static final LocalDateTime NOW
+                + static final String START_DATE
+                + static final long RANGE_DAYS
+                + static final String END_DATE
+            }
+        }
+    }
+
+    package models {
+        class Event {
+            - String eventId
+            - String eventName
+            - String eventNameShort
+            - String eventHeadline
+            - String leagueId
+            - String eventDate
+            - String eventSeasonId
+            - String teamHome
+            - String teamAway
+            - String eventStatusId
+            - String eventStatus
+            - String teamWinner
+            - Integer scoreHome
+            - Integer scoreAway
+            - Integer scoreTotal
+            - List<String> links
+
+            + String getField()
+            + void setField(String value)
+        }
+        class Schedule {
+            - String scheduleId
+            - String leagueId
+            - String leagueName
+            - String timestamp
+            - List<String> eventIdList
+            - String dateRange
+            - String scheduleName
+
+            + String getField()
+            + void setField(String value)
+        }
+
+        package assets {
+            class League {
+                - String leagueId
+                - String leagueName
+                - String seasonStatusId
+                - String seasonStatus
+                - String seasonYear
+                - String leagueLogo
+
+                + String getField()
+                + void setField(String value)
+            }
+            class Team {
+                - String leagueId
+                - String teamId
+                - String teamName
+                - String teamNameAbr
+                - String teamLogo
+                - String teamColor
+                - String teamAlternateColor
+                - List<String> teamLinks
+
+                + String getField()
+                + void setField(String value)
+            }
+        }
+    }
+}
+
+package models {
+    class ScheduleModel {
+        - final String scheduleId
+        - final String leagueId
+        - final String leagueName
+        - final String timestamp
+        - final List<String> eventIdList
+        - final String dateRange
+        - final String scheduleName
+
+        + String getField()
+        + static Builder builder()
+    }
+}
+
+dynamodb.espnDAO.espnDAO --> dynamodb.espnDAO.constants
+
+dynamodb.espnDAO.espnDAO -> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.League
+
+dynamodb.models.Schedule -- dynamodb.models.Event
+dynamodb.models.Schedule --> dynamodb.models.assets.League
+dynamodb.models.assets.Team -- dynamodb.models.assets.League
+
+dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
+
+dynamodb.dataqualitycheck.DataQualityScanner --> dynamodb.dataqualitycheck.exceptions.DataQualityException
+dynamodb.dataqualitycheck.exceptions.DataQualityException --> dynamodb.dataqualitycheck.exceptions.modelexceptions.EventDataQualityException
+dynamodb.dataqualitycheck.exceptions.DataQualityException --> dynamodb.dataqualitycheck.exceptions.modelexceptions.ScheduleDataQualityException
+dynamodb.dataqualitycheck.exceptions.DataQualityException --> dynamodb.dataqualitycheck.exceptions.modelexceptions.LeagueDataQualityException
+dynamodb.dataqualitycheck.exceptions.DataQualityException --> dynamodb.dataqualitycheck.exceptions.modelexceptions.TeamDataQualityException
+
+models.ScheduleModel -- dynamodb.models.Schedule
+
+@enduml
