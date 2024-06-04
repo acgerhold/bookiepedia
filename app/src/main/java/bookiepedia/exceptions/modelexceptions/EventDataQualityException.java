@@ -1,6 +1,6 @@
-package bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions;
+package bookiepedia.exceptions.modelexceptions;
 
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
+import bookiepedia.exceptions.DataQualityException;
 
 public class EventDataQualityException extends DataQualityException {
 

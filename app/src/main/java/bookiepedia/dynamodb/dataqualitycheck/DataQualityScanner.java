@@ -1,10 +1,10 @@
 package bookiepedia.dynamodb.dataqualitycheck;
 
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.EventDataQualityException;
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.LeagueDataQualityException;
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.ScheduleDataQualityException;
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions.TeamDataQualityException;
+import bookiepedia.exceptions.DataQualityException;
+import bookiepedia.exceptions.modelexceptions.EventDataQualityException;
+import bookiepedia.exceptions.modelexceptions.LeagueDataQualityException;
+import bookiepedia.exceptions.modelexceptions.ScheduleDataQualityException;
+import bookiepedia.exceptions.modelexceptions.TeamDataQualityException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

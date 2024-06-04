@@ -1,6 +1,6 @@
-package bookiepedia.dynamodb.dataqualitycheck.exceptions.modelexceptions;
+package bookiepedia.exceptions.modelexceptions;
 
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
+import bookiepedia.exceptions.DataQualityException;
 
 public class TeamDataQualityException extends DataQualityException {
     private static final long serialVersionUID = 4585825213860116379L;

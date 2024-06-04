@@ -64,8 +64,11 @@ public class ScheduleModel {
         }
         ScheduleModel that = (ScheduleModel) o;
         return scheduleId.equals(that.scheduleId) &&
+                leagueId.equals(that.leagueId) &&
                 timestamp.equals(that.timestamp) &&
                 eventIdList.equals(that.eventIdList);
+        // May need to change for live updates
+        // Probably will remove 'timestamp' from equals()
     }
 
     @Override

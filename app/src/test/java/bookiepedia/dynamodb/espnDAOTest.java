@@ -182,6 +182,8 @@ public class espnDAOTest {
         System.out.println("Event (short)   : " + event.getEventNameShort());
         System.out.println("Event Date      : " + event.getEventDate());
         System.out.println("Event Season ID : " + event.getEventSeasonId());
+        System.out.println("Event Status ID : " + event.getEventStatusId());
+        System.out.println("Event Status    : " + event.getEventStatus());
         System.out.println("Home Team ID    : " + event.getTeamHome());
         System.out.println("Score           : " + event.getScoreHome());
         System.out.println("Away Team ID    : " + event.getTeamAway());
