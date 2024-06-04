@@ -1,6 +1,6 @@
-package bookiepedia.exceptions.modelexceptions;
+package bookiepedia.exceptions.dataqualityexception.modelexceptions;
 
-import bookiepedia.exceptions.DataQualityException;
+import bookiepedia.exceptions.dataqualityexception.DataQualityException;
 
 public class EventDataQualityException extends DataQualityException {
 
