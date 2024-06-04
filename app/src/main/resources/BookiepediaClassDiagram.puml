@@ -354,21 +354,18 @@ package models {
 }
 
 dynamodb.espnDAO.espnDAO --> dynamodb.espnDAO.constants.espnRequestConstants
-
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Schedule
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Event
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Bet
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.Team
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.League
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.WeeklyHistory
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.YearlyHistory
-
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.Bet
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.assets.League
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.bettinghistory.WeeklyHistory
+dynamodb.espnDAO.espnDAO -[#0000FF75,thickness=10]> dynamodb.models.bettinghistory.YearlyHistory
 dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.oddsDAO.oddsDAO --> dynamodb.oddsDAO.constants.oddsRequestConstants
-
 dynamodb.oddsDAO.oddsDAO -[#red,thickness=2]> dynamodb.models.assets.Bookmaker
-
+dynamodb.oddsDAO.oddsDAO -[#red,thickness=2]> dynamodb.models.Event
 dynamodb.oddsDAO.oddsDAO --> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
