@@ -1,6 +1,6 @@
 package bookiepedia.dynamodb.dataqualitycheck;
 
-import bookiepedia.dynamodb.dataqualitycheck.exceptions.DataQualityException;
+import bookiepedia.exceptions.dataqualityexception.DataQualityException;
 import bookiepedia.models.ScheduleModel;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;

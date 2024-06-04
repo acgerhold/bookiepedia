@@ -6,9 +6,13 @@ import java.time.format.DateTimeFormatter;
 
 public class espnRequestConstants {
 
-    // Specify league with /sports/{sport}/{leagueId}/scoreboard
+    // Specify league with 'v2'/sports/{sport}/{league}/scoreboard'
     // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
     // Ex. "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20240501-20240531"
+
+    // Leagues
+    public static final String NBA = "basketball/nba";
+    public static final String NHL = "hockey/nhl";
 
     // Date Formatting
     public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");

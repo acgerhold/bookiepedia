@@ -33,8 +33,8 @@ public class espnDAO {
         // Specify league with /sports/{sport}/{leagueId}/scoreboard
         // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
         // No date parameters returns schedule for current day
-        String url = String.format("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=%s-%s",
-                espnRequestConstants.START_DATE, espnRequestConstants.END_DATE);
+        String url = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+                espnRequestConstants.NBA, espnRequestConstants.START_DATE, espnRequestConstants.END_DATE);
 
         // Calling the API
         URL obj = new URL(url);

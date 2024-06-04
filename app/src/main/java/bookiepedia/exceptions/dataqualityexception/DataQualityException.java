@@ -1,4 +1,4 @@
-package bookiepedia.dynamodb.dataqualitycheck.exceptions;
+package bookiepedia.exceptions.dataqualityexception;
 
 public class DataQualityException extends RuntimeException {
 

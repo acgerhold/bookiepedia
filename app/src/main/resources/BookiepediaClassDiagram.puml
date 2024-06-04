@@ -1,0 +1,225 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package dynamodb {
+
+    package dataqualitycheck {
+        class DataQualityScanner {
+            - dataQualityPercentage : double
+            - model : String
+            - threshold : double
+            - invalidAttributes : List<String>
+            - static final INVALID_ATTRIBUTE_REPLACER : String
+
+            + DataQualityScanner(model : String, threshold : double) : void
+            + scan() : void
+            + printQualityPercentage() : void
+            + getQualityPercentage() : double
+        }
+    }
+
+    package espnDAO {
+        class espnDAO {
+            - static THRESHOLD : double
+            - static INVALID_STRING_REPLACER : String
+
+            + requestQuery() throws IOException : JSONObject
+            + extractSchedule(espnResponse : JSONObject) : String
+            + extractEvents(espnResponse : JSONObject) : List<String>
+            + extractTeam(team : JSONObject, leagueId : String) : String
+            + extractLeague(league : JSONObject) : String
+        }
+
+        package constants {
+            class espnRequestConstants {
+                + static final NBA : String
+                + static final NHL : String
+                + static final yyyyMMdd : DateTimeFormatter
+                + static final mm_dd_yy : DateTimeFormatter
+                + static final NOW : LocalDateTime
+                + static final START_DATE : String
+                + static final RANGE_DAYS : long
+                + static final END_DATE : String
+            }
+        }
+    }
+
+    package models {
+        class Event {
+            - eventId : String
+            - eventName : String
+            - eventNameShort : String
+            - eventHeadline : String
+            - leagueId : String
+            - eventDate : String
+            - eventSeasonId : String
+            - teamHome : String
+            - teamAway : String
+            - eventStatusId : String
+            - eventStatus : String
+            - teamWinner : String
+            - scoreHome : Integer
+            - scoreAway : Integer
+            - scoreTotal : Integer
+            - links : List<String>
+
+            + getField() : Object
+            + setField(value : String) : void
+        }
+        class Schedule {
+            - scheduleId : String
+            - leagueId : String
+            - leagueName : String
+            - timestamp : String
+            - eventIdList : List<String>
+            - dateRange : String
+            - scheduleName : String
+
+            + getField() : Object
+            + setField(value : String) : void
+        }
+
+        package assets {
+            class League {
+                - leagueId : String
+                - leagueName : String
+                - seasonStatusId : String
+                - seasonStatus : String
+                - seasonYear : String
+                - leagueLogo : String
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+            class Team {
+                - leagueId : String
+                - teamId : String
+                - teamName : String
+                - teamNameAbr : String
+                - teamLogo : String
+                - teamColor : String
+                - teamAlternateColor : String
+                - teamLinks : List<String>
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+        }
+    }
+}
+
+
+package exceptions {
+
+    package dataqualityexception {
+
+        class DataQualityException {
+            - dataQualityPercentage : double
+            - model : String
+            - threshold : double
+            - invalidAttributes : List<String>
+
+            + scan() : void
+            + getQualityPercentage() : double
+        }
+
+        package modelexceptions {
+            exception EventDataQualityException {}
+            exception LeagueDataQualityException {}
+            exception ScheduleDataQualityException {}
+            exception TeamDataQualityException {}
+        }
+    }
+}
+
+
+package models {
+
+    class ScheduleModel {
+        - scheduleId : String
+        - leagueId : String
+        - leagueName : String
+        - timestamp : String
+        - eventIdList : List<String>
+        - dateRange : String
+        - scheduleName : String
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    class EventModel {
+        - eventId : String
+        - eventName : String
+        - eventNameShort : String
+        - eventHeadline : String
+        - leagueId : String
+        - eventDate : String
+        - eventSeasonId : String
+        - teamHome : String
+        - teamAway : String
+        - eventStatusId : String
+        - eventStatus : String
+        - teamWinner : String
+        - scoreHome : Integer
+        - scoreAway : Integer
+        - scoreTotal : Integer
+        - links : List<String>
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    package assets {
+
+        class LeagueModel {
+            - leagueId : String
+            - leagueName : String
+            - seasonStatusId : String
+            - seasonStatus : String
+            - seasonYear : String
+            - leagueLogo : String
+
+            + getField() : Object
+            + builder() : Builder
+        }
+
+        class TeamModel {
+            - leagueId : String
+            - teamId : String
+            - teamName : String
+            - teamNameAbr : String
+            - teamLogo : String
+            - teamColor : String
+            - teamAlternateColor : String
+            - teamLinks : List<String>
+
+            + getField() : Object
+            + builder() : Builder
+        }
+    }
+}
+
+dynamodb.espnDAO.espnDAO --> dynamodb.espnDAO.constants.espnRequestConstants
+
+dynamodb.espnDAO.espnDAO -> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.League
+
+
+
+dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
+
+dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.EventDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
+exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.TeamDataQualityException
+
+models.ScheduleModel -- dynamodb.models.Schedule
+models.EventModel -- dynamodb.models.Event
+models.assets.LeagueModel -- dynamodb.models.assets.League
+models.assets.TeamModel -- dynamodb.models.assets.Team
+
+@enduml
