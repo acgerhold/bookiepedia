@@ -60,6 +60,8 @@ manage their bets slips and view helpful insights about their bets.
 
 ## 6.1. Public Models
 
+![image](app/src/main/resources/BookiepediaClassDiagram.png)
+
 * ScheduleModel
   * scheduleId : String
   * leagueId : String
