@@ -19,6 +19,7 @@ package dynamodb {
     }
 
     package espnDAO {
+
         class espnDAO {
             - static THRESHOLD : double
             - static INVALID_STRING_REPLACER : String
@@ -31,6 +32,7 @@ package dynamodb {
         }
 
         package constants {
+
             class espnRequestConstants {
                 + static final NBA : String
                 + static final NHL : String
@@ -40,6 +42,20 @@ package dynamodb {
                 + static final START_DATE : String
                 + static final RANGE_DAYS : long
                 + static final END_DATE : String
+            }
+        }
+    }
+
+    package oddsDAO {
+
+        class oddsDAO {
+
+        }
+
+        package constants {
+
+            class oddsRequestConstants {
+
             }
         }
     }
@@ -344,11 +360,17 @@ dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Event
 dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.Bet
 dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.Team
 dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.League
-dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.assets.Bookmaker
 dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.WeeklyHistory
 dynamodb.espnDAO.espnDAO -[#blue,thickness=2]> dynamodb.models.bettinghistory.YearlyHistory
 
 dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
+
+dynamodb.oddsDAO.oddsDAO --> dynamodb.oddsDAO.constants.oddsRequestConstants
+
+dynamodb.oddsDAO.oddsDAO -[#red,thickness=2]> dynamodb.models.assets.Bookmaker
+
+dynamodb.oddsDAO.oddsDAO --> dynamodb.dataqualitycheck.DataQualityScanner
+
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
 
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
@@ -356,13 +378,13 @@ exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualitye
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.TeamDataQualityException
 
-models.ScheduleModel -- dynamodb.models.Schedule
-models.EventModel -- dynamodb.models.Event
-models.BetModel -- dynamodb.models.Bet
-models.assets.LeagueModel -- dynamodb.models.assets.League
-models.assets.TeamModel -- dynamodb.models.assets.Team
-models.assets.BookmakerModel -- dynamodb.models.assets.Bookmaker
-models.bettinghistory.WeeklyHistoryModel -- dynamodb.models.bettinghistory.WeeklyHistory
-models.bettinghistory.YearlyHistoryModel -- dynamodb.models.bettinghistory.YearlyHistory
+models.ScheduleModel --- dynamodb.models.Schedule
+models.EventModel --- dynamodb.models.Event
+models.BetModel --- dynamodb.models.Bet
+models.assets.LeagueModel --- dynamodb.models.assets.League
+models.assets.TeamModel --- dynamodb.models.assets.Team
+models.assets.BookmakerModel --- dynamodb.models.assets.Bookmaker
+models.bettinghistory.WeeklyHistoryModel --- dynamodb.models.bettinghistory.WeeklyHistory
+models.bettinghistory.YearlyHistoryModel --- dynamodb.models.bettinghistory.YearlyHistory
 
 @enduml
