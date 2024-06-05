@@ -6,6 +6,7 @@ import java.util.Objects;
 public class EventModel {
 
     private final String eventId;
+    private final String scheduleId;
     private final String eventName;
     private final String eventNameShort;
     private final String eventHeadline;
@@ -22,11 +23,12 @@ public class EventModel {
     private final Integer scoreTotal;
     private final List<String> links;
 
-    public EventModel(String eventId, String eventName, String eventNameShort, String eventHeadline,
+    public EventModel(String eventId, String scheduleId, String eventName, String eventNameShort, String eventHeadline,
                       String leagueId, String eventDate, String eventSeasonId, String teamHome, String teamAway,
                       String eventStatusId, String eventStatus, String teamWinner, Integer scoreHome,
                       Integer scoreAway, Integer scoreTotal, List<String> links) {
         this.eventId = eventId;
+        this.scheduleId = scheduleId;
         this.eventName = eventName;
         this.eventNameShort = eventNameShort;
         this.eventHeadline = eventHeadline;
@@ -46,6 +48,9 @@ public class EventModel {
 
     public String getEventId() {
         return eventId;
+    }
+    public String getScheduleId() {
+        return scheduleId;
     }
 
     public String getEventName() {
@@ -119,6 +124,7 @@ public class EventModel {
         }
         EventModel that = (EventModel) o;
         return eventId.equals(that.eventId) &&
+                scheduleId.equals(that.scheduleId) &&
                 leagueId.equals(that.leagueId) &&
                 eventDate.equals(that.eventDate) &&
                 eventSeasonId.equals(that.eventSeasonId);
@@ -128,7 +134,7 @@ public class EventModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, leagueId, eventDate, eventSeasonId);
+        return Objects.hash(eventId, scheduleId, leagueId, eventDate, eventSeasonId);
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -139,6 +145,7 @@ public class EventModel {
     public static class Builder {
 
         private String eventId;
+        private String scheduleId;
         private String eventName;
         private String eventNameShort;
         private String eventHeadline;
@@ -157,6 +164,11 @@ public class EventModel {
 
         public Builder withEventId(String eventId) {
             this.eventId = eventId;
+            return this;
+        }
+
+        public Builder withScheduleId(String scheduleId) {
+            this.scheduleId = scheduleId;
             return this;
         }
 
@@ -236,7 +248,7 @@ public class EventModel {
         }
 
         public EventModel build() {
-            return new EventModel(eventId, eventName, eventNameShort, eventHeadline, leagueId, eventDate,
+            return new EventModel(eventId, scheduleId, eventName, eventNameShort, eventHeadline, leagueId, eventDate,
                     eventSeasonId, teamHome, teamAway, eventStatusId, eventStatus, teamWinner, scoreHome, scoreAway,
                     scoreTotal, links);
         }

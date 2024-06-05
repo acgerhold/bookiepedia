@@ -1,9 +1,11 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-package dynamodb {
 
-    package dataqualitycheck {
+package "dynamodb" {
+
+    package "dataqualitycheck" {
+
         class DataQualityScanner {
             - dataQualityPercentage : double
             - model : String
@@ -18,10 +20,11 @@ package dynamodb {
         }
     }
 
-    package espnDAO {
+    package "espnDAO" {
+
         class espnDAO {
             - static THRESHOLD : double
-            - static INVALID_STRING_REPLACER : String
+            - static INVALID_ATTRIBUTE_REPLACER : String
 
             + requestQuery() throws IOException : JSONObject
             + extractSchedule(espnResponse : JSONObject) : String
@@ -30,7 +33,8 @@ package dynamodb {
             + extractLeague(league : JSONObject) : String
         }
 
-        package constants {
+        package "constants" {
+
             class espnRequestConstants {
                 + static final NBA : String
                 + static final NHL : String
@@ -44,9 +48,30 @@ package dynamodb {
         }
     }
 
-    package models {
+    package "oddsDAO" {
+
+        class oddsDAO {
+            - static THRESHOLD : double
+            - static INVALID_ATTRIBUTE_REPLACER : String
+
+            + requestQuery() throws IOException : JSONObject
+            + extractOdds(oddsResponse : JSONObject) : String
+            + extractBookmaker(oddsResponse : JSONObject) : String
+        }
+
+        package constants {
+
+            class oddsRequestConstants {
+
+            }
+        }
+    }
+
+    package "models" {
+
         class Event {
             - eventId : String
+            - scheduleId : String
             - eventName : String
             - eventNameShort : String
             - eventHeadline : String
@@ -66,6 +91,7 @@ package dynamodb {
             + getField() : Object
             + setField(value : String) : void
         }
+
         class Schedule {
             - scheduleId : String
             - leagueId : String
@@ -79,7 +105,49 @@ package dynamodb {
             + setField(value : String) : void
         }
 
-        package assets {
+        class Bet {
+            - betId : String
+            - userId : String
+            - eventId : String
+            - amountWagered : BigDecimal
+            - odds : BigDecimal
+            - teamBetOn : String
+            - projection : BigDecimal
+            - bettingMarket : String
+            - bookmakerId : String
+            - datePlaced : String
+            - gainOrLoss : BigDecimal
+            - teamHome : String
+            - scoreHome : Integer
+            - teamHomeLogo : String
+            - teamAway : String
+            - scoreAway : Integer
+            - teamAwayLogo : String
+            - teamWinner : String
+            - scoreTotal : Integer
+            - eventName : String
+            - eventHeadline : String
+            - eventDate : String
+            - eventStatus : String
+
+            + getField() : Object
+            + setField(value : String) : void
+        }
+
+        class Odds {
+            - oddsId : String
+            - eventId : String
+            - timestamp : String
+            - moneyLine : Map<String, BigDecimal>
+            - spread : Map<String, BigDecimal>
+            - total : Map<String, BigDecimal>
+
+            + getField() : Object
+            + setField(value : String) : void
+        }
+
+        package "assets" {
+
             class League {
                 - leagueId : String
                 - leagueName : String
@@ -91,6 +159,7 @@ package dynamodb {
                 + getField() : Object
                 + setField(value : String) : void
             }
+
             class Team {
                 - leagueId : String
                 - teamId : String
@@ -104,14 +173,59 @@ package dynamodb {
                 + getField() : Object
                 + setField(value : String) : void
             }
+
+            class Bookmaker {
+                - bookmakerId : String
+                - bookmakerName : String
+                - bookmakerLogo : String
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+        }
+
+        package "bettinghistory" {
+
+            class WeeklyHistory {
+                - weeklyHistoryId : String
+                - userId : String
+                - weeklyHistoryName : String
+                - date : String
+                - weeklyBetCount : Integer
+                - weeklyAmountWagered : BigDecimal
+                - weeklyGain : BigDecimal
+                - weeklyLoss : BigDecimal
+                - weeklyBetIdList : List<String>
+                - weeklySummary : Map<String, BigDecimal>
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
+
+            class YearlyHistory {
+                - yearlyHistoryId : String
+                - userId : String
+                - yearlyHistoryName : String
+                - date : String
+                - weeklyHistoryIds : List<String>
+                - yearlyBetCount : Integer
+                - yearlyAmountWagered : BigDecimal
+                - yearlyGain : BigDecimal
+                - yearlyLoss : BigDecimal
+                - yearlyBetIdList : List<String>
+                - yearlySummary : Map<String, BigDecimal>
+
+                + getField() : Object
+                + setField(value : String) : void
+            }
         }
     }
 }
 
 
-package exceptions {
+package "exceptions" {
 
-    package dataqualityexception {
+    package "dataqualityexception" {
 
         class DataQualityException {
             - dataQualityPercentage : double
@@ -123,7 +237,7 @@ package exceptions {
             + getQualityPercentage() : double
         }
 
-        package modelexceptions {
+        package "modelexceptions" {
             exception EventDataQualityException {}
             exception LeagueDataQualityException {}
             exception ScheduleDataQualityException {}
@@ -133,7 +247,7 @@ package exceptions {
 }
 
 
-package models {
+package "models" {
 
     class ScheduleModel {
         - scheduleId : String
@@ -150,6 +264,7 @@ package models {
 
     class EventModel {
         - eventId : String
+        - scheduleId : String
         - eventName : String
         - eventNameShort : String
         - eventHeadline : String
@@ -170,7 +285,48 @@ package models {
         + builder() : Builder
     }
 
-    package assets {
+    class BetModel {
+        - betId : String
+        - userId : String
+        - eventId : String
+        - amountWagered : BigDecimal
+        - odds : BigDecimal
+        - teamBetOn : String
+        - projection : BigDecimal
+        - bettingMarket : String
+        - bookmakerId : String
+        - datePlaced : String
+        - gainOrLoss : BigDecimal
+        - teamHome : String
+        - scoreHome : Integer
+        - teamHomeLogo : String
+        - teamAway : String
+        - scoreAway : Integer
+        - teamAwayLogo : String
+        - teamWinner : String
+        - scoreTotal : Integer
+        - eventName : String
+        - eventHeadline : String
+        - eventDate : String
+        - eventStatus : String
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    class OddsModel {
+        - oddsId : String
+        - eventId : String
+        - timestamp : String
+        - moneyLine : Map<String, BigDecimal>
+        - spread : Map<String, BigDecimal>
+        - total : Map<String, BigDecimal>
+
+        + getField() : Object
+        + builder() : Builder
+    }
+
+    package "assets" {
 
         class LeagueModel {
             - leagueId : String
@@ -197,29 +353,99 @@ package models {
             + getField() : Object
             + builder() : Builder
         }
+
+        class BookmakerModel {
+            - bookmakerId : String
+            - bookmakerName : String
+            - bookmakerLogo : String
+
+            + getField() : Object
+            + builder() : Builder
+        }
+    }
+
+    package "bettinghistory" {
+
+        class WeeklyHistoryModel {
+            - weeklyHistoryId : String
+            - userId : String
+            - weeklyHistoryName : String
+            - date : String
+            - weeklyBetCount : Integer
+            - weeklyAmountWagered : BigDecimal
+            - weeklyGain : BigDecimal
+            - weeklyLoss : BigDecimal
+            - weeklyBetIdList : List<String>
+            - weeklySummary : Map<String, BigDecimal>
+
+            + getField() : Object
+            + builder() : Builder
+        }
+
+        class YearlyHistoryModel {
+            - yearlyHistoryId : String
+            - userId : String
+            - yearlyHistoryName : String
+            - date : String
+            - weeklyHistoryIds : List<String>
+            - yearlyBetCount : Integer
+            - yearlyAmountWagered : BigDecimal
+            - yearlyGain : BigDecimal
+            - yearlyLoss : BigDecimal
+            - yearlyBetIdList : List<String>
+            - yearlySummary : Map<String, BigDecimal>
+
+            + getField() : Object
+            + builder() : Builder
+        }
     }
 }
 
-dynamodb.espnDAO.espnDAO --> dynamodb.espnDAO.constants.espnRequestConstants
+dynamodb.espnDAO.espnDAO -> dynamodb.espnDAO.constants.espnRequestConstants
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.League
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.dataqualitycheck.DataQualityScanner
 
-dynamodb.espnDAO.espnDAO -> dynamodb.models.Schedule
-dynamodb.espnDAO.espnDAO -> dynamodb.models.Event
-dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.Team
-dynamodb.espnDAO.espnDAO -> dynamodb.models.assets.League
-
-
-
-dynamodb.espnDAO.espnDAO --> dynamodb.dataqualitycheck.DataQualityScanner
+dynamodb.oddsDAO.oddsDAO -> dynamodb.oddsDAO.constants.oddsRequestConstants
+dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.models.assets.Bookmaker
+dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.models.Odds
+dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
+
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.EventDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.LeagueDataQualityException
 exceptions.dataqualityexception.DataQualityException --> exceptions.dataqualityexception.modelexceptions.TeamDataQualityException
 
-models.ScheduleModel -- dynamodb.models.Schedule
-models.EventModel -- dynamodb.models.Event
-models.assets.LeagueModel -- dynamodb.models.assets.League
-models.assets.TeamModel -- dynamodb.models.assets.Team
+dynamodb.models.Schedule o- dynamodb.models.assets.League
+dynamodb.models.Schedule *- dynamodb.models.Event
+dynamodb.models.Event o- dynamodb.models.assets.Team
+dynamodb.models.Event - dynamodb.models.Odds
+dynamodb.models.Event o- dynamodb.models.Bet
+dynamodb.models.Odds o- dynamodb.models.assets.Bookmaker
+dynamodb.models.bettinghistory.WeeklyHistory o- dynamodb.models.Bet
+dynamodb.models.bettinghistory.YearlyHistory o- dynamodb.models.bettinghistory.WeeklyHistory
+
+models.ScheduleModel o- models.assets.LeagueModel
+models.ScheduleModel *- models.EventModel
+models.EventModel o- models.assets.TeamModel
+models.EventModel - models.OddsModel
+models.EventModel o- models.BetModel
+models.OddsModel o- models.assets.BookmakerModel
+models.bettinghistory.WeeklyHistoryModel o- models.BetModel
+models.bettinghistory.YearlyHistoryModel o- models.bettinghistory.WeeklyHistoryModel
+
+dynamodb.models.Schedule .. models.ScheduleModel
+dynamodb.models.Event .. models.EventModel
+dynamodb.models.Odds .. models.OddsModel
+dynamodb.models.Bet .. models.BetModel
+dynamodb.models.assets.Team .. models.assets.TeamModel
+dynamodb.models.assets.League .. models.assets.LeagueModel
+dynamodb.models.assets.Bookmaker .. models.assets.BookmakerModel
+dynamodb.models.bettinghistory.WeeklyHistory .. models.bettinghistory.WeeklyHistoryModel
+dynamodb.models.bettinghistory.YearlyHistory .. models.bettinghistory.YearlyHistoryModel
 
 @enduml
