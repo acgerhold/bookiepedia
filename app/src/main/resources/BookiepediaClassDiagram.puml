@@ -4,7 +4,8 @@
 
 package "dynamodb" {
 
-    package dataqualitycheck {
+    package "dataqualitycheck" {
+
         class DataQualityScanner {
             - dataQualityPercentage : double
             - model : String
@@ -23,7 +24,7 @@ package "dynamodb" {
 
         class espnDAO {
             - static THRESHOLD : double
-            - static INVALID_STRING_REPLACER : String
+            - static INVALID_ATTRIBUTE_REPLACER : String
 
             + requestQuery() throws IOException : JSONObject
             + extractSchedule(espnResponse : JSONObject) : String
@@ -50,7 +51,12 @@ package "dynamodb" {
     package "oddsDAO" {
 
         class oddsDAO {
+            - static THRESHOLD : double
+            - static INVALID_ATTRIBUTE_REPLACER : String
 
+            + requestQuery() throws IOException : JSONObject
+            + extractOdds(oddsResponse : JSONObject) : String
+            + extractBookmaker(oddsResponse : JSONObject) : String
         }
 
         package constants {
@@ -169,7 +175,12 @@ package "dynamodb" {
             }
 
             class Bookmaker {
+                - bookmakerId : String
+                - bookmakerName : String
+                - bookmakerLogo : String
 
+                + getField() : Object
+                + setField(value : String) : void
             }
         }
 
@@ -214,7 +225,7 @@ package "dynamodb" {
 
 package "exceptions" {
 
-    package dataqualityexception {
+    package "dataqualityexception" {
 
         class DataQualityException {
             - dataQualityPercentage : double
@@ -226,7 +237,7 @@ package "exceptions" {
             + getQualityPercentage() : double
         }
 
-        package modelexceptions {
+        package "modelexceptions" {
             exception EventDataQualityException {}
             exception LeagueDataQualityException {}
             exception ScheduleDataQualityException {}
@@ -344,7 +355,12 @@ package "models" {
         }
 
         class BookmakerModel {
+            - bookmakerId : String
+            - bookmakerName : String
+            - bookmakerLogo : String
 
+            + getField() : Object
+            + builder() : Builder
         }
     }
 
@@ -386,11 +402,11 @@ package "models" {
 }
 
 dynamodb.espnDAO.espnDAO -> dynamodb.espnDAO.constants.espnRequestConstants
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=9]-> dynamodb.models.Schedule
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=9]-> dynamodb.models.Event
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=9]-> dynamodb.models.assets.Team
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=9]-> dynamodb.models.assets.League
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=9]-> dynamodb.dataqualitycheck.DataQualityScanner
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.League
+dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.oddsDAO.oddsDAO -> dynamodb.oddsDAO.constants.oddsRequestConstants
 dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.models.assets.Bookmaker
