@@ -1,5 +1,10 @@
 package bookiepedia.dynamodb.models.assets;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+@DynamoDBTable(tableName = "Bookmaker")
 public class Bookmaker {
 
     private String bookmakerId;
@@ -8,14 +13,17 @@ public class Bookmaker {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "bookmakerId")
     public String getBookmakerId() {
         return bookmakerId;
     }
 
+    @DynamoDBAttribute(attributeName = "bookmakerName")
     public String getBookmakerName() {
         return bookmakerName;
     }
 
+    @DynamoDBAttribute(attributeName = "bookmakerLogo")
     public String getBookmakerLogo() {
         return bookmakerLogo;
     }

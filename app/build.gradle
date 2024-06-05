@@ -29,6 +29,12 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
 
+    // AWS
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
+    implementation 'com.amazonaws:aws-java-sdk-cloudwatch:1.12.+'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.+'
+
     // Mockito
     implementation 'org.mockito:mockito-core:4.+'
     implementation "org.mockito:mockito-inline:4.+"

@@ -26,6 +26,7 @@ public class espnDAO {
 
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
+    private String scheduleId;
 
     public JSONObject requestQuery() throws IOException {
 
@@ -71,6 +72,10 @@ public class espnDAO {
 
         // League ID
         schedule.setLeagueId(leagues.optJSONObject(0).optString("id", INVALID_STRING_REPLACER));
+        // Schedule ID
+        scheduleId = String.format("%s-%s-%s",
+                schedule.getLeagueId(), espnRequestConstants.START_DATE, espnRequestConstants.END_DATE);
+        schedule.setScheduleId(scheduleId);
         // League Name
         schedule.setLeagueName(leagues.optJSONObject(0).optString("abbreviation", INVALID_STRING_REPLACER));
         // Event ID List
@@ -79,9 +84,6 @@ public class espnDAO {
                         .mapToObj(events::getJSONObject)
                         .map(obj -> obj.getString("id"))
                         .collect(Collectors.toList()));
-        // Schedule ID
-        schedule.setScheduleId(String.format("%s-%s-%s",
-                schedule.getLeagueId(), espnRequestConstants.START_DATE, espnRequestConstants.END_DATE));
         // Schedule Name
         schedule.setScheduleName(String.format("%s Events: %s - %s",
                 schedule.getLeagueName(), espnRequestConstants.START_DATE, espnRequestConstants.END_DATE));
@@ -137,6 +139,8 @@ public class espnDAO {
 
                     // ID
                     e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
+                    // Schedule ID
+                    //e.setScheduleId();
                     // Event Name
                     e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
                     // Event Name (Short)

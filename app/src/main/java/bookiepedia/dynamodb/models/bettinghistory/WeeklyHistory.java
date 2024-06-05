@@ -1,9 +1,14 @@
 package bookiepedia.dynamodb.models.bettinghistory;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+@DynamoDBTable(tableName = "WeeklyHistory")
 public class WeeklyHistory {
 
     private String weeklyHistoryId;
@@ -30,48 +35,57 @@ public class WeeklyHistory {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "weeklyHistoryId")
     public String getWeeklyHistoryId() {
         return weeklyHistoryId;
     }
 
+    @DynamoDBAttribute(attributeName = "userId")
     public String getUserId() {
         return userId;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyHistoryName")
     public String getWeeklyHistoryName() {
         return weeklyHistoryName;
     }
 
+    @DynamoDBAttribute(attributeName = "date")
     public String getDate() {
         return date;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyBetCount")
     public Integer getWeeklyBetCount() {
         return weeklyBetCount;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyAmountWagered")
     public BigDecimal getWeeklyAmountWagered() {
         return weeklyAmountWagered;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyGain")
     public BigDecimal getWeeklyGain() {
         return weeklyGain;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyLoss")
     public BigDecimal getWeeklyLoss() {
         return weeklyLoss;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyBetIdList")
     public List<String> getWeeklyBetIdList() {
         return weeklyBetIdList;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklySummary")
     public Map<String, BigDecimal> getWeeklySummary() {
         return weeklySummary;
     }
 
     // SETTERS
-
 
     public void setWeeklyHistoryId(String weeklyHistoryId) {
         this.weeklyHistoryId = weeklyHistoryId;

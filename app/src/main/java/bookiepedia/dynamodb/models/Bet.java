@@ -1,7 +1,14 @@
 package bookiepedia.dynamodb.models;
 
+import bookiepedia.converters.BigDecimalConverter;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+
 import java.math.BigDecimal;
 
+@DynamoDBTable(tableName = "Bet")
 public class Bet {
 
     private String betId;
@@ -18,7 +25,6 @@ public class Bet {
     // May be able to pull projection, bettingMarket, and bookmakerId from Odds object for Event and not have as attr
     private String datePlaced;
     private BigDecimal gainOrLoss;
-
     // May not need these as attributes, might be able to pull directly from Event using the EventId?
     private String teamHome;
     private Integer scoreHome;
@@ -35,94 +41,121 @@ public class Bet {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "betId")
     public String getBetId() {
         return betId;
     }
 
+    @DynamoDBAttribute(attributeName = "userId")
     public String getUserId() {
         return userId;
     }
 
+    @DynamoDBAttribute(attributeName = "eventId")
     public String getEventId() {
         return eventId;
     }
 
+    @DynamoDBAttribute(attributeName = "amountWagered")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getAmountWagered() {
         return amountWagered;
     }
 
+    @DynamoDBAttribute(attributeName = "odds")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getOdds() {
         return odds;
     }
 
+    @DynamoDBAttribute(attributeName = "teamBetOn")
     public String getTeamBetOn() {
         return teamBetOn;
     }
 
+    @DynamoDBAttribute(attributeName = "projection")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getProjection() {
         return projection;
     }
 
+    @DynamoDBAttribute(attributeName = "bettingMarket")
     public String getBettingMarket() {
         return bettingMarket;
     }
 
+    @DynamoDBAttribute(attributeName = "bookmakerId")
     public String getBookmakerId() {
         return bookmakerId;
     }
 
+    @DynamoDBAttribute(attributeName = "datePlaced")
     public String getDatePlaced() {
         return datePlaced;
     }
 
+    @DynamoDBAttribute(attributeName = "gainOrLoss")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getGainOrLoss() {
         return gainOrLoss;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHome")
     public String getTeamHome() {
         return teamHome;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreHome")
     public Integer getScoreHome() {
         return scoreHome;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHomeLogo")
     public String getTeamHomeLogo() {
         return teamHomeLogo;
     }
 
+    @DynamoDBAttribute(attributeName = "teamAway")
     public String getTeamAway() {
         return teamAway;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreAway")
     public Integer getScoreAway() {
         return scoreAway;
     }
 
+    @DynamoDBAttribute(attributeName = "teamAwayLogo")
     public String getTeamAwayLogo() {
         return teamAwayLogo;
     }
 
+    @DynamoDBAttribute(attributeName = "teamWinner")
     public String getTeamWinner() {
         return teamWinner;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreTotal")
     public Integer getScoreTotal() {
         return scoreTotal;
     }
 
+    @DynamoDBAttribute(attributeName = "eventName")
     public String getEventName() {
         return eventName;
     }
 
+    @DynamoDBAttribute(attributeName = "eventHeadline")
     public String getEventHeadline() {
         return eventHeadline;
     }
 
+    @DynamoDBAttribute(attributeName = "eventDate")
     public String getEventDate() {
         return eventDate;
     }
 
+    @DynamoDBAttribute(attributeName = "eventStatus")
     public String getEventStatus() {
         return eventStatus;
     }

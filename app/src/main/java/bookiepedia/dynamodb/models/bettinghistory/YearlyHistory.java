@@ -1,9 +1,16 @@
 package bookiepedia.dynamodb.models.bettinghistory;
 
+import bookiepedia.converters.BigDecimalConverter;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+@DynamoDBTable(tableName = "YearlyHistory")
 public class YearlyHistory {
 
     private String yearlyHistoryId;
@@ -31,46 +38,63 @@ public class YearlyHistory {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "yearlyHistoryId")
     public String getYearlyHistoryId() {
         return yearlyHistoryId;
     }
 
+    @DynamoDBAttribute(attributeName = "userId")
     public String getUserId() {
         return userId;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyHistoryName")
     public String getYearlyHistoryName() {
         return yearlyHistoryName;
     }
 
+    @DynamoDBAttribute(attributeName = "getDate")
     public String getDate() {
         return date;
     }
 
+    @DynamoDBAttribute(attributeName = "weeklyHistoryIds")
     public List<String> getWeeklyHistoryIds() {
         return weeklyHistoryIds;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyBetCount")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public Integer getYearlyBetCount() {
         return yearlyBetCount;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyAmountWagered")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getYearlyAmountWagered() {
         return yearlyAmountWagered;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyGain")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getYearlyGain() {
         return yearlyGain;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyLoss")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public BigDecimal getYearlyLoss() {
         return yearlyLoss;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlyBetIdList")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public List<String> getYearlyBetIdList() {
         return yearlyBetIdList;
     }
 
+    @DynamoDBAttribute(attributeName = "yearlySummary")
+    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
     public Map<String, BigDecimal> getYearlySummary() {
         return yearlySummary;
     }

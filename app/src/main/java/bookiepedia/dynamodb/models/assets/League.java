@@ -1,5 +1,10 @@
 package bookiepedia.dynamodb.models.assets;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
+@DynamoDBTable(tableName = "League")
 public class League {
 
     private String leagueId;
@@ -15,29 +20,34 @@ public class League {
     private String leagueLogo;
     // leagues > 0 > logos > 1 > href
 
-
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueName")
     public String getLeagueName() {
         return leagueName;
     }
 
+    @DynamoDBAttribute(attributeName = "seasonStatusId")
     public String getSeasonStatusId() {
         return seasonStatusId;
     }
 
+    @DynamoDBAttribute(attributeName = "seasonStatus")
     public String getSeasonStatus() {
         return seasonStatus;
     }
 
+    @DynamoDBAttribute(attributeName = "seasonYear")
     public String getSeasonYear() {
         return seasonYear;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueLogo")
     public String getLeagueLogo() {
         return leagueLogo;
     }

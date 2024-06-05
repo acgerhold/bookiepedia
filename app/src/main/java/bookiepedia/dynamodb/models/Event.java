@@ -1,8 +1,13 @@
 package bookiepedia.dynamodb.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.util.List;
 import java.util.Map;
 
+@DynamoDBTable(tableName = "Event")
 public class Event {
 
     private String eventId;
@@ -64,66 +69,82 @@ public class Event {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "eventId")
     public String getEventId() {
         return eventId;
     }
 
+    @DynamoDBAttribute(attributeName = "scheduleId")
     public String getScheduleId() {
         return scheduleId;
     }
 
+    @DynamoDBAttribute(attributeName = "eventName")
     public String getEventName() {
         return eventName;
     }
 
+    @DynamoDBAttribute(attributeName = "eventNameShort")
     public String getEventNameShort() {
         return eventNameShort;
     }
 
+    @DynamoDBAttribute(attributeName = "eventHeadline")
     public String getEventHeadline() {
         return eventHeadline;
     }
 
+    @DynamoDBAttribute(attributeName = "eventDate")
     public String getEventDate() {
         return eventDate;
     }
 
+    @DynamoDBAttribute(attributeName = "eventSeasonId")
     public String getEventSeasonId() {
         return eventSeasonId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHome")
     public String getTeamHome() {
         return teamHome;
     }
 
+    @DynamoDBAttribute(attributeName = "teamAway")
     public String getTeamAway() {
         return teamAway;
     }
 
+    @DynamoDBAttribute(attributeName = "eventStatusId")
     public String getEventStatusId() {
         return eventStatusId;
     }
 
+    @DynamoDBAttribute(attributeName = "eventStatus")
     public String getEventStatus() {
         return eventStatus;
     }
 
+    @DynamoDBAttribute(attributeName = "teamWinner")
     public String getTeamWinner() {
         return teamWinner;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreHome")
     public int getScoreHome() {
         return scoreHome;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreAway")
     public int getScoreAway() {
         return scoreAway;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreAway")
     public int getScoreTotal() {
         return scoreTotal;
     }
@@ -132,6 +153,7 @@ public class Event {
         //return currentOdds;
     //}
 
+    @DynamoDBAttribute(attributeName = "links")
     public List<String> getLinks() {
         return links;
     }
