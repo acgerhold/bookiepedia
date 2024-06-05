@@ -7,6 +7,7 @@ public class Event {
 
     private String eventId;
     // events > 0,1,2 ... > id (401571998)
+    private String scheduleId;
     private String eventName;
     // events > 0,1,2 ... > name (Indiana Pacers at Boston Celtics)
     private String eventNameShort;
@@ -65,6 +66,10 @@ public class Event {
 
     public String getEventId() {
         return eventId;
+    }
+
+    public String getScheduleId() {
+        return scheduleId;
     }
 
     public String getEventName() {
@@ -135,6 +140,10 @@ public class Event {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
+    }
+
+    public void setScheduleId(String scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     public void setEventName(String eventName) {
