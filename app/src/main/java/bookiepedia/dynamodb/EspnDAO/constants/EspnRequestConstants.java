@@ -20,7 +20,8 @@ public class EspnRequestConstants {
 
     // Starting Date
     public static final LocalDateTime NOW = LocalDateTime.now(ZoneId.of("UTC-05:00"));
-    public static final String START_DATE = NOW.format(yyyyMMdd);
+    public static final String START_DATE = "20240606";
+    // NOW.format(yyyyMMdd)
 
     // Ending Date
     public static final long RANGE_DAYS = 14;

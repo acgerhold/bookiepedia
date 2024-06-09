@@ -41,7 +41,7 @@ public class EventModel {
      * @param scoreHome - The score of 'teamHome'
      * @param scoreAway - The score of 'teamAway'
      * @param scoreTotal - The combined score of 'teamHome' and 'teamAway'
-     * @param links - External links to ESPN's box score and statistics for an Event
+     * @param links - External links to ESPN's game cast, box score, highlights, play-by-play, and recap
      */
     public EventModel(String eventId, String scheduleId, String eventName, String eventNameShort, String eventHeadline,
                       String leagueId, String eventDate, String eventSeasonId, String teamHome, String teamAway,

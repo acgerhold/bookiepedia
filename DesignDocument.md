@@ -62,47 +62,6 @@ manage their bets slips and view helpful insights about their bets.
 
 ![image](app/src/main/resources/BookiepediaClassDiagram.png)
 
-* ScheduleModel
-  * scheduleId : String
-  * leagueId : String
-  * leagueName : String
-  * timestamp : String
-  * eventIdList : List<String>
-* EventModel
-  * eventId : String
-  * eventName : String
-  * eventNameShort : String
-  * eventHeadline : String
-  * leagueId : String
-  * eventDate : String
-  * eventSeasonId : String
-  * teamHome : String
-  * teamAway : String
-  * eventStatusId : String
-  * eventStatus : String
-  * teamWinner : String
-  * scoreHome : Integer
-  * scoreAway : Integer
-  * scoreTotal : Integer
-  * links : List<String>
-* LeagueModel
-  * leagueId : String
-  * seasonStatusId : String
-  * seasonStatus : String
-  * seasonYear : String
-  * leagueLogo : String
-* TeamModel
-  * leagueId : String
-  * teamId : String
-  * teamName : String
-  * teamNameAbr : String
-  * teamLogo : String
-  * teamColor : String
-  * teamAlternateColor : String
-  * teamLinks : List<String>
-* HistoryModel
-* BetModel
-
 ## 6.2. _Get Schedule Endpoint_
 
 * Accepts GET requests to /schedule/:leagueId
