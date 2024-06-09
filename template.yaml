@@ -224,7 +224,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Role: !GetAtt AccessRole.Arn
-      CodeUri: bookiepedia
+      CodeUri: app
       Handler: bookiepedia.lambda.GetScheduleLambda::handleRequest
       Runtime: java11
       Architectures:
