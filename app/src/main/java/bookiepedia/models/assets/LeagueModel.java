@@ -11,6 +11,15 @@ public class LeagueModel {
     private final String seasonYear;
     private final String leagueLogo;
 
+    /**
+     * Constructor for a 'League' model.
+     * @param leagueId - The ID associated with a League
+     * @param leagueName - The name of the League
+     * @param seasonStatusId - An ID representing pre-season, regular season, or post-season
+     * @param seasonStatus - "Pre-season, "Regular Season", or "Post-season"
+     * @param seasonYear - The year of a League's current season
+     * @param leagueLogo - External link to a League's logo
+     */
     public LeagueModel(String leagueId, String leagueName, String seasonStatusId, String seasonStatus,
                        String seasonYear, String leagueLogo) {
         this.leagueId = leagueId;
@@ -64,6 +73,7 @@ public class LeagueModel {
         return Objects.hash(leagueId, seasonStatusId, seasonYear);
     }
 
+    // CHECKSTYLE:OFF:Builder
     public static Builder builder() {
         return new Builder();
     }

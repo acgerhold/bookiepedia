@@ -70,7 +70,9 @@ public class League {
         this.seasonStatus = seasonStatus;
     }
 
-    public void setSeasonYear(String seasonYear) { this.seasonYear = seasonYear; }
+    public void setSeasonYear(String seasonYear) {
+        this.seasonYear = seasonYear;
+    }
 
     public void setLeagueLogo(String leagueLogo) {
         this.leagueLogo = leagueLogo;

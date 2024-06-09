@@ -5,14 +5,13 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.List;
-import java.util.Map;
 
 @DynamoDBTable(tableName = "Event")
 public class Event {
 
     private String eventId;
     // events > 0,1,2 ... > id (401571998)
-    private String scheduleId;
+    //private String scheduleId;
     private String eventName;
     // events > 0,1,2 ... > name (Indiana Pacers at Boston Celtics)
     private String eventNameShort;
@@ -74,10 +73,10 @@ public class Event {
         return eventId;
     }
 
-    @DynamoDBAttribute(attributeName = "scheduleId")
-    public String getScheduleId() {
-        return scheduleId;
-    }
+    // @DynamoDBAttribute(attributeName = "scheduleId")
+    // public String getScheduleId() {
+    //    return scheduleId;
+    // }
 
     @DynamoDBAttribute(attributeName = "eventName")
     public String getEventName() {
@@ -149,9 +148,9 @@ public class Event {
         return scoreTotal;
     }
 
-    //public Map<String, Map<String, Integer>> getCurrentOdds() {
-        //return currentOdds;
-    //}
+    //  public Map<String, Map<String, Integer>> getCurrentOdds() {
+    //      return currentOdds;
+    //  }
 
     @DynamoDBAttribute(attributeName = "links")
     public List<String> getLinks() {
@@ -164,9 +163,9 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public void setScheduleId(String scheduleId) {
-        this.scheduleId = scheduleId;
-    }
+    //    public void setScheduleId(String scheduleId) {
+    //        this.scheduleId = scheduleId;
+    //    }
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
@@ -224,9 +223,9 @@ public class Event {
         this.scoreTotal = scoreTotal;
     }
 
-    //public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
-        //this.currentOdds = currentOdds;
-    //}
+    //  public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
+    //      this.currentOdds = currentOdds;
+    //  }
 
     public void setLinks(List<String> links) {
         this.links = links;

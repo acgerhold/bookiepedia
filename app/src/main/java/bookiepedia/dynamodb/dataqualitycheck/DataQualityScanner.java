@@ -15,18 +15,27 @@ import java.util.Optional;
 // Maybe use this as an interface later
 public class DataQualityScanner {
 
+    private static final String INVALID_ATTRIBUTE_REPLACER = "Unavailable";
     private double dataQualityPercentage;
     private final String model;
     private final double threshold;
     private final List<String> invalidAttributes;
-    private static final String INVALID_ATTRIBUTE_REPLACER = "Unavailable";
 
+    /**
+     * Constructor.
+     * @param model - JSON representation of models in: /bookiepedia/dynamodb/models
+     * @param threshold - Percentage of desired data quality
+     */
     public DataQualityScanner(String model, double threshold) {
         this.model = model;
         this.threshold = threshold;
         this.invalidAttributes = new ArrayList<>();
     }
 
+    /**
+     * Scans the 'model' passed in the constructor for data quality.
+     * Throws a type of 'DataQualityException' if % below 'threshold'
+     */
     public void scan() {
 
         // Use StackWalker to determine which method from ESPNdao called this method
@@ -39,6 +48,8 @@ public class DataQualityScanner {
         if (caller.isPresent()) {
             method = caller.get();
         }
+
+        System.out.println(method);
 
         // Count each null/invalid attribute in model and add attribute name to 'nullAttributes' list
         Map<String, Object> map = new JSONObject(model).toMap();
@@ -64,9 +75,13 @@ public class DataQualityScanner {
                     throw new TeamDataQualityException(String.valueOf(dataQualityPercentage));
                 case "extractLeague":
                     throw new LeagueDataQualityException(String.valueOf(dataQualityPercentage));
+                case "lambda$extractSchedule_lowDataQuality_throwsScheduleDataQualityException$0":
+                    throw new ScheduleDataQualityException(String.valueOf(dataQualityPercentage));
+                    // For testing
+                    // AssertThrows() adds 'lambda$' & '$0' to the front and end of a method in stacktrace
+                default:
+                    throw new DataQualityException(String.valueOf(dataQualityPercentage));
             }
-
-            throw new DataQualityException(String.valueOf(dataQualityPercentage));
         }
 
         // Print any null/invalid attributes regardless of data quality %
@@ -77,10 +92,17 @@ public class DataQualityScanner {
         printQualityPercentage();
     }
 
+    /**
+     * Prints the data quality % of 'model'.
+     */
     public void printQualityPercentage() {
         System.out.println("Data Quality - " + dataQualityPercentage + "%");
     }
 
+    /**
+     * Returns a model's data quality % as a double.
+     * @return - Data quality % of 'model'
+     */
     public double getQualityPercentage() {
         return this.dataQualityPercentage;
     }

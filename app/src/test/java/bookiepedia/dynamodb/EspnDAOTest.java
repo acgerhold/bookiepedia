@@ -1,7 +1,7 @@
 package bookiepedia.dynamodb;
 
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
-import bookiepedia.dynamodb.espnDAO.espnDAO;
+import bookiepedia.dynamodb.EspnDAO.EspnDAO;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 
@@ -20,17 +20,17 @@ import java.util.List;
 //import static org.mockito.Mockito.*
 
 
-public class espnDAOTest {
+public class EspnDAOTest {
 
 //    @Mock
     private DataQualityScanner dataQualityScanner;
-    private static bookiepedia.dynamodb.espnDAO.espnDAO espnDAO;
+    private static EspnDAO espnDAO;
     private static JSONObject result;
 
     @BeforeAll
     public static void setUp() throws IOException {
 //        openMocks(this);
-        espnDAO = new espnDAO();
+        espnDAO = new EspnDAO();
         result = espnDAO.requestQuery();
     }
 
@@ -120,22 +120,31 @@ public class espnDAOTest {
                 .getJSONArray("competitors")
                 .getJSONObject(0)
                 .getJSONObject("team");
+        JSONObject teamJsonOriginalTwo = eventJson.getJSONArray("competitions")
+                .getJSONObject(0)
+                .getJSONArray("competitors")
+                .getJSONObject(1)
+                .getJSONObject("team");
         // * Temporary, will probably call extractTeam() within extractEvents() to simplify
 
         String teamJsonNew = espnDAO.extractTeam(teamJsonOriginal, "46");
+        String teamJsonNewTwo = espnDAO.extractTeam(teamJsonOriginalTwo, "46");
 
         // THEN - A 'Team' object will be created for both teams that will be stored in DynamoDB
         ObjectMapper mapper = new ObjectMapper();
         Team team;
+        Team teamTwo;
 
         try {
             team = mapper.readValue(teamJsonNew, Team.class);
+            teamTwo = mapper.readValue(teamJsonNewTwo, Team.class);
         } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe);
         }
 
         System.out.println("Team(s)");
         printTeamAttributes(team);
+        printTeamAttributes(teamTwo);
     }
 
     @Test
