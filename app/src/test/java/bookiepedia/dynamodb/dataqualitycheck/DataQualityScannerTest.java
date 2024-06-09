@@ -1,6 +1,7 @@
 package bookiepedia.dynamodb.dataqualitycheck;
 
-import bookiepedia.exceptions.dataqualityexception.DataQualityException;
+import bookiepedia.dynamodb.EspnDAO.EspnDAO;
+import bookiepedia.exceptions.dataqualityexception.modelexceptions.ScheduleDataQualityException;
 import bookiepedia.models.ScheduleModel;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 public class DataQualityScannerTest {
 
     @Mock
-    private bookiepedia.dynamodb.espnDAO.espnDAO espnDAO;
+    private EspnDAO espnDAO;
     private DataQualityScanner dataQualityScanner;
 
     @BeforeEach
@@ -49,9 +50,7 @@ public class DataQualityScannerTest {
         dataQualityScanner = new DataQualityScanner(schedule, threshold);
 
         // THEN - A ScheduleDataQualityException will be thrown
-        // * Can't use ScheduleDataQualityException because ESPNdao is being mocked;
-        //   StackWalker can't trace the class' calling method
-        assertThrows(DataQualityException.class, () -> dataQualityScanner.scan());
+        assertThrows(ScheduleDataQualityException.class, () -> dataQualityScanner.scan());
     }
 
     @Test

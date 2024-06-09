@@ -1,8 +1,12 @@
 package bookiepedia.dynamodb.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.util.List;
 
-// @DynamoDBTable(tableName = "schedule')
+@DynamoDBTable(tableName = "schedule")
 public class Schedule {
 
     private String scheduleId;
@@ -20,33 +24,39 @@ public class Schedule {
     private String scheduleName;
     // leagueName + " upcoming events " + dateRange;
 
-
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "scheduleId")
     public String getScheduleId() {
         return scheduleId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueName")
     public String getLeagueName() {
         return leagueName;
     }
 
+    @DynamoDBAttribute(attributeName = "timestamp")
     public String getTimestamp() {
         return timestamp;
     }
 
+    @DynamoDBAttribute(attributeName = "eventIdList")
     public List<String> getEventIdList() {
         return eventIdList;
     }
 
+    @DynamoDBAttribute(attributeName = "dateRange")
     public String getDateRange() {
         return dateRange;
     }
 
+    @DynamoDBAttribute(attributeName = "scheduleName")
     public String getScheduleName() {
         return scheduleName;
     }

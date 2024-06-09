@@ -1,13 +1,18 @@
 package bookiepedia.dynamodb.models.assets;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 import java.util.List;
 
+@DynamoDBTable(tableName = "Team")
 public class Team {
 
-    private String leagueId;
-    // leagues > 0 > id
     private String teamId;
     // events > 0/1 > competitions > competitors > 0/1 > team > id
+    private String leagueId;
+    // leagues > 0 > id
     private String teamName;
     // events > 0/1 > competitions > competitors > 0/1 > team > displayName
     private String teamNameAbr;
@@ -19,37 +24,44 @@ public class Team {
     private String teamAlternateColor;
     private List<String> teamLinks;
 
-
     // GETTERS
 
-    public String getLeagueId() {
-        return leagueId;
-    }
-
+    @DynamoDBHashKey(attributeName = "teamId")
     public String getTeamId() {
         return teamId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueId")
+    public String getLeagueId() {
+        return leagueId;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamName")
     public String getTeamName() {
         return teamName;
     }
 
+    @DynamoDBAttribute(attributeName = "teamNameAbr")
     public String getTeamNameAbr() {
         return teamNameAbr;
     }
 
+    @DynamoDBAttribute(attributeName = "teamLogo")
     public String getTeamLogo() {
         return teamLogo;
     }
 
+    @DynamoDBAttribute(attributeName = "teamColor")
     public String getTeamColor() {
         return teamColor;
     }
 
+    @DynamoDBAttribute(attributeName = "teamAlternateColor")
     public String getTeamAlternateColor() {
         return teamAlternateColor;
     }
 
+    @DynamoDBAttribute(attributeName = "teamLinks")
     public List<String> getTeamLinks() {
         return teamLinks;
     }

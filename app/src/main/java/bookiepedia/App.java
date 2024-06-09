@@ -3,13 +3,17 @@
  */
 package bookiepedia;
 
-import bookiepedia.dynamodb.espnDAO.espnDAO;
+import bookiepedia.dynamodb.EspnDAO.EspnDAO;
 import org.json.JSONObject;
 
 public class App {
 
-    private static espnDAO espn = new espnDAO();
+    private static EspnDAO espn = new EspnDAO();
 
+    /**
+     * Main method.
+     * @param args - Arguments
+     */
     public static void main(String[] args) {
         try {
             JSONObject espnJson = espn.requestQuery();

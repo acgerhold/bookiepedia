@@ -23,6 +23,26 @@ public class EventModel {
     private final Integer scoreTotal;
     private final List<String> links;
 
+    /**
+     * Constructor for an Event model.
+     * @param eventId - An ID associated with an Event
+     * @param scheduleId - The ID of a Schedule object an Event is contained in
+     * @param eventName - The name of an Event
+     * @param eventNameShort - An abbreviated version of eventName
+     * @param eventHeadline - The headline of an Event
+     * @param leagueId - The ID of a league associated with an Event
+     * @param eventDate - The date of the Event
+     * @param eventSeasonId - An ID representing pre-season, regular season, or post-season
+     * @param teamHome - The home team of the Event
+     * @param teamAway - The away team of the Event
+     * @param eventStatusId - An ID representing if an Event is scheduled, in progress, or complete
+     * @param eventStatus - "Scheduled", "In Progress", or "Complete"
+     * @param teamWinner - The winning team of the event
+     * @param scoreHome - The score of 'teamHome'
+     * @param scoreAway - The score of 'teamAway'
+     * @param scoreTotal - The combined score of 'teamHome' and 'teamAway'
+     * @param links - External links to ESPN's box score and statistics for an Event
+     */
     public EventModel(String eventId, String scheduleId, String eventName, String eventNameShort, String eventHeadline,
                       String leagueId, String eventDate, String eventSeasonId, String teamHome, String teamAway,
                       String eventStatusId, String eventStatus, String teamWinner, Integer scoreHome,

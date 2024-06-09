@@ -1,13 +1,17 @@
 package bookiepedia.dynamodb.models;
 
-import java.util.List;
-import java.util.Map;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+import java.util.List;
+
+@DynamoDBTable(tableName = "Event")
 public class Event {
 
     private String eventId;
     // events > 0,1,2 ... > id (401571998)
-    private String scheduleId;
+    //private String scheduleId;
     private String eventName;
     // events > 0,1,2 ... > name (Indiana Pacers at Boston Celtics)
     private String eventNameShort;
@@ -64,74 +68,91 @@ public class Event {
 
     // GETTERS
 
+    @DynamoDBHashKey(attributeName = "eventId")
     public String getEventId() {
         return eventId;
     }
 
-    public String getScheduleId() {
-        return scheduleId;
-    }
+    // @DynamoDBAttribute(attributeName = "scheduleId")
+    // public String getScheduleId() {
+    //    return scheduleId;
+    // }
 
+    @DynamoDBAttribute(attributeName = "eventName")
     public String getEventName() {
         return eventName;
     }
 
+    @DynamoDBAttribute(attributeName = "eventNameShort")
     public String getEventNameShort() {
         return eventNameShort;
     }
 
+    @DynamoDBAttribute(attributeName = "eventHeadline")
     public String getEventHeadline() {
         return eventHeadline;
     }
 
+    @DynamoDBAttribute(attributeName = "eventDate")
     public String getEventDate() {
         return eventDate;
     }
 
+    @DynamoDBAttribute(attributeName = "eventSeasonId")
     public String getEventSeasonId() {
         return eventSeasonId;
     }
 
+    @DynamoDBAttribute(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHome")
     public String getTeamHome() {
         return teamHome;
     }
 
+    @DynamoDBAttribute(attributeName = "teamAway")
     public String getTeamAway() {
         return teamAway;
     }
 
+    @DynamoDBAttribute(attributeName = "eventStatusId")
     public String getEventStatusId() {
         return eventStatusId;
     }
 
+    @DynamoDBAttribute(attributeName = "eventStatus")
     public String getEventStatus() {
         return eventStatus;
     }
 
+    @DynamoDBAttribute(attributeName = "teamWinner")
     public String getTeamWinner() {
         return teamWinner;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreHome")
     public int getScoreHome() {
         return scoreHome;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreAway")
     public int getScoreAway() {
         return scoreAway;
     }
 
+    @DynamoDBAttribute(attributeName = "scoreAway")
     public int getScoreTotal() {
         return scoreTotal;
     }
 
-    //public Map<String, Map<String, Integer>> getCurrentOdds() {
-        //return currentOdds;
-    //}
+    //  public Map<String, Map<String, Integer>> getCurrentOdds() {
+    //      return currentOdds;
+    //  }
 
+    @DynamoDBAttribute(attributeName = "links")
     public List<String> getLinks() {
         return links;
     }
@@ -142,9 +163,9 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public void setScheduleId(String scheduleId) {
-        this.scheduleId = scheduleId;
-    }
+    //    public void setScheduleId(String scheduleId) {
+    //        this.scheduleId = scheduleId;
+    //    }
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
@@ -202,9 +223,9 @@ public class Event {
         this.scoreTotal = scoreTotal;
     }
 
-    //public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
-        //this.currentOdds = currentOdds;
-    //}
+    //  public void setCurrentOdds(Map<String, Map<String, Integer>> currentOdds) {
+    //      this.currentOdds = currentOdds;
+    //  }
 
     public void setLinks(List<String> links) {
         this.links = links;

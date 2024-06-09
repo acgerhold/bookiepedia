@@ -1,10 +1,10 @@
-package bookiepedia.dynamodb.espnDAO.constants;
+package bookiepedia.dynamodb.EspnDAO.constants;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class espnRequestConstants {
+public class EspnRequestConstants {
 
     // Specify league with 'v2'/sports/{sport}/{league}/scoreboard'
     // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
