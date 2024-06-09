@@ -22,7 +22,7 @@ public class TeamModel {
      * @param teamLogo - External link to a Team's logo
      * @param teamColor - A Team's main color as a color code
      * @param teamAlternateColor - A Team's alternate color as a color code
-     * @param teamLinks - External links to ESPN's roster and statistics for a Team
+     * @param teamLinks - External links to ESPN's roster, statistics, schedule, and home page for a Team
      */
     public TeamModel(String leagueId, String teamId, String teamName, String teamNameAbr, String teamLogo,
                      String teamColor, String teamAlternateColor, List<String> teamLinks) {
