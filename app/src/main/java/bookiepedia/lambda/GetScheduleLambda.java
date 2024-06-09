@@ -7,6 +7,6 @@ public class GetScheduleLambda implements RequestHandler<LambdaRequest<GetSchedu
 
     @Override
     public LambdaResponse handleRequest(LambdaRequest<GetScheduleLambda> input, Context context) {
-        return null;
+        return LambdaResponse.success();
     }
 }
