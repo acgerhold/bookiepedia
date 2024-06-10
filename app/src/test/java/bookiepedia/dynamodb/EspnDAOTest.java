@@ -180,11 +180,11 @@ public class EspnDAOTest {
         System.out.println("League      : " + schedule.getLeagueName());
         System.out.println("League ID   : " + schedule.getLeagueId());
         System.out.println("Timestamp   : " + schedule.getTimestamp());
-        System.out.println("Date Range  : " + schedule.getDateRange());
         System.out.println("Events      : " + schedule.getEventIdList());
     }
     public void printEventAttributes(Event event) {
         System.out.println("Event           : " + event.getEventName());
+        System.out.println("Schedule ID     : " + event.getScheduleId());
         System.out.println("ID              : " + event.getEventId());
         System.out.println("Headline        : " + event.getEventHeadline());
         System.out.println("League ID       : " + event.getLeagueId());

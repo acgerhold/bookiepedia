@@ -2,11 +2,12 @@ package bookiepedia.dynamodb.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.List;
 
-@DynamoDBTable(tableName = "schedule")
+@DynamoDBTable(tableName = "Schedule")
 public class Schedule {
 
     private String scheduleId;
@@ -19,19 +20,17 @@ public class Schedule {
     // day > date
     private List<String> eventIdList;
     // events > 0,1,2 ... > id
-    private String dateRange;
-    // MIN(event.date : eventlist) + "-" + MAX(event.date : eventlist)
     private String scheduleName;
     // leagueName + " upcoming events " + dateRange;
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "scheduleId")
+    @DynamoDBAttribute(attributeName = "scheduleId")
     public String getScheduleId() {
         return scheduleId;
     }
 
-    @DynamoDBAttribute(attributeName = "leagueId")
+    @DynamoDBHashKey(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }
@@ -41,7 +40,7 @@ public class Schedule {
         return leagueName;
     }
 
-    @DynamoDBAttribute(attributeName = "timestamp")
+    @DynamoDBRangeKey(attributeName = "timestamp")
     public String getTimestamp() {
         return timestamp;
     }
@@ -49,11 +48,6 @@ public class Schedule {
     @DynamoDBAttribute(attributeName = "eventIdList")
     public List<String> getEventIdList() {
         return eventIdList;
-    }
-
-    @DynamoDBAttribute(attributeName = "dateRange")
-    public String getDateRange() {
-        return dateRange;
     }
 
     @DynamoDBAttribute(attributeName = "scheduleName")
@@ -81,10 +75,6 @@ public class Schedule {
 
     public void setEventIdList(List<String> eventIdList) {
         this.eventIdList = eventIdList;
-    }
-
-    public void setDateRange(String dateRange) {
-        this.dateRange = dateRange;
     }
 
     public void setScheduleName(String scheduleName) {
