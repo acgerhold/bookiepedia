@@ -319,12 +319,12 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "leagueId"
           AttributeType: "S"
-        - AttributeName: "eventId"
+        - AttributeName: "teamId"
           AttributeType: "S"
       KeySchema:
         - AttributeName: "leagueId"
           KeyType: "HASH"
-        - AttributeName: "eventId"
+        - AttributeName: "teamId"
           KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
 

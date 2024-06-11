@@ -1,13 +1,17 @@
 package bookiepedia.dynamodb.EspnDAO;
 
+import bookiepedia.dynamodb.DynamoDbClientProvider;
 import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
 
+import bookiepedia.dynamodb.assets.TeamDAO;
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
 
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
@@ -298,6 +302,9 @@ public class EspnDAO {
                 .map(link -> link.optString("href", INVALID_STRING_REPLACER))
                 .collect(Collectors.toList());
         t.setTeamLinks(linksList);
+
+        // TeamDAO teamDAO = new TeamDAO(new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient(Regions.US_EAST_2)));
+        // teamDAO.saveTeam(t);
 
         ObjectMapper mapper = new ObjectMapper();
         String teamJson;
