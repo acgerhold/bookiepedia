@@ -143,7 +143,7 @@ public class Event {
         return scoreAway;
     }
 
-    @DynamoDBAttribute(attributeName = "scoreAway")
+    @DynamoDBAttribute(attributeName = "scoreTotal")
     public int getScoreTotal() {
         return scoreTotal;
     }
