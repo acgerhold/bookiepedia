@@ -16,15 +16,18 @@ public class EspnRequestConstants {
 
     // Date Formatting
     public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
-    public static final DateTimeFormatter mm_dd_yy = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    public static final DateTimeFormatter yyyy_MM_dd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // Starting Date
     public static final LocalDateTime NOW = LocalDateTime.now(ZoneId.of("UTC-05:00"));
-    public static final String START_DATE = "20240606";
-    // NOW.format(yyyyMMdd)
+    public static final String START_DATE = NOW.format(yyyyMMdd);
 
     // Ending Date
-    public static final long RANGE_DAYS = 14;
+    public static final long RANGE_DAYS = 10;
+    // On average, for most regular season games across major sports leagues, lines are released
+    // for games 1-7 days in advance depending on the game's importance
+    // Regular Season NBA/NHL - 1 to 2 days before game
+    // Post Season NBA/NHL & special events - 3-7+
     public static final String END_DATE = NOW.plusDays(RANGE_DAYS).format(yyyyMMdd);
 
 }

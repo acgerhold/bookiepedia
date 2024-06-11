@@ -27,7 +27,6 @@ public class EspnDAO {
 
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
-    private String scheduleId;
 
     /**
      * Sends an HTTP request to the ESPN API.
@@ -85,9 +84,8 @@ public class EspnDAO {
         // League ID
         schedule.setLeagueId(leagues.optJSONObject(0).optString("id", INVALID_STRING_REPLACER));
         // Schedule ID
-        scheduleId = String.format("%s-%s-%s",
-                schedule.getLeagueId(), EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE);
-        schedule.setScheduleId(scheduleId);
+        schedule.setScheduleId(String.format("%s-%s-%s",
+                schedule.getLeagueId(), EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
         // League Name
         schedule.setLeagueName(leagues.optJSONObject(0).optString("abbreviation", INVALID_STRING_REPLACER));
         // Event ID List
@@ -99,12 +97,9 @@ public class EspnDAO {
         // Schedule Name
         schedule.setScheduleName(String.format("%s Events: %s - %s",
                 schedule.getLeagueName(), EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
-        // Schedule Date Range
-        schedule.setDateRange(String.format("%s-%s",
-                EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
         // Schedule Timestamp
         schedule.setTimestamp(
-                EspnRequestConstants.NOW.toString());
+                EspnRequestConstants.NOW.format(EspnRequestConstants.yyyy_MM_dd));
 
         ObjectMapper mapper = new ObjectMapper();
         String scheduleJson;
@@ -130,7 +125,12 @@ public class EspnDAO {
      */
     public List<String> extractEvents(JSONObject espnResponse) {
 
-        // Start by extracting the "events" JSONArray from the response and adding each JSONObject (event) to a list
+        // Extract the league ID to be used in setting an event's scheduleId
+        String leagueId = espnResponse.getJSONArray("leagues")
+                .optJSONObject(0)
+                .optString("id", INVALID_STRING_REPLACER);
+
+        // Extract the "events" JSONArray from the response and adding each JSONObject (event) to a list
         JSONArray eventsJson = espnResponse.getJSONArray("events");
         List<JSONObject> eventJsonList = IntStream.range(0, eventsJson.length())
                 .mapToObj(eventsJson::getJSONObject)
@@ -157,7 +157,8 @@ public class EspnDAO {
                     // ID
                     e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
                     // Schedule ID
-                    //e.setScheduleId();
+                    e.setScheduleId(String.format("%s-%s-%s",
+                            leagueId, EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
                     // Event Name
                     e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
                     // Event Name (Short)

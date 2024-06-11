@@ -11,7 +11,7 @@ public class Event {
 
     private String eventId;
     // events > 0,1,2 ... > id (401571998)
-    //private String scheduleId;
+    private String scheduleId;
     private String eventName;
     // events > 0,1,2 ... > name (Indiana Pacers at Boston Celtics)
     private String eventNameShort;
@@ -68,15 +68,15 @@ public class Event {
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "eventId")
+    @DynamoDBAttribute(attributeName = "eventId")
     public String getEventId() {
         return eventId;
     }
 
-    // @DynamoDBAttribute(attributeName = "scheduleId")
-    // public String getScheduleId() {
-    //    return scheduleId;
-    // }
+     @DynamoDBHashKey(attributeName = "scheduleId")
+     public String getScheduleId() {
+        return scheduleId;
+     }
 
     @DynamoDBAttribute(attributeName = "eventName")
     public String getEventName() {
@@ -163,9 +163,9 @@ public class Event {
         this.eventId = eventId;
     }
 
-    //    public void setScheduleId(String scheduleId) {
-    //        this.scheduleId = scheduleId;
-    //    }
+    public void setScheduleId(String scheduleId) {
+        this.scheduleId = scheduleId;
+    }
 
     public void setEventName(String eventName) {
         this.eventName = eventName;
