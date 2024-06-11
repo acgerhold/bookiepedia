@@ -1,16 +1,14 @@
 package bookiepedia.dynamodb.models;
 
 import bookiepedia.converters.BigDecimalConverter;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.math.BigDecimal;
 
 @DynamoDBTable(tableName = "Bet")
 public class Bet {
 
+    private String weeklyHistoryId;
     private String betId;
     private String userId;
     private String eventId;
@@ -41,7 +39,12 @@ public class Bet {
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "betId")
+    @DynamoDBHashKey(attributeName = "weeklyHistoryId")
+    public String getWeeklyHistoryId() {
+        return weeklyHistoryId;
+    }
+
+    @DynamoDBRangeKey(attributeName = "betId")
     public String getBetId() {
         return betId;
     }
@@ -161,6 +164,11 @@ public class Bet {
     }
 
     // SETTERS
+
+
+    public void setWeeklyHistoryId(String weeklyHistoryId) {
+        this.weeklyHistoryId = weeklyHistoryId;
+    }
 
     public void setBetId(String betId) {
         this.betId = betId;

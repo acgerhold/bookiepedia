@@ -73,8 +73,8 @@ public class Event {
         return eventId;
     }
 
-     @DynamoDBHashKey(attributeName = "scheduleId")
-     public String getScheduleId() {
+    @DynamoDBHashKey(attributeName = "scheduleId")
+    public String getScheduleId() {
         return scheduleId;
      }
 

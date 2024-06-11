@@ -300,6 +300,78 @@ Resources:
           KeyType: "RANGE"
       BillingMode: PAY_PER_REQUEST
 
+  LeagueTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "League"
+      AttributeDefinitions:
+        - AttributeName: "leagueId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "leagueId"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
+  TeamTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Team"
+      AttributeDefinitions:
+        - AttributeName: "leagueId"
+          AttributeType: "S"
+        - AttributeName: "eventId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "leagueId"
+          KeyType: "HASH"
+        - AttributeName: "eventId"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+
+  WeeklyHistoryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Weekly_History"
+      AttributeDefinitions:
+        - AttributeName: "monthlyHistoryId"
+          AttributeType: "S"
+        - AttributeName: "weeklyHistoryId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "monthlyHistoryId"
+          KeyType: "HASH"
+        - AttributeName: "weeklyHistoryId"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+
+  MonthlyHistoryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Monthly_History"
+      AttributeDefinitions:
+        - AttributeName: "monthlyHistoryId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "monthlyHistoryId"
+          KeyType: "HASH"
+      BillingMode: PAY_PER_REQUEST
+
+  BetTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "Bet"
+      AttributeDefinitions:
+        - AttributeName: "weeklyHistoryId"
+          AttributeType: "S"
+        - AttributeName: "betId"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "weeklyHistoryId"
+          KeyType: "HASH"
+        - AttributeName: "betId"
+          KeyType: "RANGE"
+      BillingMode: PAY_PER_REQUEST
+
 #-----------------------------------------------------
 # The outputs defined below will be printed
 #  to the screen after a successful deploy
