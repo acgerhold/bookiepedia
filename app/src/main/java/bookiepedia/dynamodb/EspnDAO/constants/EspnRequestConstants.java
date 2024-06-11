@@ -19,6 +19,7 @@ public class EspnRequestConstants {
     public static final DateTimeFormatter yyyy_MM_dd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // Starting Date
+    public static final ZoneId ZONE_ID = ZoneId.of("UTC-05:00");
     public static final LocalDateTime NOW = LocalDateTime.now(ZoneId.of("UTC-05:00"));
     public static final String START_DATE = NOW.format(yyyyMMdd);
 
@@ -29,5 +30,15 @@ public class EspnRequestConstants {
     // Regular Season NBA/NHL - 1 to 2 days before game
     // Post Season NBA/NHL & special events - 3-7+
     public static final String END_DATE = NOW.plusDays(RANGE_DAYS).format(yyyyMMdd);
+
+    public static String getStartDate() {
+        LocalDateTime now = LocalDateTime.now(ZONE_ID);
+        return now.format(yyyyMMdd);
+    }
+
+    public static String getEndDate() {
+        LocalDateTime now = LocalDateTime.now(ZONE_ID);
+        return now.plusDays(RANGE_DAYS).format(yyyyMMdd);
+    }
 
 }

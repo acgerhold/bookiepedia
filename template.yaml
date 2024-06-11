@@ -264,6 +264,25 @@ Resources:
             Auth:
               Authorizer: 'NONE'
 
+  FetchScheduleLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Role: !GetAtt AccessRole.Arn
+      CodeUri: app
+      Handler: bookiepedia.lambda.FetchScheduleLambda::handleRequest
+      Runtime: java11
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Environment:
+        Variables:
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+      Events:
+        ScheduleRule:
+          Type: Schedule
+          Properties:
+            Schedule: !Sub "rate(${UpdateFrequency} minutes)"
+
   #-----------------------------------------------------
   # DynamoDB Configuration
   #-----------------------------------------------------

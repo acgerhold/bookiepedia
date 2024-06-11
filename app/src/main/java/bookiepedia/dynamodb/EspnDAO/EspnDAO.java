@@ -38,14 +38,7 @@ public class EspnDAO {
      * @return A response from the ESPN API as a JSONObject
      * @throws IOException if error contacting the ESPN API
      */
-    public JSONObject requestQuery() throws IOException {
-
-        // GET request for NBA schedule
-        // Specify league with /sports/{sport}/{leagueId}/scoreboard
-        // Specify date ranges with '?dates=YYYYMMDD-YYYYMMDD'
-        // No date parameters returns schedule for current day
-        String url = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
-                EspnRequestConstants.NBA, EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE);
+    public JSONObject requestQuery(String url) throws IOException {
 
         // Calling the API
         URL obj = new URL(url);
