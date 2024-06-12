@@ -14,7 +14,9 @@ public class GetScheduleRequest {
 
     @Override
     public String toString() {
-        return "GetScheduleRequest {ID = " + id + "}";
+        return "GetScheduleRequest{" +
+                "id='" + id + '\'' +
+                '}';
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -25,7 +27,7 @@ public class GetScheduleRequest {
     public static class Builder {
         private String id;
 
-        public Builder withId(String id) {
+        public GetScheduleRequest.Builder withId(String id) {
             this.id = id;
             return this;
         }

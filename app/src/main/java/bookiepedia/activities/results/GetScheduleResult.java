@@ -16,7 +16,7 @@ public class GetScheduleResult {
 
     @Override
     public String toString() {
-        return "GetScheduleResult {Schedule = " + schedule + "}";
+        return "GetScheduleResult{schedule=" + schedule + "}";
     }
 
     //CHECKSTYLE:OFF:BUILDER

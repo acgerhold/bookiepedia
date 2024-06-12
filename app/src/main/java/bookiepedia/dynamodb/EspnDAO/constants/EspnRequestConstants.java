@@ -22,6 +22,7 @@ public class EspnRequestConstants {
     public static final ZoneId ZONE_ID = ZoneId.of("UTC-05:00");
     public static final LocalDateTime NOW = LocalDateTime.now(ZoneId.of("UTC-05:00"));
     public static final String START_DATE = NOW.format(yyyyMMdd);
+    public static final String START_DATE_SPLIT = NOW.format(yyyy_MM_dd);
 
     // Ending Date
     public static final long RANGE_DAYS = 10;

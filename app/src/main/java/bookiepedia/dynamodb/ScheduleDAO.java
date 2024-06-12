@@ -16,7 +16,7 @@ public class ScheduleDAO {
     }
 
     public Schedule getSchedule(String leagueId) {
-        return this.dynamoDBMapper.load(Schedule.class, leagueId, leagueId + "-" + EspnRequestConstants.START_DATE);
+        return this.dynamoDBMapper.load(Schedule.class, leagueId, EspnRequestConstants.START_DATE_SPLIT);
     }
 
     public void saveSchedule(Schedule schedule) {

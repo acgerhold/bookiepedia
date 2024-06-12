@@ -15,7 +15,7 @@ public class GetScheduleLambda
         return super.runActivity(
                 () -> input.fromPath(path ->
                         GetScheduleRequest.builder()
-                                .withId(path.get("id"))
+                                .withId(path.get("leagueId"))
                                 .build()),
                 (request, serviceComponent) ->
                     serviceComponent.provideGetScheduleActivity().handleRequest(request)
