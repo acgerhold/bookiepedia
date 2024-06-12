@@ -30,7 +30,6 @@ public class EspnRequestConstants {
     // for games 1-7 days in advance depending on the game's importance
     // Regular Season NBA/NHL - 1 to 2 days before game
     // Post Season NBA/NHL & special events - 3-7+
-    public static final String END_DATE = NOW.plusDays(RANGE_DAYS).format(yyyyMMdd);
 
     public static String getStartDate() {
         LocalDateTime now = LocalDateTime.now(ZONE_ID);

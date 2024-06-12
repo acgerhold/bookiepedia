@@ -9,18 +9,24 @@
 <body class="background">
     <header class="header" id="header"></header>
     <div class="card">
-        <h2>Search Playlists</h2>
+        <h2>View live scores, odds, and more</h2>
         <form class="card-content" id="search-playlists-form">
             <p class="form-field">
-                <label>Search by name or tag</label>
-                <input type="text" class="validated-field" id="search-criteria" placeholder="smooth-jamz" autofocus>
-                <sub>Search is case-sensitive and tags must match exactly.</sub>
+                <label>Select a league</label>
+                <div class="icon-container">
+                    <div class="icon-wrapper">
+                        <div class="hover-indicator"></div>
+                        <img class="test-icon" src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500-dark/nba.png&w=500&h=500&transparent=true" alt="Test Icon" style="cursor: pointer;">
+                    </div>
+                </div>
+                <div class="icon-container">
+                    <div class="icon-wrapper">
+                        <div class="hover-indicator"></div>
+                        <img class="test-icon" src="https://a.espncdn.com/i/teamlogos/leagues/500-dark/nhl.png" alt="Test Icon" style="cursor: pointer;">
+                    </div>
+                </div>
             </p>
         </form>
-        <p class="button-group">
-            <a href="#" class="button" id="search-btn">Search</a>
-            <a href="createPlaylist.html" class="button">New Playlist</a>
-        </p>
     </div>
     <div class="card hidden" id='search-results-container'>
         <h3>Results for <span id="search-criteria-display"></span></h3>

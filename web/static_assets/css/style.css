@@ -47,11 +47,18 @@
     color: var(--secondary-color);
 }
 
+/*
+Changed to Win10 start menu widget type of look
+*/
+
 .card {
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
+    color: white;
+    background-color: rgba(0,0,0,0.7);
     margin: 20px;
-    padding: 10px 20px;
+    padding: 20px;
+    border-radius:10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    text-align: center;
 }
 
 .error {
@@ -69,6 +76,7 @@
 
 .card-content {
     max-width: 500px;
+    margin: 0 auto;
 }
 
 .card-content .form-field {
@@ -134,4 +142,67 @@ th {
 a {
     color: var(--tertiary-color);
     text-decoration: none;
+}
+
+
+/*
+New .css being added to template
+*/
+
+
+/*
+League icon/button placeholders
+- .icon-wrapper for help with indicator
+*/
+
+.icon-container {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+}
+
+.icon-wrapper {
+    position: relative;
+}
+
+.test-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/*
+Gold hover indicator
+- transform: scale() adjust speed for size increase when hovering
+- adjust position in .hover-indicator
+- transform: translateX() keeps icon centered when expanding?
+*/
+
+.hover-indicator {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 5px;
+    background-color: gold;
+    border-radius: 5px;
+    display: none;
+}
+
+.icon-container:hover .test-icon {
+    transform: scale(1.2);
+}
+
+.icon-container:hover .hover-indicator {
+    display: block;
+}
+
+
+
+
+.card .form-field label,
+.card .form-field sub {
+    color: #cccccc;
 }

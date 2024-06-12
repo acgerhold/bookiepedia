@@ -43,8 +43,13 @@ class SearchPlaylists extends BindingClass {
      */
     mount() {
         // Wire up the form's 'submit' event and the button's 'click' event to the search method.
-        document.getElementById('search-playlists-form').addEventListener('submit', this.search);
-        document.getElementById('search-btn').addEventListener('click', this.search);
+        const icons = document.querySelectorAll('.search-icon')
+        icons.forEach(icon => {
+            icon.addEventListener('click', (evt) => {
+                const searchCriteria = evt.target.getAttribute('data-search-criteria');
+                this.search(searchCriteria);
+            });
+        });
 
         this.header.addHeaderToPage();
 
@@ -56,11 +61,12 @@ class SearchPlaylists extends BindingClass {
      * then updates the datastore with the criteria and results.
      * @param evt The "event" object representing the user-initiated event that triggered this method.
      */
-    async search(evt) {
+    async search(searchCriteria) {
         // Prevent submitting the from from reloading the page.
-        evt.preventDefault();
+        if (!searchCriteria) {
+            return;
+        }
 
-        const searchCriteria = document.getElementById('search-criteria').value;
         const previousSearchCriteria = this.dataStore.get(SEARCH_CRITERIA_KEY);
 
         // If the user didn't change the search criteria, do nothing
