@@ -10,17 +10,15 @@ public class ScheduleModel {
     private final String leagueName;
     private final String timestamp;
     private final List<String> eventIdList;
-    private final String dateRange;
     private final String scheduleName;
 
     private ScheduleModel(String scheduleId, String leagueId, String leagueName, String timestamp,
-                          List<String> eventIdList, String dateRange, String scheduleName) {
+                          List<String> eventIdList, String scheduleName) {
         this.scheduleId = scheduleId;
         this.leagueId = leagueId;
         this.leagueName = leagueName;
         this.timestamp = timestamp;
         this.eventIdList = eventIdList;
-        this.dateRange = dateRange;
         this.scheduleName = scheduleName;
     }
 
@@ -44,10 +42,6 @@ public class ScheduleModel {
 
     public List<String> getEventIdList() {
         return eventIdList;
-    }
-
-    public String getDateRange() {
-        return dateRange;
     }
 
     public String getScheduleName() {
@@ -87,7 +81,6 @@ public class ScheduleModel {
         private String leagueName;
         private String timestamp;
         private List<String> eventIdList;
-        private String dateRange;
         private String scheduleName;
 
         public Builder withScheduleId(String scheduleId) {
@@ -115,11 +108,6 @@ public class ScheduleModel {
             return this;
         }
 
-        public Builder withDateRange(String dateRange) {
-            this.dateRange = dateRange;
-            return this;
-        }
-
         public Builder withScheduleName(String scheduleName) {
             this.scheduleName = scheduleName;
             return this;
@@ -127,7 +115,7 @@ public class ScheduleModel {
 
         public ScheduleModel build() {
             return new ScheduleModel(scheduleId, leagueId, leagueName, timestamp,
-                    eventIdList, dateRange, scheduleName);
+                    eventIdList, scheduleName);
         }
     }
 }

@@ -4,6 +4,52 @@
 
 package "dynamodb" {
 
+    class BetDAO {
+
+    }
+
+    class EventDAO {
+
+    }
+
+    class OddDAO {
+
+    }
+
+    class ScheduleDAO {
+
+    }
+
+    class DynamoDBClientProvider {
+
+    }
+
+    package "assets" {
+
+        class LeagueDAO {
+
+        }
+
+        class TeamDAO {
+
+        }
+
+        class BookmakerDAO {
+
+        }
+    }
+
+    package "bettinghistory" {
+
+        class WeeklyHistoryDAO {
+
+        }
+
+        class MonthlyHistoryDAO {
+
+        }
+    }
+
     package "dataqualitycheck" {
 
         class DataQualityScanner {
@@ -202,18 +248,18 @@ package "dynamodb" {
                 + setField(value : String) : void
             }
 
-            class YearlyHistory {
-                - yearlyHistoryId : String
+            class MonthlyHistory {
+                - monthlyHistoryId : String
                 - userId : String
-                - yearlyHistoryName : String
+                - monthlyHistoryName : String
                 - date : String
-                - weeklyHistoryIds : List<String>
-                - yearlyBetCount : Integer
-                - yearlyAmountWagered : BigDecimal
-                - yearlyGain : BigDecimal
-                - yearlyLoss : BigDecimal
-                - yearlyBetIdList : List<String>
-                - yearlySummary : Map<String, BigDecimal>
+                - monthlyHistoryIds : List<String>
+                - monthlyBetCount : Integer
+                - monthlyAmountWagered : BigDecimal
+                - monthlyGain : BigDecimal
+                - monthlyLoss : BigDecimal
+                - monthlyBetIdList : List<String>
+                - monthlySummary : Map<String, BigDecimal>
 
                 + getField() : Object
                 + setField(value : String) : void
@@ -246,6 +292,24 @@ package "exceptions" {
     }
 }
 
+package lambda {
+
+    class GetScheduleLambda {
+
+    }
+
+    class GetEventsForScheduleLambda {
+
+    }
+
+    class LambdaRequest {
+
+    }
+
+    class LambdaResponse {
+
+    }
+}
 
 package "models" {
 
@@ -382,18 +446,18 @@ package "models" {
             + builder() : Builder
         }
 
-        class YearlyHistoryModel {
-            - yearlyHistoryId : String
+        class MonthlyHistoryModel {
+            - monthlyHistoryId : String
             - userId : String
-            - yearlyHistoryName : String
+            - monthlyHistoryName : String
             - date : String
             - weeklyHistoryIds : List<String>
-            - yearlyBetCount : Integer
-            - yearlyAmountWagered : BigDecimal
-            - yearlyGain : BigDecimal
-            - yearlyLoss : BigDecimal
-            - yearlyBetIdList : List<String>
-            - yearlySummary : Map<String, BigDecimal>
+            - monthlyBetCount : Integer
+            - monthlyAmountWagered : BigDecimal
+            - monthlyGain : BigDecimal
+            - monthlyLoss : BigDecimal
+            - monthlyBetIdList : List<String>
+            - monthlySummary : Map<String, BigDecimal>
 
             + getField() : Object
             + builder() : Builder
@@ -401,17 +465,28 @@ package "models" {
     }
 }
 
+package utils {
+
+    class CollectionUtils {
+
+    }
+
+    class NullUtils {
+
+    }
+}
+
 dynamodb.espnDAO.espnDAO -> dynamodb.espnDAO.constants.espnRequestConstants
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Schedule
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.Event
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.Team
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.models.assets.League
-dynamodb.espnDAO.espnDAO -[#0000FF95,thickness=3]-> dynamodb.dataqualitycheck.DataQualityScanner
+dynamodb.espnDAO.espnDAO -[#0000FF50,thickness=15]-> dynamodb.models.Schedule
+dynamodb.espnDAO.espnDAO -[#0000FF50,thickness=15]-> dynamodb.models.Event
+dynamodb.espnDAO.espnDAO -[#0000FF50,thickness=15]-> dynamodb.models.assets.Team
+dynamodb.espnDAO.espnDAO -[#0000FF50,thickness=15]-> dynamodb.models.assets.League
+dynamodb.espnDAO.espnDAO -[#0000FF50,thickness=15]-> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.oddsDAO.oddsDAO -> dynamodb.oddsDAO.constants.oddsRequestConstants
-dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.models.assets.Bookmaker
-dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.models.Odds
-dynamodb.oddsDAO.oddsDAO -[#FF000095,thickness=3]-> dynamodb.dataqualitycheck.DataQualityScanner
+dynamodb.oddsDAO.oddsDAO -[#FF000075,thickness=9]-> dynamodb.models.assets.Bookmaker
+dynamodb.oddsDAO.oddsDAO -[#FF000075,thickness=9]-> dynamodb.models.Odds
+dynamodb.oddsDAO.oddsDAO -[#FF000075,thickness=9]-> dynamodb.dataqualitycheck.DataQualityScanner
 
 dynamodb.dataqualitycheck.DataQualityScanner --> exceptions.dataqualityexception.DataQualityException
 
@@ -427,7 +502,7 @@ dynamodb.models.Event - dynamodb.models.Odds
 dynamodb.models.Event o- dynamodb.models.Bet
 dynamodb.models.Odds o- dynamodb.models.assets.Bookmaker
 dynamodb.models.bettinghistory.WeeklyHistory o- dynamodb.models.Bet
-dynamodb.models.bettinghistory.YearlyHistory o- dynamodb.models.bettinghistory.WeeklyHistory
+dynamodb.models.bettinghistory.MonthlyHistory o- dynamodb.models.bettinghistory.WeeklyHistory
 
 models.ScheduleModel o- models.assets.LeagueModel
 models.ScheduleModel *- models.EventModel
@@ -436,7 +511,7 @@ models.EventModel - models.OddsModel
 models.EventModel o- models.BetModel
 models.OddsModel o- models.assets.BookmakerModel
 models.bettinghistory.WeeklyHistoryModel o- models.BetModel
-models.bettinghistory.YearlyHistoryModel o- models.bettinghistory.WeeklyHistoryModel
+models.bettinghistory.MonthlyHistoryModel o- models.bettinghistory.WeeklyHistoryModel
 
 dynamodb.models.Schedule .. models.ScheduleModel
 dynamodb.models.Event .. models.EventModel
@@ -446,6 +521,36 @@ dynamodb.models.assets.Team .. models.assets.TeamModel
 dynamodb.models.assets.League .. models.assets.LeagueModel
 dynamodb.models.assets.Bookmaker .. models.assets.BookmakerModel
 dynamodb.models.bettinghistory.WeeklyHistory .. models.bettinghistory.WeeklyHistoryModel
-dynamodb.models.bettinghistory.YearlyHistory .. models.bettinghistory.YearlyHistoryModel
+dynamodb.models.bettinghistory.MonthlyHistory .. models.bettinghistory.MonthlyHistoryModel
+
+dynamodb.ScheduleDAO .[#00863195,thickness=6].> dynamodb.models.Schedule
+dynamodb.EventDAO .[#00863195,thickness=6].> dynamodb.models.Event
+dynamodb.OddDAO .[#00863195,thickness=6].> dynamodb.models.Odds
+dynamodb.BetDAO .[#00863195,thickness=6].> dynamodb.models.Bet
+dynamodb.assets.LeagueDAO .[#00863195,thickness=6].> dynamodb.models.assets.League
+dynamodb.assets.TeamDAO .[#00863195,thickness=6].> dynamodb.models.assets.Team
+dynamodb.assets.BookmakerDAO .[#00863195,thickness=6].> dynamodb.models.assets.Bookmaker
+dynamodb.bettinghistory.WeeklyHistoryDAO .[#00863195,thickness=6].> dynamodb.models.bettinghistory.WeeklyHistory
+dynamodb.bettinghistory.MonthlyHistoryDAO .[#00863195,thickness=6].> dynamodb.models.bettinghistory.MonthlyHistory
+
+lambda.GetScheduleLambda --> lambda.LambdaRequest
+lambda.GetScheduleLambda --> lambda.LambdaResponse
+lambda.GetEventsForScheduleLambda --> lambda.LambdaRequest
+lambda.GetEventsForScheduleLambda --> lambda.LambdaResponse
+
+lambda.LambdaRequest --> utils.CollectionUtils
+lambda.LambdaResponse --> utils.CollectionUtils
+lambda.LambdaRequest --> utils.NullUtils
+lambda.LambdaResponse --> utils.NullUtils
+
+dynamodb.DynamoDBClientProvider --> dynamodb.ScheduleDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.EventDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.OddDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.BetDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.assets.LeagueDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.assets.TeamDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.assets.BookmakerDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.bettinghistory.WeeklyHistoryDAO
+dynamodb.DynamoDBClientProvider --> dynamodb.bettinghistory.MonthlyHistoryDAO
 
 @enduml

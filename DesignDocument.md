@@ -64,13 +64,13 @@ manage their bets slips and view helpful insights about their bets.
 
 ## 6.2. _Get Schedule Endpoint_
 
-* Accepts GET requests to /schedule/:leagueId
+* Accepts GET requests to /league/{leagueId}/schedule
   * Accepts a league ID and will return a ScheduleModel containing a list of events for the corresponding league
     * Throws ScheduleDataQualityException if % of valid fields is below given threshold
 
 ## 6.3 _Get Events in Schedule Endpoint_
 
-* Accepts GET requests to /schedule/:scheduleId/events
+* Accepts GET requests to /schedule/{scheduleId}/events
   * Accepts a scheduleId and retrieves corresponding schedule's list of events
     * Throws EventDataQualityException if % of valid fields is below given threshold
 

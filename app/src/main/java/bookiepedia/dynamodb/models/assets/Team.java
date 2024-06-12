@@ -2,6 +2,7 @@ package bookiepedia.dynamodb.models.assets;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public class Team {
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "teamId")
+    @DynamoDBRangeKey(attributeName = "teamId")
     public String getTeamId() {
         return teamId;
     }
 
-    @DynamoDBAttribute(attributeName = "leagueId")
+    @DynamoDBHashKey(attributeName = "leagueId")
     public String getLeagueId() {
         return leagueId;
     }

@@ -31,14 +31,13 @@ public class DataQualityScannerTest {
     public void extractSchedule_lowDataQuality_throwsScheduleDataQualityException() {
 
         // GIVEN - A Schedule JSONObject with 71% data quality and 75% threshold
-        double threshold = 75.00;
+        double threshold = 95.00;
         ScheduleModel scheduleModel = ScheduleModel.builder()
                 .withScheduleId("schedule")
                 .withLeagueId("123")
                 .withLeagueName("league")
                 .withTimestamp("01012024")
                 .withEventIdList(List.of("game123"))
-                .withDateRange("Unavailable")
                 .withScheduleName("Unavailable")
                 .build();
         JSONObject scheduleObject = new JSONObject(scheduleModel);
@@ -64,7 +63,6 @@ public class DataQualityScannerTest {
                 .withLeagueName("league")
                 .withTimestamp("01012024")
                 .withEventIdList(List.of("game123"))
-                .withDateRange("01012024-02012024")
                 .withScheduleName("schedule123")
                 .build();
         JSONObject scheduleObject = new JSONObject(scheduleModel);

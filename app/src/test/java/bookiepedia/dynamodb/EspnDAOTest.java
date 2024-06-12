@@ -1,5 +1,6 @@
 package bookiepedia.dynamodb;
 
+import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.EspnDAO.EspnDAO;
 import bookiepedia.dynamodb.models.Event;
@@ -7,6 +8,8 @@ import bookiepedia.dynamodb.models.Schedule;
 
 import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,7 +25,6 @@ import java.util.List;
 
 public class EspnDAOTest {
 
-//    @Mock
     private DataQualityScanner dataQualityScanner;
     private static EspnDAO espnDAO;
     private static JSONObject result;
@@ -30,8 +32,18 @@ public class EspnDAOTest {
     @BeforeAll
     public static void setUp() throws IOException {
 //        openMocks(this);
-        espnDAO = new EspnDAO();
-        result = espnDAO.requestQuery();
+        //    @Mock
+        DynamoDBMapper dynamoDbMapper = new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient(Regions.US_EAST_2));
+        espnDAO = new EspnDAO(dynamoDbMapper);
+
+        String startDate = EspnRequestConstants.getStartDate();
+        String endDate = EspnRequestConstants.getEndDate();
+
+        String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+                EspnRequestConstants.NBA, startDate, endDate);
+        String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+                EspnRequestConstants.NHL, startDate, endDate);
+        result = espnDAO.requestQuery(nbaURL);
     }
 
     @Test
@@ -109,67 +121,67 @@ public class EspnDAOTest {
         System.out.println("-");
     }
 
-    @Test
-    public void printTeams() {
-        // Team Example - Values printed to terminal
+//    @Test
+//    public void printTeams() {
+//        // Team Example - Values printed to terminal
+//
+//        // GIVEN & WHEN - Extracting values from ESPN API response to create a 'Team' object not found in DynamoDB
+//        JSONObject eventJson = result.getJSONArray("events").getJSONObject(0);
+//        JSONObject teamJsonOriginal = eventJson.getJSONArray("competitions")
+//                .getJSONObject(0)
+//                .getJSONArray("competitors")
+//                .getJSONObject(0)
+//                .getJSONObject("team");
+//        JSONObject teamJsonOriginalTwo = eventJson.getJSONArray("competitions")
+//                .getJSONObject(0)
+//                .getJSONArray("competitors")
+//                .getJSONObject(1)
+//                .getJSONObject("team");
+//        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
+//
+//        espnDAO.extractTeam(teamJsonOriginal, "46");
+//        espnDAO.extractTeam(teamJsonOriginalTwo, "46");
 
-        // GIVEN & WHEN - Extracting values from ESPN API response to create a 'Team' object not found in DynamoDB
-        JSONObject eventJson = result.getJSONArray("events").getJSONObject(0);
-        JSONObject teamJsonOriginal = eventJson.getJSONArray("competitions")
-                .getJSONObject(0)
-                .getJSONArray("competitors")
-                .getJSONObject(0)
-                .getJSONObject("team");
-        JSONObject teamJsonOriginalTwo = eventJson.getJSONArray("competitions")
-                .getJSONObject(0)
-                .getJSONArray("competitors")
-                .getJSONObject(1)
-                .getJSONObject("team");
-        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
+//        // THEN - A 'Team' object will be created for both teams that will be stored in DynamoDB
+//        ObjectMapper mapper = new ObjectMapper();
+//        Team team;
+//        Team teamTwo;
+//
+//        try {
+//            team = mapper.readValue(teamJsonNew, Team.class);
+//            teamTwo = mapper.readValue(teamJsonNewTwo, Team.class);
+//        } catch (JsonProcessingException jpe) {
+//            throw new RuntimeException(jpe);
+//        }
+//
+//        System.out.println("Team(s)");
+//        printTeamAttributes(team);
+//        printTeamAttributes(teamTwo);
+//    }
 
-        String teamJsonNew = espnDAO.extractTeam(teamJsonOriginal, "46");
-        String teamJsonNewTwo = espnDAO.extractTeam(teamJsonOriginalTwo, "46");
-
-        // THEN - A 'Team' object will be created for both teams that will be stored in DynamoDB
-        ObjectMapper mapper = new ObjectMapper();
-        Team team;
-        Team teamTwo;
-
-        try {
-            team = mapper.readValue(teamJsonNew, Team.class);
-            teamTwo = mapper.readValue(teamJsonNewTwo, Team.class);
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
-
-        System.out.println("Team(s)");
-        printTeamAttributes(team);
-        printTeamAttributes(teamTwo);
-    }
-
-    @Test
-    public void printLeagues() {
-        // Leagues Example - Values printed to terminal
-
-        // GIVEN & WHEN - Extracting values from ESPN API response to create a 'League' object
-        JSONObject leagueJsonOriginal = result.getJSONArray("leagues").getJSONObject(0);
-        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
-
-        String leagueJson = espnDAO.extractLeague(leagueJsonOriginal);
-
-        // THEN - A 'League' object will be created to be stored in DynamoDB
-        ObjectMapper mapper = new ObjectMapper();
-        League league;
-
-        try {
-            league = mapper.readValue(leagueJson, League.class);
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
-
-        System.out.println("League(s)");
-        printLeagueAttributes(league);
-    }
+//    @Test
+//    public void printLeagues() {
+//        // Leagues Example - Values printed to terminal
+//
+//        // GIVEN & WHEN - Extracting values from ESPN API response to create a 'League' object
+//        JSONObject leagueJsonOriginal = result.getJSONArray("leagues").getJSONObject(0);
+//        // * Temporary, will probably call extractTeam() within extractEvents() to simplify
+//
+//        String leagueJson = espnDAO.extractLeague(leagueJsonOriginal);
+//
+//        // THEN - A 'League' object will be created to be stored in DynamoDB
+//        ObjectMapper mapper = new ObjectMapper();
+//        League league;
+//
+//        try {
+//            league = mapper.readValue(leagueJson, League.class);
+//        } catch (JsonProcessingException jpe) {
+//            throw new RuntimeException(jpe);
+//        }
+//
+//        System.out.println("League(s)");
+//        printLeagueAttributes(league);
+//    }
 
 
 

@@ -2,6 +2,7 @@ package bookiepedia.dynamodb.models.bettinghistory;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.Map;
 @DynamoDBTable(tableName = "WeeklyHistory")
 public class WeeklyHistory {
 
+    private String monthlyHistoryId;
     private String weeklyHistoryId;
     private String userId;
     private String weeklyHistoryName;
@@ -35,7 +37,11 @@ public class WeeklyHistory {
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "weeklyHistoryId")
+    @DynamoDBHashKey(attributeName = "monthlyHistoryId")
+    public String getMonthlyHistoryId() {
+        return monthlyHistoryId;
+    }
+    @DynamoDBRangeKey(attributeName = "weeklyHistoryId")
     public String getWeeklyHistoryId() {
         return weeklyHistoryId;
     }
@@ -87,6 +93,9 @@ public class WeeklyHistory {
 
     // SETTERS
 
+    public void setMonthlyHistoryId(String monthlyHistoryId) {
+        this.monthlyHistoryId = monthlyHistoryId;
+    }
     public void setWeeklyHistoryId(String weeklyHistoryId) {
         this.weeklyHistoryId = weeklyHistoryId;
     }

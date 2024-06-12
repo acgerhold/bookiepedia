@@ -2,6 +2,7 @@ package bookiepedia.dynamodb.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.List;
@@ -68,13 +69,13 @@ public class Event {
 
     // GETTERS
 
-    @DynamoDBAttribute(attributeName = "eventId")
+    @DynamoDBRangeKey(attributeName = "eventId")
     public String getEventId() {
         return eventId;
     }
 
-     @DynamoDBHashKey(attributeName = "scheduleId")
-     public String getScheduleId() {
+    @DynamoDBHashKey(attributeName = "scheduleId")
+    public String getScheduleId() {
         return scheduleId;
      }
 
@@ -143,7 +144,7 @@ public class Event {
         return scoreAway;
     }
 
-    @DynamoDBAttribute(attributeName = "scoreAway")
+    @DynamoDBAttribute(attributeName = "scoreTotal")
     public int getScoreTotal() {
         return scoreTotal;
     }
