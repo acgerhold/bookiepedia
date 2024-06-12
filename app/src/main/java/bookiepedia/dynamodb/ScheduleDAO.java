@@ -1,5 +1,6 @@
 package bookiepedia.dynamodb;
 
+import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
 import bookiepedia.dynamodb.models.Schedule;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
@@ -14,8 +15,8 @@ public class ScheduleDAO {
         this.dynamoDBMapper = dynamoDBMapper;
     }
 
-    public Schedule getSchedule(String scheduleId) {
-        return this.dynamoDBMapper.load(Schedule.class, scheduleId);
+    public Schedule getSchedule(String leagueId) {
+        return this.dynamoDBMapper.load(Schedule.class, leagueId, leagueId + "-" + EspnRequestConstants.START_DATE);
     }
 
     public void saveSchedule(Schedule schedule) {

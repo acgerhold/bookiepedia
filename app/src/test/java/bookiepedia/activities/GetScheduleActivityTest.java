@@ -28,7 +28,7 @@ public class GetScheduleActivityTest {
         }
 
         @Test
-        public void handleRequest_savedPlaylistFound_returnsPlaylistModelInResult() {
+        public void handleRequest_savedScheduleFound_returnsScheduleModelInResult() {
             // GIVEN
             String expectedId = "expectedId";
             String expectedLeagueId = "expectedLeagueId";

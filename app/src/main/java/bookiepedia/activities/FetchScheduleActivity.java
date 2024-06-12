@@ -63,6 +63,5 @@ public class FetchScheduleActivity {
             Event event = new ObjectMapper().readValue(eventJson, Event.class);
             dynamoDBMapper.save(event);
         }
-
     }
 }

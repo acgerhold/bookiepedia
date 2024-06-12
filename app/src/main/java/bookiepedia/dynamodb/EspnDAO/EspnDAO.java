@@ -1,16 +1,13 @@
 package bookiepedia.dynamodb.EspnDAO;
 
-import bookiepedia.dynamodb.DynamoDbClientProvider;
 import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
 
-import bookiepedia.dynamodb.assets.TeamDAO;
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
 
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -105,8 +102,7 @@ public class EspnDAO {
         schedule.setScheduleName(String.format("%s Events: %s",
                 schedule.getLeagueName(), EspnRequestConstants.START_DATE));
         // Schedule Timestamp
-        schedule.setTimestamp(
-                EspnRequestConstants.NOW.format(EspnRequestConstants.yyyy_MM_dd));
+        schedule.setTimestamp(EspnRequestConstants.NOW.format(EspnRequestConstants.yyyy_MM_dd));
 
         ObjectMapper mapper = new ObjectMapper();
         String scheduleJson;

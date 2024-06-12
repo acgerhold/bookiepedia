@@ -8,13 +8,14 @@ import bookiepedia.dynamodb.models.Schedule;
 import bookiepedia.models.ScheduleModel;
 
 import javax.inject.Inject;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetScheduleActivity {
 
+    private final Logger log = LogManager.getLogger(GetScheduleActivity.class);
+
     private final ScheduleDAO scheduleDAO;
-    // private final Logger log = LogManager.getLogger();
 
     @Inject
     public GetScheduleActivity(ScheduleDAO scheduleDAO) {
@@ -23,6 +24,7 @@ public class GetScheduleActivity {
 
     public GetScheduleResult handleRequest(final GetScheduleRequest getScheduleRequest) {
         String requestedId = getScheduleRequest.getId();
+        log.info("Received GetScheduleRequest " + getScheduleRequest);
         Schedule schedule = scheduleDAO.getSchedule(requestedId);
         ScheduleModel scheduleModel = new ModelConverter().toScheduleModel(schedule);
 
