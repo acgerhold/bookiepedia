@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,8 +30,14 @@ import java.util.stream.IntStream;
 
 public class EspnDAO {
 
+    private final DynamoDBMapper dynamoDbMapper;
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
+
+    @Inject
+    public EspnDAO(DynamoDBMapper dynamoDBMapper) {
+        this.dynamoDbMapper = dynamoDBMapper;
+    }
 
     /**
      * Sends an HTTP request to the ESPN API.
@@ -80,9 +87,12 @@ public class EspnDAO {
 
         // League ID
         schedule.setLeagueId(leagues.optJSONObject(0).optString("id", INVALID_STRING_REPLACER));
+        if (dynamoDbMapper.load(League.class, schedule.getLeagueId()) == null) {
+            extractLeague(leagues.optJSONObject(0));
+        }
         // Schedule ID
-        schedule.setScheduleId(String.format("%s-%s-%s",
-                schedule.getLeagueId(), EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
+        schedule.setScheduleId(String.format("%s-%s",
+                schedule.getLeagueId(), EspnRequestConstants.START_DATE));
         // League Name
         schedule.setLeagueName(leagues.optJSONObject(0).optString("abbreviation", INVALID_STRING_REPLACER));
         // Event ID List
@@ -92,8 +102,8 @@ public class EspnDAO {
                         .map(obj -> obj.getString("id"))
                         .collect(Collectors.toList()));
         // Schedule Name
-        schedule.setScheduleName(String.format("%s Events: %s - %s",
-                schedule.getLeagueName(), EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
+        schedule.setScheduleName(String.format("%s Events: %s",
+                schedule.getLeagueName(), EspnRequestConstants.START_DATE));
         // Schedule Timestamp
         schedule.setTimestamp(
                 EspnRequestConstants.NOW.format(EspnRequestConstants.yyyy_MM_dd));
@@ -154,8 +164,8 @@ public class EspnDAO {
                     // ID
                     e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
                     // Schedule ID
-                    e.setScheduleId(String.format("%s-%s-%s",
-                            leagueId, EspnRequestConstants.START_DATE, EspnRequestConstants.END_DATE));
+                    e.setScheduleId(String.format("%s-%s",
+                            leagueId, EspnRequestConstants.START_DATE));
                     // Event Name
                     e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
                     // Event Name (Short)
@@ -176,20 +186,16 @@ public class EspnDAO {
                     // Home Team
                     e.setTeamHome(homeTeam.getJSONObject("team")
                             .optString("id", INVALID_STRING_REPLACER));
-
-                    // This is where I will likely use extractTeams()
-                    // if (dynamoDbMapper.load(e.getTeamHome() == null)) {
-                    //    extractTeams(homeTeam.getJSONObject("team"), e.getLeagueId());
-                    // }
-
+                    // Add Team info to DynamoDB if Team doesnt exist yet
+                    if (dynamoDbMapper.load(Team.class, e.getTeamHome(), e.getLeagueId()) == null) {
+                        extractTeam(homeTeam.getJSONObject("team"), e.getLeagueId());
+                    }
                     // Away Team
                     e.setTeamAway(awayTeam.getJSONObject("team")
                             .optString("id", INVALID_STRING_REPLACER));
-
-                    // if (dynamoDbMapper.load(e.getTeamHome() == null)) {
-                    //    extractTeams(homeTeam.getJSONObject("team"), e.getLeagueId());
-                    // }
-
+                    if (dynamoDbMapper.load(Team.class, e.getTeamAway(), e.getLeagueId()) == null) {
+                        extractTeam(homeTeam.getJSONObject("team"), e.getLeagueId());
+                    }
                     // Event Status ID
                     e.setEventStatusId(status.getJSONObject("type")
                             .optString("id", INVALID_STRING_REPLACER));
@@ -268,7 +274,7 @@ public class EspnDAO {
      * @param leagueId - The 'leagueId' for a given 'Event'
      * @return A JSON of a 'Schedule' object represented as a String
      */
-    public String extractTeam(JSONObject team, String leagueId) {
+    public void extractTeam(JSONObject team, String leagueId) {
         // This will likely end up as a void method and be called within extractEvents() @Ln156
         // Takes extra parameter 'leagueId' that will be available in extractEvents()
 
@@ -296,8 +302,7 @@ public class EspnDAO {
                 .collect(Collectors.toList());
         t.setTeamLinks(linksList);
 
-        // TeamDAO teamDAO = new TeamDAO(new DynamoDBMapper(DynamoDbClientProvider.getDynamoDBClient(Regions.US_EAST_2)));
-        // teamDAO.saveTeam(t);
+        dynamoDbMapper.save(t);
 
         ObjectMapper mapper = new ObjectMapper();
         String teamJson;
@@ -313,9 +318,6 @@ public class EspnDAO {
         } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe);
         }
-
-        // * Temporary
-        return teamJson;
     }
 
     /**
@@ -324,7 +326,7 @@ public class EspnDAO {
      * @param league - A subsection of the JSONObject returned by requestQuery()
      * @return A JSON of a 'Schedule' object represented as a String
      */
-    public String extractLeague(JSONObject league) {
+    public void extractLeague(JSONObject league) {
         // This method will also probably end up as a void method that gets called in extractSchedule()
 
         League l = new League();
@@ -344,6 +346,8 @@ public class EspnDAO {
         // League Logo
         l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
 
+        dynamoDbMapper.save(l);
+
         ObjectMapper mapper = new ObjectMapper();
         String leagueJson;
 
@@ -357,8 +361,6 @@ public class EspnDAO {
         } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe);
         }
-
-        return leagueJson;
     }
 
 }

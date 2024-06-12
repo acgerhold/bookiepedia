@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class App {
 
-    private static EspnDAO espn = new EspnDAO();
+    //private static EspnDAO espn = new EspnDAO();
 
     /**
      * Main method.

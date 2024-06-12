@@ -23,7 +23,7 @@ public class FetchScheduleActivity {
     @Inject
     public FetchScheduleActivity(DynamoDBMapper dynamoDBMapper) {
         this.dynamoDBMapper = dynamoDBMapper;
-        this.espnDAO = new EspnDAO();
+        this.espnDAO = new EspnDAO(dynamoDBMapper);
     }
 
     public FetchScheduleResult handleRequest(final FetchScheduleRequest request) {
@@ -31,10 +31,12 @@ public class FetchScheduleActivity {
             String startDate = EspnRequestConstants.getStartDate();
             String endDate = EspnRequestConstants.getEndDate();
 
-            String nbaURL = String.format("https//site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+            String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                     EspnRequestConstants.NBA, startDate, endDate);
-            String nhlURL = String.format("https//site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+            String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                     EspnRequestConstants.NHL, startDate, endDate);
+
+            System.out.println(startDate + "-" + endDate);
 
             JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
             processResponse(nbaResponse);
