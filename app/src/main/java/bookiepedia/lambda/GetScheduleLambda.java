@@ -2,7 +2,6 @@ package bookiepedia.lambda;
 
 import bookiepedia.activities.requests.GetScheduleRequest;
 import bookiepedia.activities.results.GetScheduleResult;
-import bookiepedia.lambda.LambdaActivityRunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;

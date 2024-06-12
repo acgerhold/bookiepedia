@@ -14,5 +14,7 @@ public interface ServiceComponent {
 
     GetScheduleActivity provideGetScheduleActivity();
 
+    FetchScheduleActivity provideFetchScheduleActivity();
+
     EspnDAO provideEspnDAO();
 }
