@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -72,10 +72,11 @@ class GetEvents extends BindingClass {
         console.log('Retrieving schedule for league ID: ${leagueId}')
 
         const results = await this.client.getSchedule(leagueId);
+        const events = await this.getEventsForSchedule(results);
         console.log('Results:', results);
         this.dataStore.setState({
                         [SEARCH_CRITERIA_KEY]: leagueId,
-                        [SEARCH_RESULTS_KEY]: results,
+                        [SEARCH_RESULTS_KEY]: events,
                     });
     }
 
@@ -89,6 +90,18 @@ class GetEvents extends BindingClass {
             });
         } catch (error) {
             console.error('error fetching schedule', error);
+        }
+    }
+
+    async getEventsForSchedule(results) {
+        console.log('Retrieving events...');
+        try {
+            const response = await this.client.getEventsForSchedule(results);
+            console.log('Events: ', response)
+            return response;
+        } catch (error) {
+            console.error('error retrieving events', error);
+            return [];
         }
     }
 
@@ -120,18 +133,20 @@ class GetEvents extends BindingClass {
      * @returns A string of HTML suitable for being dropped on the page.
      */
     getHTMLForSearchResults(searchResults) {
-        const schedules = this.dataStore.get('schedule');
+        //const schedules = this.dataStore.get('schedule');
+        //const events = this.dataStore.get('events');
 
         if (searchResults.length === 0) {
             return '<h4>No results found</h4>';
         }
 
         let html = '<table><tr><th>Event ID</th></tr>';
-        for (const eventId of searchResults) {
+        for (const event of searchResults) {
             html += `
             <tr>
                 <td>
-                    ${eventId}
+                    ${event.eventId}
+                    ${event.eventName}
                 </td>
             </tr>`;
         }

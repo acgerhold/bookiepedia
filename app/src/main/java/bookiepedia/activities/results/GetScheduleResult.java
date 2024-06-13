@@ -19,7 +19,7 @@ public class GetScheduleResult {
         return "GetScheduleResult{schedule=" + schedule + "}";
     }
 
-    //CHECKSTYLE:OFF:BUILDER
+    //CHECKSTYLE:OFF:Builder
     public static Builder builder() {
         return new Builder();
     }

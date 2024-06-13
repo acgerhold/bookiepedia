@@ -15,7 +15,7 @@ export default class BookiepediaClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -80,7 +80,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             const response = await this.axiosClient.get(`league/${leagueId}/schedule`);
             console.log('API Response: ', response.data);
-            return response.data.schedule?.eventIdList;
+            return response.data.schedule?.scheduleId;
         } catch (error) {
             this.handleError(error, errorCallback)
         }
@@ -91,6 +91,16 @@ export default class BookiepediaClient extends BindingClass {
         try {
             const response = await this.axiosClient.post(`/schedule`);
             console.log('API Response: ', response.data)
+            return response.data;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
+    async getEventsForSchedule(scheduleId, errorCallback) {
+        try {
+            const response = await this.axiosClient.get(`/schedule/${scheduleId}/events`);
+            console.log('API Response: ', response.data);
             return response.data;
         } catch (error) {
             this.handleError(error, errorCallback);
