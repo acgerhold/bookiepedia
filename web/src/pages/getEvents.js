@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -46,13 +46,15 @@ class GetEvents extends BindingClass {
         const icons = document.querySelectorAll('.test-icon')
         icons.forEach(icon => {
             icon.addEventListener('click', (evt) => {
-                const iconId = evt.target.id;
-                this.getSchedule(iconId);
+                const leagueId = evt.target.id;
+                this.getSchedule(leagueId);
             });
         });
 
-        this.header.addHeaderToPage();
+        const refreshButton = document.getElementById('refresh-button');
+        refreshButton.addEventListener('click', () => this.fetchSchedule());
 
+        this.header.addHeaderToPage();
         this.client = new BookiepediaClient();
     }
 
@@ -61,35 +63,33 @@ class GetEvents extends BindingClass {
      * then updates the datastore with the criteria and results.
      * @param evt The "event" object representing the user-initiated event that triggered this method.
      */
-    async getSchedule(iconId) {
+    async getSchedule(leagueId) {
         // Prevent submitting the from from reloading the page.
-        if (!iconId) {
+        if (!leagueId) {
             return;
         }
         // Add a fetchSchedule() call in here to refresh when a use clicks a league too
-        console.log('Retrieving schedule for league ID: ${iconId}')
+        console.log('Retrieving schedule for league ID: ${leagueId}')
 
-        const results = await this.client.getSchedule(iconId);
+        const results = await this.client.getSchedule(leagueId);
+        console.log('Results:', results);
         this.dataStore.setState({
-                        [SEARCH_CRITERIA_KEY]: searchCriteria,
+                        [SEARCH_CRITERIA_KEY]: leagueId,
                         [SEARCH_RESULTS_KEY]: results,
                     });
+    }
 
-        // If the user didn't change the search criteria, do nothing
-//        if (previousSearchCriteria === searchCriteria) {
-//            return;
-//        }
-//
-//        if (searchCriteria) {
-//            const results = await this.client.search(searchCriteria);
-//
-//            this.dataStore.setState({
-//                [SEARCH_CRITERIA_KEY]: searchCriteria,
-//                [SEARCH_RESULTS_KEY]: results,
-//            });
-//        } else {
-//            this.dataStore.setState(EMPTY_DATASTORE_STATE);
-//        }
+    async fetchSchedule() {
+        console.log('Fetching schedule...')
+        try {
+            const response = await this.client.fetchSchedule();
+            this.dataStore.setState({
+            [SEARCH_CRITERIA_KEY]: '',
+            [SEARCH_CRITERIA_KEY]: response,
+            });
+        } catch (error) {
+            console.error('error fetching schedule', error);
+        }
     }
 
     /**
@@ -120,18 +120,18 @@ class GetEvents extends BindingClass {
      * @returns A string of HTML suitable for being dropped on the page.
      */
     getHTMLForSearchResults(searchResults) {
-        const schedules = this.dataStore.get('schedules');
+        const schedules = this.dataStore.get('schedule');
 
         if (searchResults.length === 0) {
             return '<h4>No results found</h4>';
         }
 
-        let html = '<table><tr><th>Name</th><th>Song Count</th><th>Tags</th></tr>';
-        for (const res of searchResults) {
+        let html = '<table><tr><th>Event ID</th></tr>';
+        for (const eventId of searchResults) {
             html += `
             <tr>
                 <td>
-                    <a href="playlist.html?id=${res.id}">${res.name}</a>
+                    ${eventId}
                 </td>
             </tr>`;
         }

@@ -15,7 +15,7 @@ export default class BookiepediaClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -76,15 +76,25 @@ export default class BookiepediaClient extends BindingClass {
      * @param criteria A string containing search criteria to pass to the API.
      * @returns The playlists that match the search criteria.
      */
-    async getSchedule(criteria, errorCallback) {
+    async getSchedule(leagueId, errorCallback) {
         try {
             const response = await this.axiosClient.get(`league/${leagueId}/schedule`);
-
-            return response.data.schedule;
+            console.log('API Response: ', response.data);
+            return response.data.schedule?.eventIdList;
         } catch (error) {
             this.handleError(error, errorCallback)
         }
 
+    }
+
+    async fetchSchedule(errorCallback) {
+        try {
+            const response = await this.axiosClient.post(`/schedule`);
+            console.log('API Response: ', response.data)
+            return response.data;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
     }
 
     /**
