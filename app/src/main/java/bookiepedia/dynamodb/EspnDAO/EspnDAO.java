@@ -203,7 +203,7 @@ public class EspnDAO {
                     switch (e.getEventStatusId()) {
                         case "1":
                             e.setEventStatus(status.getJSONObject("type")
-                                    .optString("detail", INVALID_STRING_REPLACER));
+                                    .optString("shortDetail", INVALID_STRING_REPLACER));
                             break;
                         case "2":
                             e.setEventStatus("Final");
