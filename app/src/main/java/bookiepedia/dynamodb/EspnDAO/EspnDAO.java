@@ -231,6 +231,12 @@ public class EspnDAO {
                     } else {
                         e.setTeamWinner("-1");
                     }
+                    // Team Home Logo
+                    Team teamHome = dynamoDbMapper.load(Team.class, leagueId, e.getTeamHome());
+                    e.setTeamHomeLogo(teamHome.getTeamLogo());
+                    // Team Away Logo
+                    Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
+                    e.setTeamAwayLogo(teamAway.getTeamLogo());
 
                     try {
 

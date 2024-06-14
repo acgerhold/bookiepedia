@@ -134,18 +134,25 @@ class GetEvents extends BindingClass {
      */
     getHTMLForSearchResults(searchResults) {
         //const schedules = this.dataStore.get('schedule');
-        //const events = this.dataStore.get('events');
+        const events = this.dataStore.get('events');
 
         if (searchResults.length === 0) {
             return '<h4>No results found</h4>';
         }
 
-        let html = '<table><tr><th>Event ID</th></tr>';
+        let html = '<table><tr><th>Event ID</th><th>Event Name</th></tr>';
         for (const event of searchResults) {
             html += `
             <tr>
                 <td>
-                    ${event.eventId}
+                    <img src=${event.teamHomeLogo} />
+                </td>
+                <td>
+                    <img src=${event.teamAwayLogo} />
+                </d>
+            </tr>
+            <tr>
+                <td>
                     ${event.eventName}
                 </td>
             </tr>`;

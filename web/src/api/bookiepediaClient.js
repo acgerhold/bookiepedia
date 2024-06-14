@@ -101,7 +101,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             const response = await this.axiosClient.get(`/schedule/${scheduleId}/events`);
             console.log('API Response: ', response.data);
-            return response.data;
+            return response.data.eventList;
         } catch (error) {
             this.handleError(error, errorCallback);
         }

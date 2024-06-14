@@ -37,6 +37,8 @@ public class ModelConverter {
                 .withScoreAway(event.getScoreAway())
                 .withScoreTotal(event.getScoreTotal())
                 .withLinks(event.getLinks())
+                .withTeamHomeLogo(event.getTeamHomeLogo())
+                .withTeamAwayLogo(event.getTeamAwayLogo())
                 .build();
     }
 
