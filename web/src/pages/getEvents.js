@@ -140,22 +140,31 @@ class GetEvents extends BindingClass {
             return '<h4>No results found</h4>';
         }
 
-        let html = '<table><tr><th>Event ID</th><th>Event Name</th></tr>';
+        let html = '<table><tr><th></th></tr>';
         for (const event of searchResults) {
             html += `
             <tr>
                 <td>
-                    <img src=${event.teamHomeLogo} />
+                    <div class="event-logos">
+                        <img src="${event.teamHomeLogo}" class="event-team-logo" />
+                        <span class="at-symbol">@</span>
+                        <img src="${event.teamAwayLogo}" class="event-team-logo" />
+                    </div>
+                    <div class="event-score-status">
+                        <div class="home-score">${event.scoreHome}</div>
+                        <div class="event-status">${event.eventStatus}</div>
+                        <div class="away-score">${event.scoreAway}</div>
+                    </div>
                 </td>
-                <td>
-                    <img src=${event.teamAwayLogo} />
-                </d>
             </tr>
             <tr>
-                <td>
-                    ${event.eventName}
+                <td class="event-details">
+                    <div class="event-name">${event.eventName}</div>
+                    <div class="event-headline">${event.eventHeadline}</div>
                 </td>
-            </tr>`;
+            </tr>
+            <th>
+            </th>`;
         }
         html += '</table>';
 

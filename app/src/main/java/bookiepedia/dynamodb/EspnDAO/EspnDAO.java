@@ -167,9 +167,13 @@ public class EspnDAO {
                     // Event Name (Short)
                     e.setEventNameShort(event.optString("shortName", INVALID_STRING_REPLACER));
                     // Headline
-                    e.setEventHeadline(competition.getJSONArray("notes")
-                            .getJSONObject(0)
-                            .optString("headline", INVALID_STRING_REPLACER));
+                    if (!competition.getJSONArray("notes").isEmpty()) {
+                        e.setEventHeadline(competition.getJSONArray("notes")
+                                .getJSONObject(0)
+                                .optString("headline", INVALID_STRING_REPLACER));
+                    } else {
+                        e.setEventHeadline("-");
+                    }
                     // League ID
                     e.setLeagueId(espnResponse.getJSONArray("leagues")
                             .getJSONObject(0)
@@ -190,7 +194,7 @@ public class EspnDAO {
                     e.setTeamAway(awayTeam.getJSONObject("team")
                             .optString("id", INVALID_STRING_REPLACER));
                     if (dynamoDbMapper.load(Team.class, e.getTeamAway(), e.getLeagueId()) == null) {
-                        extractTeam(homeTeam.getJSONObject("team"), e.getLeagueId());
+                        extractTeam(awayTeam.getJSONObject("team"), e.getLeagueId());
                     }
                     // Event Status ID
                     e.setEventStatusId(status.getJSONObject("type")
@@ -198,7 +202,8 @@ public class EspnDAO {
                     // Event Status
                     switch (e.getEventStatusId()) {
                         case "1":
-                            e.setEventStatus("TBD");
+                            e.setEventStatus(status.getJSONObject("type")
+                                    .optString("detail", INVALID_STRING_REPLACER));
                             break;
                         case "2":
                             e.setEventStatus("Final");

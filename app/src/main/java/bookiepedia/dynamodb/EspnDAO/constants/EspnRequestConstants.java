@@ -13,6 +13,7 @@ public class EspnRequestConstants {
     // Leagues
     public static final String NBA = "basketball/nba";
     public static final String NHL = "hockey/nhl";
+    public static final String MLB = "baseball/mlb";
 
     // Date Formatting
     public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");

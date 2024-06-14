@@ -152,7 +152,7 @@ New .css being added to template
 
 
 /*
-League icon/button placeholders
+League logo/button placeholders
 - .icon-wrapper for help with indicator
 */
 
@@ -228,4 +228,74 @@ Refresh button to call ESPN API and update events and their scores for all suppo
 
 .refresh-button:hover {
     background-color: #0056b3;
+}
+
+/*
+Event Home/Away team logos
+*/
+
+.event-logos {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-team-logo {
+    width: 125px;
+    height: 125px;
+    object-fit: cover;
+}
+
+.at-symbol {
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/*
+Event details and headline
+*/
+
+.event-details {
+    display: flex;
+    flex-direction:column;
+    gap: 5px;
+}
+
+.event-name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.event-headline {
+    font-style: italic;
+}
+
+/*
+Scores and event status
+*/
+
+.event-score-status {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: center;
+    margin-top: 10px;
+}
+
+.home-score {
+    text-align: center;
+    font-size: 32px;
+}
+
+.away-score {
+    text-align: center;
+    font-size: 32px;
+}
+
+.event-status {
+    text-align: center;
+    white-space: normal;
+    width 10px;
 }
