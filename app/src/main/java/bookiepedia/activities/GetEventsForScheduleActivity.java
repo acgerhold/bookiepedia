@@ -11,7 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GetEventsForScheduleActivity {
 
@@ -30,8 +32,13 @@ public class GetEventsForScheduleActivity {
         log.info("Received GetEventsForScheduleRequest " + getEventsForScheduleRequest);
 
         List<Event> events = eventDAO.getEvents(requestedId);
+
+        List<Event> eventsSorted = events.stream()
+                .sorted(Comparator.comparing(Event::getEventDate))
+                .collect(Collectors.toList());
+
         List<EventModel> eventModels = new ArrayList<>();
-        for (Event event : events) {
+        for (Event event : eventsSorted) {
             eventModels.add(new ModelConverter().toEventModel(event));
         }
 

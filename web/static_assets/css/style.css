@@ -234,24 +234,28 @@ Refresh button to call ESPN API and update events and their scores for all suppo
 Event Home/Away team logos
 */
 
+.event-container {
+    display: flex;
+    justify-content:center;
+    margin-bottom: 10px;
+}
+
 .event-logos {
-    display: grid;
-    grid-template-columns: auto auto auto;
+    display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .event-team-logo {
     width: 125px;
     height: 125px;
     object-fit: cover;
+    margin-right: 10px;
 }
 
 .at-symbol {
-    margin: 0 10px;
     font-size: 20px;
     font-weight: bold;
-    text-align: center;
+    margin: 0 10px;
 }
 
 /*
@@ -259,9 +263,8 @@ Event details and headline
 */
 
 .event-details {
-    display: flex;
-    flex-direction:column;
-    gap: 5px;
+    text-align: center;
+    margin-top: 10px;
 }
 
 .event-name {
@@ -278,24 +281,25 @@ Scores and event status
 */
 
 .event-score-status {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    justify-items: center;
-    margin-top: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 .home-score {
     text-align: center;
     font-size: 32px;
+    margin: 0 10px;
 }
 
 .away-score {
     text-align: center;
     font-size: 32px;
+    margin: 0 10px;
 }
 
 .event-status {
     text-align: center;
     white-space: normal;
     width 10px;
+    margin: 0 10px;
 }

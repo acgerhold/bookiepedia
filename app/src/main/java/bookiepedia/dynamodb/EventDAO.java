@@ -5,10 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EventDAO {
@@ -30,6 +27,8 @@ public class EventDAO {
 
         PaginatedScanList<Event> eventList = dynamoDBMapper.scan(Event.class, scanExpression);
 
-        return eventList;
+        return eventList.stream()
+                .sorted(Comparator.comparing(Event::getEventDate))
+                .collect(Collectors.toList());
     }
 }

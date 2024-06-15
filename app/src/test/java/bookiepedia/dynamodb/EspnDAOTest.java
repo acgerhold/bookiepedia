@@ -45,7 +45,7 @@ public class EspnDAOTest {
                 EspnRequestConstants.NHL, startDate, endDate);
         String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                 EspnRequestConstants.MLB, startDate, endDate);
-        result = espnDAO.requestQuery(mlbURL);
+        result = espnDAO.requestQuery(nhlURL);
     }
 
     @Test

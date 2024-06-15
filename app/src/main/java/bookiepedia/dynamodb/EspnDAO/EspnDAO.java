@@ -20,10 +20,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.CENTRAL_ZONE;
 
 public class EspnDAO {
 
@@ -139,14 +142,22 @@ public class EspnDAO {
                 .mapToObj(eventsJson::getJSONObject)
                 .collect(Collectors.toList());
 
+        List<List<JSONObject>> eventJsonListSplit = splitEvents(eventJsonList, 20);
+        // Splitting the list of events into chunks, 7 days of MLB events returns 100 events in the result.
+        // Calling fetchSchedule with all 100 events makes the request time out before finishing.
+        // Splitting into chunks 5 chunks of 20 still causes an issue, but retrying fetchSchedule() will...
+        // Eventually load remaining events into DynamoDB.
+        // Placeholder for threading
+
         ObjectMapper mapper = new ObjectMapper();
 
         // List that will contain each created Event's JSON and their data quality scores
         List<String> eventList = new ArrayList<>();
         List<Double> dataQualityScores = new ArrayList<>();
         // Stream the list of Event JSONObjects to extract data for Event object attributes
-        eventJsonList
-                .forEach(event -> {
+
+        for (List<JSONObject> chunk : eventJsonListSplit) {
+            chunk.forEach(event -> {
 
                     Event e = new Event();
 
@@ -179,7 +190,10 @@ public class EspnDAO {
                             .getJSONObject(0)
                             .optString("id", INVALID_STRING_REPLACER));
                     // Event Date
-                    e.setEventDate(event.optString("date", INVALID_STRING_REPLACER));
+                    String date = event.optString("date", INVALID_STRING_REPLACER);
+                    ZonedDateTime dateInCentral = ZonedDateTime.parse(date, EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X)
+                                    .withZoneSameInstant(EspnRequestConstants.CENTRAL_ZONE);
+                    e.setEventDate(dateInCentral.format(EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X));
                     // Event Season
                     e.setEventSeasonId(event.getJSONObject("season")
                             .optString("type", INVALID_STRING_REPLACER));
@@ -200,20 +214,31 @@ public class EspnDAO {
                     e.setEventStatusId(status.getJSONObject("type")
                             .optString("id", INVALID_STRING_REPLACER));
                     // Event Status
-                    switch (e.getEventStatusId()) {
-                        case "1":
-                            e.setEventStatus(status.getJSONObject("type")
-                                    .optString("shortDetail", INVALID_STRING_REPLACER));
-                            break;
-                        case "2":
-                            e.setEventStatus("Final");
-                            break;
-                        case "3":
-                            e.setEventStatus("P" + status.optString("period") + " " + status.optString("clock"));
-                            break;
-                        default:
-                            e.setEventStatus("Unknown");
-                            break;
+                    if (e.getEventStatusId().equals("2")) {
+                        switch (e.getLeagueId()) {
+                            case "10":
+                                e.setEventStatus(status.getJSONObject("type")
+                                        .optString("shortDetail", INVALID_STRING_REPLACER));
+                                break;
+                            case "90":
+                                e.setEventStatus("P" + status.optString("period") +
+                                        " " +
+                                        status.optString("clock") +
+                                        " " +
+                                        status.optString("displayClock"));
+                            case "46":
+                                e.setEventStatus("Q" + status.optString("period") +
+                                        " " +
+                                        status.optString("clock") +
+                                        " " +
+                                        status.optString("displayClock"));
+                            default:
+                                e.setEventStatus(status.getJSONObject("type")
+                                        .optString("shortDetail", INVALID_STRING_REPLACER));
+                        }
+                    } else {
+                        e.setEventStatus(status.getJSONObject("type")
+                                .optString("shortDetail", INVALID_STRING_REPLACER));
                     }
                     // Home Team Score (Current or Final)
                     e.setScoreHome(homeTeam.optInt("score", -1));
@@ -261,7 +286,8 @@ public class EspnDAO {
                     } catch (JsonProcessingException jpe) {
                         throw new RuntimeException(jpe);
                     }
-                });
+            });
+        }
 
         // Take average of each Event's data quality score and print result
         // * May include data quality score as an attribute for each object
@@ -272,6 +298,16 @@ public class EspnDAO {
         System.out.println("\nAverage - " + avgDataQualityScore + "%");
 
         return eventList;
+    }
+
+    public static List<List<JSONObject>> splitEvents(List<JSONObject> eventJsonList, int chunkSize) {
+        List<List<JSONObject>> eventJsonListChunks = new ArrayList<>();
+
+        for (int i = 0; i < eventJsonList.size(); i += chunkSize) {
+            eventJsonListChunks.add(eventJsonList.subList(i, Math.min(eventJsonList.size(), i + chunkSize)));
+        }
+
+        return eventJsonListChunks;
     }
 
     /**
