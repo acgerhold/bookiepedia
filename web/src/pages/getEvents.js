@@ -145,17 +145,22 @@ class GetEvents extends BindingClass {
 
             const homeColor = event.teamHomeColor;
             const awayColor = event.teamAwayColor;
-
-            console.log("home: ", homeColor);
-            console.log("away: ", awayColor);
+            const homeColorAlt = event.teamHomeColorAlt;
+            const awayColorAlt = event.teamAwayColorAlt;
 
             html += `
             <div class="event-card" style="--home-color:#${homeColor}; --away-color:#${awayColor};">
+                ${event.eventStatusId.includes("2") ? `
+                    <div class="live-indicator">
+                        <span class="live-circle"></span>
+                        LIVE
+                    </div>
+                ` : ''}
                 <div class="event-container">
-                    <div class="event-logos">
-                        <img src="${event.teamAwayLogo}" class="event-team-logo" />
+                    <div class="event-logos" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
+                        <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
                         <span class="at-symbol">@</span>
-                        <img src="${event.teamHomeLogo}" class="event-team-logo" />
+                        <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
                     </div>
                 </div>
                 <div class="event-container">
@@ -173,6 +178,7 @@ class GetEvents extends BindingClass {
                     <div class="event-details">
                         <div class="event-name">${event.eventName}</div>
                         <div class="event-headline">${event.eventHeadline}</div>
+                        <div class="hover-indicator"></div>
                     </div>
                 </div>
             </div>`;

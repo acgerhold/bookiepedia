@@ -187,7 +187,7 @@ Gold hover indicator
     transform: translateX(-50%);
     width: 40px;
     height: 5px;
-    background-color: gold;
+    background-color: rgba(255, 215, 0, 0.6);
     border-radius: 5px;
     display: none;
 }
@@ -197,10 +197,6 @@ Gold hover indicator
 }
 
 .icon-container:hover .hover-indicator {
-    display: block;
-}
-
-.refresh-button:hover .hover-indicator {
     display: block;
 }
 
@@ -242,16 +238,29 @@ Adjust the color split for event card with %s in background
 }
 
 .event-card {
+    position: relative;
     background: linear-gradient(to right, var(--away-color), var(--home-color)) top,
-                linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 20%, rgba(0, 0, 0, 0.9) 100%) bottom;
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.9) 100%) bottom;
     background-size: 100% 70%, 100% 30%;
     background-repeat: no-repeat;
     backdrop-filter: blur(10px);
     box-shadow: 0 0px 8px rgba(0,0,0,0.7);
-    padding: 20px;
+    padding: 25px;
     width: calc(25% - 20px);
     box-sizing: border-box;
+    transition: transform 0.3s ease;
 }
+
+.event-card:hover {
+    transform: scale(1.05);
+}
+
+.event-card:hover .hover-indicator {
+    display: block;
+    bottom: -9px;
+    width: 150px;
+}
+
 
 /*
 Event logo container and @ symbol
@@ -262,11 +271,22 @@ Event logo container and @ symbol
     align-items: center;
 }
 
-.event-team-logo {
+.event-team-logo-away {
     width: 100px;
     height: 100px;
     object-fit: fill;
     margin: 0 10px;
+    background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.event-team-logo-home {
+    width: 100px;
+    height: 100px;
+    object-fit: fill;
+    margin: 0 10px;
+    background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
 }
 
 .at-symbol {
@@ -338,4 +358,47 @@ Details about the event like the name and headline
 
 .event-headline {
     font-style: italic;
+}
+
+/*
+Live indicator, can adjust positioning with top/left/right/bottom or %s and translateX/Y
+to center horizontally easier
+*/
+
+
+.live-indicator {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: red;
+    font-size: 12px;
+}
+
+.live-circle {
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 5px;
+    animation: pulse 1s infinite;
+}
+
+/*
+Set the pulse of the live circle
+*/
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
 }

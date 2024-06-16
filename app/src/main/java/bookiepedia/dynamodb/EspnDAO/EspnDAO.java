@@ -237,14 +237,16 @@ public class EspnDAO {
                     } else {
                         e.setTeamWinner("-1");
                     }
-                    // Team Home Logo & Color
+                    // Team Home Logo & Colors
                     Team teamHome = dynamoDbMapper.load(Team.class, leagueId, e.getTeamHome());
                     e.setTeamHomeLogo(teamHome.getTeamLogo());
                     e.setTeamHomeColor(teamHome.getTeamColor());
-                    // Team Away Logo & Color
+                    e.setTeamHomeColorAlt(teamHome.getTeamAlternateColor());
+                    // Team Away Logo & Colors
                     Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
                     e.setTeamAwayLogo(teamAway.getTeamLogo());
                     e.setTeamAwayColor(teamAway.getTeamColor());
+                    e.setTeamAwayColorAlt(teamAway.getTeamAlternateColor());
 
                     try {
 
