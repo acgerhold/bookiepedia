@@ -140,45 +140,44 @@ class GetEvents extends BindingClass {
             return '<h4>No results found</h4>';
         }
 
-        let html = '<table><tr><th></th></tr>';
+        let html = '<div class="events-grid">';
         for (const event of searchResults) {
+
+            const homeColor = event.teamHomeColor;
+            const awayColor = event.teamAwayColor;
+
+            console.log("home: ", homeColor);
+            console.log("away: ", awayColor);
+
             html += `
-        <tr>
-            <td>
+            <div class="event-card" style="--home-color:#${homeColor}; --away-color:#${awayColor};">
                 <div class="event-container">
                     <div class="event-logos">
-                        <img src="${event.teamHomeLogo}" class="event-team-logo" />
-                        <span class="at-symbol">@</span>
                         <img src="${event.teamAwayLogo}" class="event-team-logo" />
+                        <span class="at-symbol">@</span>
+                        <img src="${event.teamHomeLogo}" class="event-team-logo" />
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <div class="event-container">
                     <div class="event-score-status">
-                        <div class="home-score">${event.scoreHome}</div>
-                        <div class="event-status">${event.eventStatus}</div>
-                        <div class="away-score">${event.scoreAway}</div>
+                        ${event.eventStatus.includes("EDT") || event.eventStatus.includes("Postponed") ? `
+                            <div class="event-status">${event.eventStatus}</div>
+                        ` : `
+                            <div class="home-score">${event.scoreAway}</div>
+                            <div class="event-status">${event.eventStatus}</div>
+                            <div class="away-score">${event.scoreHome}</div>
+                        `}
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <div class="event-container">
                     <div class="event-details">
                         <div class="event-name">${event.eventName}</div>
                         <div class="event-headline">${event.eventHeadline}</div>
                     </div>
                 </div>
-            </td>
-        </tr>
-        <th>
-        </th>`;
+            </div>`;
         }
-        html += '</table>';
+        html += '</div>';
 
         return html;
     }

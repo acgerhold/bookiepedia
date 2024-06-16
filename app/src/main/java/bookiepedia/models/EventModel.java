@@ -24,6 +24,8 @@ public class EventModel {
     private final List<String> links;
     private final String teamHomeLogo;
     private final String teamAwayLogo;
+    private final String teamHomeColor;
+    private final String teamAwayColor;
 
     /**
      * Constructor for an Event model.
@@ -48,7 +50,8 @@ public class EventModel {
     public EventModel(String eventId, String scheduleId, String eventName, String eventNameShort, String eventHeadline,
                       String leagueId, String eventDate, String eventSeasonId, String teamHome, String teamAway,
                       String eventStatusId, String eventStatus, String teamWinner, Integer scoreHome,
-                      Integer scoreAway, Integer scoreTotal, List<String> links, String teamHomeLogo, String teamAwayLogo) {
+                      Integer scoreAway, Integer scoreTotal, List<String> links, String teamHomeLogo,
+                      String teamAwayLogo, String teamHomeColor, String teamAwayColor) {
         this.eventId = eventId;
         this.scheduleId = scheduleId;
         this.eventName = eventName;
@@ -68,6 +71,8 @@ public class EventModel {
         this.links = links;
         this.teamHomeLogo = teamHomeLogo;
         this.teamAwayLogo = teamAwayLogo;
+        this.teamHomeColor = teamHomeColor;
+        this.teamAwayColor = teamAwayColor;
     }
 
     public String getEventId() {
@@ -136,13 +141,22 @@ public class EventModel {
     public List<String> getLinks() {
         return links;
     }
+
     public String getTeamHomeLogo() {
         return teamHomeLogo;
     }
+
     public String getTeamAwayLogo() {
         return teamAwayLogo;
     }
 
+    public String getTeamHomeColor() {
+        return teamHomeColor;
+    }
+
+    public String getTeamAwayColor() {
+        return teamAwayColor;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -193,6 +207,8 @@ public class EventModel {
         private List<String> links;
         private String teamHomelogo;
         private String teamAwayLogo;
+        private String teamHomeColor;
+        private String teamAwayColor;
 
         public Builder withEventId(String eventId) {
             this.eventId = eventId;
@@ -289,10 +305,20 @@ public class EventModel {
             return this;
         }
 
+        public Builder withTeamHomeColor(String teamHomeColor) {
+            this.teamHomeColor = teamHomeColor;
+            return this;
+        }
+
+        public Builder withTeamAwayColor(String teamAwayColor) {
+            this.teamAwayColor = teamAwayColor;
+            return this;
+        }
+
         public EventModel build() {
             return new EventModel(eventId, scheduleId, eventName, eventNameShort, eventHeadline, leagueId, eventDate,
                     eventSeasonId, teamHome, teamAway, eventStatusId, eventStatus, teamWinner, scoreHome, scoreAway,
-                    scoreTotal, links, teamHomelogo, teamAwayLogo);
+                    scoreTotal, links, teamHomelogo, teamAwayLogo, teamHomeColor, teamAwayColor);
         }
     }
 }

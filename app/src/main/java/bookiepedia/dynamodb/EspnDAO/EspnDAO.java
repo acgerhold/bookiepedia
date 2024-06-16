@@ -155,9 +155,9 @@ public class EspnDAO {
         List<String> eventList = new ArrayList<>();
         List<Double> dataQualityScores = new ArrayList<>();
         // Stream the list of Event JSONObjects to extract data for Event object attributes
-
-        for (List<JSONObject> chunk : eventJsonListSplit) {
-            chunk.forEach(event -> {
+        List<JSONObject> firstChunk = eventJsonListSplit.get(0);
+        // for (List<JSONObject> chunk : eventJsonListSplit) {
+            firstChunk.forEach(event -> {
 
                     Event e = new Event();
 
@@ -214,32 +214,8 @@ public class EspnDAO {
                     e.setEventStatusId(status.getJSONObject("type")
                             .optString("id", INVALID_STRING_REPLACER));
                     // Event Status
-                    if (e.getEventStatusId().equals("2")) {
-                        switch (e.getLeagueId()) {
-                            case "10":
-                                e.setEventStatus(status.getJSONObject("type")
-                                        .optString("shortDetail", INVALID_STRING_REPLACER));
-                                break;
-                            case "90":
-                                e.setEventStatus("P" + status.optString("period") +
-                                        " " +
-                                        status.optString("clock") +
-                                        " " +
-                                        status.optString("displayClock"));
-                            case "46":
-                                e.setEventStatus("Q" + status.optString("period") +
-                                        " " +
-                                        status.optString("clock") +
-                                        " " +
-                                        status.optString("displayClock"));
-                            default:
-                                e.setEventStatus(status.getJSONObject("type")
-                                        .optString("shortDetail", INVALID_STRING_REPLACER));
-                        }
-                    } else {
-                        e.setEventStatus(status.getJSONObject("type")
-                                .optString("shortDetail", INVALID_STRING_REPLACER));
-                    }
+                    e.setEventStatus(status.getJSONObject("type")
+                            .optString("shortDetail", INVALID_STRING_REPLACER));
                     // Home Team Score (Current or Final)
                     e.setScoreHome(homeTeam.optInt("score", -1));
                     // Away Team Score (Current or Final)
@@ -261,12 +237,14 @@ public class EspnDAO {
                     } else {
                         e.setTeamWinner("-1");
                     }
-                    // Team Home Logo
+                    // Team Home Logo & Color
                     Team teamHome = dynamoDbMapper.load(Team.class, leagueId, e.getTeamHome());
                     e.setTeamHomeLogo(teamHome.getTeamLogo());
-                    // Team Away Logo
+                    e.setTeamHomeColor(teamHome.getTeamColor());
+                    // Team Away Logo & Color
                     Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
                     e.setTeamAwayLogo(teamAway.getTeamLogo());
+                    e.setTeamAwayColor(teamAway.getTeamColor());
 
                     try {
 
@@ -287,7 +265,7 @@ public class EspnDAO {
                         throw new RuntimeException(jpe);
                     }
             });
-        }
+        // }
 
         // Take average of each Event's data quality score and print result
         // * May include data quality score as an attribute for each object

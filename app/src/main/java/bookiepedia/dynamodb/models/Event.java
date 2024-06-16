@@ -68,6 +68,8 @@ public class Event {
     // events > 0,1,2 ... > links > 0 > href ("https://www.espn.com/nba…401671998/pacers-celtics")
     private String teamHomeLogo;
     private String teamAwayLogo;
+    private String teamHomeColor;
+    private String teamAwayColor;
 
     // GETTERS
 
@@ -170,6 +172,16 @@ public class Event {
         return teamAwayLogo;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHomeColor")
+    public String getTeamHomeColor() {
+        return teamHomeColor;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamAwayColor")
+    public String getTeamAwayColor() {
+        return teamAwayColor;
+    }
+
     // SETTERS
 
     public void setEventId(String eventId) {
@@ -250,5 +262,13 @@ public class Event {
 
     public void setTeamAwayLogo(String teamAwayLogo) {
         this.teamAwayLogo = teamAwayLogo;
+    }
+
+    public void setTeamHomeColor(String teamHomeColor) {
+        this.teamHomeColor = teamHomeColor;
+    }
+
+    public void setTeamAwayColor(String teamAwayColor) {
+        this.teamAwayColor = teamAwayColor;
     }
 }
