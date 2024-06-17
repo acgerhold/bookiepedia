@@ -143,6 +143,8 @@ class GetEvents extends BindingClass {
         let html = '<div class="events-grid">';
         for (const event of searchResults) {
 
+            let options = 'Hello';
+
             const homeColor = event.teamHomeColor;
             const awayColor = event.teamAwayColor;
             const homeColorAlt = event.teamHomeColorAlt;
@@ -158,19 +160,55 @@ class GetEvents extends BindingClass {
                 ` : ''}
                 <div class="event-container">
                     <div class="betting-buttons betting-buttons-away" style="--away-color-alt:#${awayColorAlt}; --away-color:#${awayColor};">
-                        <button id="${event.teamAway}" class="money-line">ML<div class="hover-indicator-betting"></div></button>
-                        <button id="${event.teamAway}" class="spread">Spread<div class="hover-indicator-betting"></div></button>
-                        <button id="${event.teamAway}" class="total">Total<div class="hover-indicator-betting"></div></button>
+                        <button id="event-${event.teamAway}-moneyline" class="money-line">
+                            ML
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-away-${event.teamAway}-moneyline" class="moneyline-dropdown-content">
+                                ${options}
+                            </div>
+                        <button id="event-${event.teamAway}-spread" class="spread">
+                            Spread
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-away-${event.teamAway}-spread" class="spread-dropdown-content">
+                                ${options}
+                            </div>
+                        <button id="event-${event.teamAway}-total" class="total">
+                            Total
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-away-${event.teamAway}-total" class="total-dropdown-content">
+                                ${options}
+                            </div>
                     </div>
                     <div class="event-logos" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
                         <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
-                        <span class="at-symbol">@</span>
+                            <span class="at-symbol">@</span>
                         <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
                     </div>
                     <div class="betting-buttons betting-buttons-home" style="--home-color-alt:#${homeColorAlt}; --home-color:#${homeColor};">
-                        <button id="${event.teamHome}" class="money-line">ML<div class="hover-indicator-betting"></div></button>
-                        <button id="${event.teamHome}" class="spread">Spread<div class="hover-indicator-betting"></div></button>
-                        <button id="${event.teamHome}" class="total">Total<div class="hover-indicator-betting"></div></button>
+                        <button id="event-${event.teamHome}-moneyline" class="money-line">
+                            ML
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-home-${event.teamHome}-moneyline" class="moneyline-dropdown-content">
+                                ${options}
+                            </div>
+                        <button id="event-${event.teamHome}-spread" class="spread">
+                            Spread
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-home-${event.teamHome}-spread" class="spread-dropdown-content">
+                                ${options}
+                            </div>
+                        <button id="event-${event.teamHome}-total" class="total">
+                            Total
+                            <div class="hover-indicator-betting"></div>
+                        </button>
+                            <div id="betting-dropdown-home-${event.teamHome}-total" class="total-dropdown-content">
+                                ${options}
+                            </div>
                     </div>
                 </div>
                 <div class="event-score-status">
@@ -190,6 +228,17 @@ class GetEvents extends BindingClass {
             </div>`;
         }
         html += '</div>';
+
+        const searchResultsDisplay = document.getElementById('search-results-display');
+        searchResultsDisplay.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.matches('.money-line, .spread, .total')) {
+                const dropdown = target.nextElementSibling;
+                if (dropdown) {
+                    dropdown.classList.toggle('show');
+                }
+            }
+        });
 
         return html;
     }
