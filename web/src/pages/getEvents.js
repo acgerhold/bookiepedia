@@ -143,7 +143,11 @@ class GetEvents extends BindingClass {
         let html = '<div class="events-grid">';
         for (const event of searchResults) {
 
-            let options = 'Hello';
+            let options = `
+              <input type="text" id="amount-wagered" placeholder="Amount">
+              <input type="text" id="odds" placeholder="Odds">
+              <input type="text" id="bookmaker" placeholder="Bookie">
+            `;
 
             const homeColor = event.teamHomeColor;
             const awayColor = event.teamAwayColor;
