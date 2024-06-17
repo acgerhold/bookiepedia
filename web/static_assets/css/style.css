@@ -187,7 +187,7 @@ Gold hover indicator
     transform: translateX(-50%);
     width: 40px;
     height: 5px;
-    background-color: rgba(255, 215, 0, 0.6);
+    background-color: rgba(255, 215, 0, 1);
     border-radius: 5px;
     display: none;
 }
@@ -245,10 +245,11 @@ Adjust the color split for event card with %s in background
     background-repeat: no-repeat;
     backdrop-filter: blur(10px);
     box-shadow: 0 0px 8px rgba(0,0,0,0.7);
-    padding: 25px;
+    padding: 20px 15px;
     width: calc(25% - 20px);
     box-sizing: border-box;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
+    border-radius: 5px;
 }
 
 .event-card:hover {
@@ -266,35 +267,45 @@ Adjust the color split for event card with %s in background
 Event logo container and @ symbol
 */
 
+.event-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .event-logos {
+    order: 2;
+    display: flex;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
 }
 
 .event-team-logo-away {
     width: 100px;
     height: 100px;
     object-fit: fill;
-    margin: 0 10px;
+    margin: 0 15px;
     background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.6);
+    margin-bottom: 5px;
 }
 
 .event-team-logo-home {
     width: 100px;
     height: 100px;
     object-fit: fill;
-    margin: 0 10px;
+    margin: 0 15px;
     background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
+    margin-bottom: 5px;
 }
 
 .at-symbol {
     position: relative;
     font-size: 20px;
     font-weight: bold;
-    margin: 0 10px;
-    bottom: 45px;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 /*
@@ -322,6 +333,7 @@ The large font was changing the spacing too much vs games that werent in progres
     bottom: 5px;
     top: 0;
     transform: translateX(-100%);
+    text-shadow: -3px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 .away-score {
@@ -331,6 +343,7 @@ The large font was changing the spacing too much vs games that werent in progres
     bottom: 5px;
     top: 0;
     transform: translateX(100%);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 .event-status {
@@ -338,13 +351,14 @@ The large font was changing the spacing too much vs games that werent in progres
     margin-bottom: 10px;
     margin-top: 10px;
     font-style: italic;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 /*
 Details about the event like the name and headline
 */
 .event-details {
-    margin-top: 10px;
+    margin-top: 12.5px;
     text-align: center;
     width: flex;
     height: 40px;
@@ -402,3 +416,160 @@ Set the pulse of the live circle
         opacity: 1;
     }
 }
+
+/*
+Betting buttons
+*/
+
+.betting-buttons {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.betting-buttons-away {
+    order: 1;
+}
+
+.betting-buttons-home {
+    order: 3;
+}
+
+.betting-buttons-home button {
+    background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+}
+
+.betting-buttons-away button {
+    background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+}
+
+.money-line {
+    margin-bottom: 6px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.spread {
+    margin-bottom: 6px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.total {
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+
+
+
+
+
+.hover-indicator-betting {
+    position: absolute;
+    width: 2px;
+    background-color: rgba(255, 215, 0, 1);
+    transition: height 0.1s ease;
+    bottom: 0;
+    height: 0;
+}
+
+
+
+
+.betting-buttons-away .money-line {
+    position: relative;
+}
+
+.betting-buttons-away .money-line .hover-indicator-betting {
+    left: -5px;
+}
+
+.betting-buttons-away .money-line:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+
+.betting-buttons-away .spread {
+    position: relative;
+}
+
+.betting-buttons-away .spread .hover-indicator-betting {
+    left: -5px;
+}
+
+.betting-buttons-away .spread:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+
+.betting-buttons-away .total {
+    position: relative;
+}
+
+.betting-buttons-away .total .hover-indicator-betting {
+    left: -5px;
+}
+
+.betting-buttons-away .total:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+
+.betting-buttons-home .money-line {
+    position: relative;
+}
+
+.betting-buttons-home .money-line .hover-indicator-betting {
+    position: absolute;
+    right: -5px;
+}
+
+.betting-buttons-home .money-line:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+
+.betting-buttons-home .spread {
+    position: relative;
+}
+
+.betting-buttons-home .spread .hover-indicator-betting {
+    position: absolute;
+    right: -5px;
+}
+
+.betting-buttons-home .spread:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+
+.betting-buttons-home .total {
+    position: relative;
+}
+
+.betting-buttons-home .total .hover-indicator-betting {
+    position: absolute;
+    right: -5px;
+}
+
+.betting-buttons-home .total:hover .hover-indicator-betting {
+    height: 100%;
+}
+
+

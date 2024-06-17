@@ -157,29 +157,35 @@ class GetEvents extends BindingClass {
                     </div>
                 ` : ''}
                 <div class="event-container">
+                    <div class="betting-buttons betting-buttons-away" style="--away-color-alt:#${awayColorAlt}; --away-color:#${awayColor};">
+                        <button id="${event.teamAway}" class="money-line">ML<div class="hover-indicator-betting"></div></button>
+                        <button id="${event.teamAway}" class="spread">Spread<div class="hover-indicator-betting"></div></button>
+                        <button id="${event.teamAway}" class="total">Total<div class="hover-indicator-betting"></div></button>
+                    </div>
                     <div class="event-logos" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
                         <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
                         <span class="at-symbol">@</span>
                         <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
                     </div>
-                </div>
-                <div class="event-container">
-                    <div class="event-score-status">
-                        ${event.eventStatus.includes("EDT") || event.eventStatus.includes("Postponed") ? `
-                            <div class="event-status">${event.eventStatus}</div>
-                        ` : `
-                            <div class="home-score">${event.scoreAway}</div>
-                            <div class="event-status">${event.eventStatus}</div>
-                            <div class="away-score">${event.scoreHome}</div>
-                        `}
+                    <div class="betting-buttons betting-buttons-home" style="--home-color-alt:#${homeColorAlt}; --home-color:#${homeColor};">
+                        <button id="${event.teamHome}" class="money-line">ML<div class="hover-indicator-betting"></div></button>
+                        <button id="${event.teamHome}" class="spread">Spread<div class="hover-indicator-betting"></div></button>
+                        <button id="${event.teamHome}" class="total">Total<div class="hover-indicator-betting"></div></button>
                     </div>
                 </div>
-                <div class="event-container">
-                    <div class="event-details">
-                        <div class="event-name">${event.eventName}</div>
-                        <div class="event-headline">${event.eventHeadline}</div>
-                        <div class="hover-indicator"></div>
-                    </div>
+                <div class="event-score-status">
+                    ${event.eventStatus.includes("EDT") || event.eventStatus.includes("Postponed") ? `
+                        <div class="event-status">${event.eventStatus}</div>
+                    ` : `
+                        <div class="home-score">${event.scoreAway}</div>
+                        <div class="event-status">${event.eventStatus}</div>
+                        <div class="away-score">${event.scoreHome}</div>
+                    `}
+                </div>
+                <div class="event-details">
+                    <div class="event-name">${event.eventName}</div>
+                    <div class="event-headline">${event.eventHeadline}</div>
+                    <div class="hover-indicator"></div>
                 </div>
             </div>`;
         }
