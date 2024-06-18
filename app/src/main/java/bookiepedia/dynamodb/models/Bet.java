@@ -12,17 +12,17 @@ public class Bet {
     private String betId;
     private String userId;
     private String eventId;
-    private BigDecimal amountWagered;
-    private BigDecimal odds;
+    private Double amountWagered;
+    private Double odds;
     private String teamBetOn;
     // Tells which team user chose to bet on if spread or money line markets, blank for total\
-    private BigDecimal projection;
+    private Double projection;
     // Shows projection for spread or total markets (O 207.5, -2.5), blank for money line
     private String bettingMarket;
     private String bookmakerId;
     // May be able to pull projection, bettingMarket, and bookmakerId from Odds object for Event and not have as attr
     private String datePlaced;
-    private BigDecimal gainOrLoss;
+    private Double gainOrLoss;
     // May not need these as attributes, might be able to pull directly from Event using the EventId?
     private String teamHome;
     private Integer scoreHome;
@@ -60,14 +60,12 @@ public class Bet {
     }
 
     @DynamoDBAttribute(attributeName = "amountWagered")
-    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
-    public BigDecimal getAmountWagered() {
+    public Double getAmountWagered() {
         return amountWagered;
     }
 
     @DynamoDBAttribute(attributeName = "odds")
-    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
-    public BigDecimal getOdds() {
+    public Double getOdds() {
         return odds;
     }
 
@@ -77,8 +75,7 @@ public class Bet {
     }
 
     @DynamoDBAttribute(attributeName = "projection")
-    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
-    public BigDecimal getProjection() {
+    public Double getProjection() {
         return projection;
     }
 
@@ -98,8 +95,7 @@ public class Bet {
     }
 
     @DynamoDBAttribute(attributeName = "gainOrLoss")
-    @DynamoDBTypeConverted(converter = BigDecimalConverter.class)
-    public BigDecimal getGainOrLoss() {
+    public Double getGainOrLoss() {
         return gainOrLoss;
     }
 
@@ -165,7 +161,6 @@ public class Bet {
 
     // SETTERS
 
-
     public void setWeeklyHistoryId(String weeklyHistoryId) {
         this.weeklyHistoryId = weeklyHistoryId;
     }
@@ -182,11 +177,11 @@ public class Bet {
         this.eventId = eventId;
     }
 
-    public void setAmountWagered(BigDecimal amountWagered) {
+    public void setAmountWagered(Double amountWagered) {
         this.amountWagered = amountWagered;
     }
 
-    public void setOdds(BigDecimal odds) {
+    public void setOdds(Double odds) {
         this.odds = odds;
     }
 
@@ -194,7 +189,7 @@ public class Bet {
         this.teamBetOn = teamBetOn;
     }
 
-    public void setProjection(BigDecimal projection) {
+    public void setProjection(Double projection) {
         this.projection = projection;
     }
 
@@ -210,7 +205,7 @@ public class Bet {
         this.datePlaced = datePlaced;
     }
 
-    public void setGainOrLoss(BigDecimal gainOrLoss) {
+    public void setGainOrLoss(Double gainOrLoss) {
         this.gainOrLoss = gainOrLoss;
     }
 

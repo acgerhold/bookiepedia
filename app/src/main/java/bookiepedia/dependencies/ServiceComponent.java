@@ -1,5 +1,6 @@
 package bookiepedia.dependencies;
 
+import bookiepedia.activities.AddBetToHistoryActivity;
 import bookiepedia.activities.FetchScheduleActivity;
 import bookiepedia.activities.GetEventsForScheduleActivity;
 import bookiepedia.activities.GetScheduleActivity;
@@ -19,6 +20,8 @@ public interface ServiceComponent {
     FetchScheduleActivity provideFetchScheduleActivity();
 
     GetEventsForScheduleActivity provideGetEventsForScheduleActivity();
+
+    AddBetToHistoryActivity provideAddBetToHistoryActivity();
 
     EspnDAO provideEspnDAO();
 }

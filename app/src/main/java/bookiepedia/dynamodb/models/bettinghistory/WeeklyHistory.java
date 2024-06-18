@@ -1,5 +1,6 @@
 package bookiepedia.dynamodb.models.bettinghistory;
 
+import bookiepedia.dynamodb.models.Bet;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
@@ -9,27 +10,32 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-@DynamoDBTable(tableName = "WeeklyHistory")
+@DynamoDBTable(tableName = "Weekly_History")
 public class WeeklyHistory {
 
-    private String monthlyHistoryId;
+    // private String monthlyHistoryId;
     private String weeklyHistoryId;
     private String userId;
     private String weeklyHistoryName;
     private String date;
     // Starting by organizing histories by week number/month/year
     // Ex. 1-05-2024, 2-05-2024, ..., 1-06-2024, 2-05, 2024 ...
-    private Integer weeklyBetCount;
+
+    // private Integer weeklyBetCount;
     // Total bets placed in week
-    private BigDecimal weeklyAmountWagered;
+
+    // private BigDecimal weeklyAmountWagered;
     // Total amount wagered in week
-    private BigDecimal weeklyGain;
+
+    // private BigDecimal weeklyGain;
     // Total $ gained in week
-    private BigDecimal weeklyLoss;
+
+    // private BigDecimal weeklyLoss;
     // Total $ lost in week
-    private List<String> weeklyBetIdList;
+    private List<Bet> weeklyBetList;
     // List of all betIds placed in week
-    private Map<String, BigDecimal> weeklySummary;
+
+    // private Map<String, BigDecimal> weeklySummary;
     // Map of betting markets to +/- of each bet in betIdList
     // When a betId is added to betIdList, retrieves the betting market & its gain or loss if available
     // Add each bet's gain/loss as a value entry for corresponding market
@@ -37,11 +43,11 @@ public class WeeklyHistory {
 
     // GETTERS
 
-    @DynamoDBHashKey(attributeName = "monthlyHistoryId")
-    public String getMonthlyHistoryId() {
-        return monthlyHistoryId;
-    }
-    @DynamoDBRangeKey(attributeName = "weeklyHistoryId")
+//    @DynamoDBHashKey(attributeName = "monthlyHistoryId")
+//    public String getMonthlyHistoryId() {
+//        return monthlyHistoryId;
+//    }
+    @DynamoDBHashKey(attributeName = "weeklyHistoryId")
     public String getWeeklyHistoryId() {
         return weeklyHistoryId;
     }
@@ -61,41 +67,41 @@ public class WeeklyHistory {
         return date;
     }
 
-    @DynamoDBAttribute(attributeName = "weeklyBetCount")
-    public Integer getWeeklyBetCount() {
-        return weeklyBetCount;
+//    @DynamoDBAttribute(attributeName = "weeklyBetCount")
+//    public Integer getWeeklyBetCount() {
+//        return weeklyBetCount;
+//    }
+//
+//    @DynamoDBAttribute(attributeName = "weeklyAmountWagered")
+//    public BigDecimal getWeeklyAmountWagered() {
+//        return weeklyAmountWagered;
+//    }
+//
+//    @DynamoDBAttribute(attributeName = "weeklyGain")
+//    public BigDecimal getWeeklyGain() {
+//        return weeklyGain;
+//    }
+//
+//    @DynamoDBAttribute(attributeName = "weeklyLoss")
+//    public BigDecimal getWeeklyLoss() {
+//        return weeklyLoss;
+//    }
+//
+    @DynamoDBAttribute(attributeName = "weeklyBetList")
+    public List<Bet> getWeeklyBetList() {
+        return weeklyBetList;
     }
-
-    @DynamoDBAttribute(attributeName = "weeklyAmountWagered")
-    public BigDecimal getWeeklyAmountWagered() {
-        return weeklyAmountWagered;
-    }
-
-    @DynamoDBAttribute(attributeName = "weeklyGain")
-    public BigDecimal getWeeklyGain() {
-        return weeklyGain;
-    }
-
-    @DynamoDBAttribute(attributeName = "weeklyLoss")
-    public BigDecimal getWeeklyLoss() {
-        return weeklyLoss;
-    }
-
-    @DynamoDBAttribute(attributeName = "weeklyBetIdList")
-    public List<String> getWeeklyBetIdList() {
-        return weeklyBetIdList;
-    }
-
-    @DynamoDBAttribute(attributeName = "weeklySummary")
-    public Map<String, BigDecimal> getWeeklySummary() {
-        return weeklySummary;
-    }
+//
+//    @DynamoDBAttribute(attributeName = "weeklySummary")
+//    public Map<String, BigDecimal> getWeeklySummary() {
+//        return weeklySummary;
+//    }
 
     // SETTERS
 
-    public void setMonthlyHistoryId(String monthlyHistoryId) {
-        this.monthlyHistoryId = monthlyHistoryId;
-    }
+//    public void setMonthlyHistoryId(String monthlyHistoryId) {
+//        this.monthlyHistoryId = monthlyHistoryId;
+//    }
     public void setWeeklyHistoryId(String weeklyHistoryId) {
         this.weeklyHistoryId = weeklyHistoryId;
     }
@@ -112,27 +118,27 @@ public class WeeklyHistory {
         this.date = date;
     }
 
-    public void setWeeklyBetCount(Integer weeklyBetCount) {
-        this.weeklyBetCount = weeklyBetCount;
+//    public void setWeeklyBetCount(Integer weeklyBetCount) {
+//        this.weeklyBetCount = weeklyBetCount;
+//    }
+//
+//    public void setWeeklyAmountWagered(BigDecimal weeklyAmountWagered) {
+//        this.weeklyAmountWagered = weeklyAmountWagered;
+//    }
+//
+//    public void setWeeklyGain(BigDecimal weeklyGain) {
+//        this.weeklyGain = weeklyGain;
+//    }
+//
+//    public void setWeeklyLoss(BigDecimal weeklyLoss) {
+//        this.weeklyLoss = weeklyLoss;
+//    }
+//
+    public void setWeeklyBetList(List<Bet> weeklyBetList) {
+        this.weeklyBetList = weeklyBetList;
     }
-
-    public void setWeeklyAmountWagered(BigDecimal weeklyAmountWagered) {
-        this.weeklyAmountWagered = weeklyAmountWagered;
-    }
-
-    public void setWeeklyGain(BigDecimal weeklyGain) {
-        this.weeklyGain = weeklyGain;
-    }
-
-    public void setWeeklyLoss(BigDecimal weeklyLoss) {
-        this.weeklyLoss = weeklyLoss;
-    }
-
-    public void setWeeklyBetIdList(List<String> weeklyBetIdList) {
-        this.weeklyBetIdList = weeklyBetIdList;
-    }
-
-    public void setWeeklySummary(Map<String, BigDecimal> weeklySummary) {
-        this.weeklySummary = weeklySummary;
-    }
+//
+//    public void setWeeklySummary(Map<String, BigDecimal> weeklySummary) {
+//        this.weeklySummary = weeklySummary;
+//    }
 }

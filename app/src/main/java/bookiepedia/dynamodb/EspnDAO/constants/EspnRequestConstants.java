@@ -20,12 +20,14 @@ public class EspnRequestConstants {
     public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter yyyy_MM_dd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter yyyy_MM_DD_T_HH_MM_X = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mmX");
+    public static final DateTimeFormatter yyyy_MM_ww = DateTimeFormatter.ofPattern("yyyy/MM/ww");
 
     // Starting Date
     public static final ZoneId ZONE_ID = ZoneId.of("UTC-05:00");
     public static final LocalDateTime NOW = LocalDateTime.now(ZoneId.of("UTC-05:00"));
     public static final String START_DATE = NOW.format(yyyyMMdd);
     public static final String START_DATE_SPLIT = NOW.format(yyyy_MM_dd);
+    public static final String CURRENT_WEEK_OF_MONTH = NOW.format(yyyy_MM_ww);
     public static final ZoneId CENTRAL_ZONE = ZoneId.of("America/Chicago");
 
     // Ending Date
