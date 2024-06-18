@@ -37,6 +37,12 @@ public class ModelConverter {
                 .withScoreAway(event.getScoreAway())
                 .withScoreTotal(event.getScoreTotal())
                 .withLinks(event.getLinks())
+                .withTeamHomeLogo(event.getTeamHomeLogo())
+                .withTeamAwayLogo(event.getTeamAwayLogo())
+                .withTeamHomeColor(event.getTeamHomeColor())
+                .withTeamAwayColor(event.getTeamAwayColor())
+                .withTeamHomeColorAlt(event.getTeamHomeColorAlt())
+                .withTeamAwayColorAlt(event.getTeamAwayColorAlt())
                 .build();
     }
 

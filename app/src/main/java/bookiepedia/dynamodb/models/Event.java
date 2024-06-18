@@ -66,6 +66,12 @@ public class Event {
     private List<String> links;
     // Can I embed these links instead of opening new tab?
     // events > 0,1,2 ... > links > 0 > href ("https://www.espn.com/nba…401671998/pacers-celtics")
+    private String teamHomeLogo;
+    private String teamAwayLogo;
+    private String teamHomeColor;
+    private String teamAwayColor;
+    private String teamHomeColorAlt;
+    private String teamAwayColorAlt;
 
     // GETTERS
 
@@ -135,17 +141,17 @@ public class Event {
     }
 
     @DynamoDBAttribute(attributeName = "scoreHome")
-    public int getScoreHome() {
+    public Integer getScoreHome() {
         return scoreHome;
     }
 
     @DynamoDBAttribute(attributeName = "scoreAway")
-    public int getScoreAway() {
+    public Integer getScoreAway() {
         return scoreAway;
     }
 
     @DynamoDBAttribute(attributeName = "scoreTotal")
-    public int getScoreTotal() {
+    public Integer getScoreTotal() {
         return scoreTotal;
     }
 
@@ -156,6 +162,36 @@ public class Event {
     @DynamoDBAttribute(attributeName = "links")
     public List<String> getLinks() {
         return links;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamHomeLogo")
+    public String getTeamHomeLogo() {
+        return teamHomeLogo;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamAwayLogo")
+    public String getTeamAwayLogo() {
+        return teamAwayLogo;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamHomeColor")
+    public String getTeamHomeColor() {
+        return teamHomeColor;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamAwayColor")
+    public String getTeamAwayColor() {
+        return teamAwayColor;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamHomeColorAlt")
+    public String getTeamHomeColorAlt() {
+        return teamHomeColorAlt;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamAwayColorAlt")
+    public String getTeamAwayColorAlt() {
+        return teamAwayColorAlt;
     }
 
     // SETTERS
@@ -230,5 +266,29 @@ public class Event {
 
     public void setLinks(List<String> links) {
         this.links = links;
+    }
+
+    public void setTeamHomeLogo(String teamHomeLogo) {
+        this.teamHomeLogo = teamHomeLogo;
+    }
+
+    public void setTeamAwayLogo(String teamAwayLogo) {
+        this.teamAwayLogo = teamAwayLogo;
+    }
+
+    public void setTeamHomeColor(String teamHomeColor) {
+        this.teamHomeColor = teamHomeColor;
+    }
+
+    public void setTeamAwayColor(String teamAwayColor) {
+        this.teamAwayColor = teamAwayColor;
+    }
+
+    public void setTeamHomeColorAlt(String teamHomeColorAlt) {
+        this.teamHomeColorAlt = teamHomeColorAlt;
+    }
+
+    public void setTeamAwayColorAlt(String teamAwayColorAlt) {
+        this.teamAwayColorAlt = teamAwayColorAlt;
     }
 }

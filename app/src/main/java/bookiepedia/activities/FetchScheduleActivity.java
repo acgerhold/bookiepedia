@@ -35,8 +35,8 @@ public class FetchScheduleActivity {
                     EspnRequestConstants.NBA, startDate, endDate);
             String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                     EspnRequestConstants.NHL, startDate, endDate);
-
-            System.out.println(startDate + "-" + endDate);
+            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+                    EspnRequestConstants.MLB, startDate, endDate);
 
             JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
             processResponse(nbaResponse);
@@ -44,8 +44,11 @@ public class FetchScheduleActivity {
             JSONObject nhlResponse = espnDAO.requestQuery(nhlURL);
             processResponse(nhlResponse);
 
+            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
+            processResponse(mlbResponse);
+
             return FetchScheduleResult.builder()
-                    .withMessage("Schedules for : " + startDate + " - Successfully created for NBA & NHL")
+                    .withMessage("Schedules for : " + startDate + " - Successfully created for NBA, NHL, and MLB")
                     .build();
 
         } catch (IOException ioe) {

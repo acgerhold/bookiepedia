@@ -22,6 +22,12 @@ public class EventModel {
     private final Integer scoreAway;
     private final Integer scoreTotal;
     private final List<String> links;
+    private final String teamHomeLogo;
+    private final String teamAwayLogo;
+    private final String teamHomeColor;
+    private final String teamAwayColor;
+    private final String teamHomeColorAlt;
+    private final String teamAwayColorAlt;
 
     /**
      * Constructor for an Event model.
@@ -46,7 +52,9 @@ public class EventModel {
     public EventModel(String eventId, String scheduleId, String eventName, String eventNameShort, String eventHeadline,
                       String leagueId, String eventDate, String eventSeasonId, String teamHome, String teamAway,
                       String eventStatusId, String eventStatus, String teamWinner, Integer scoreHome,
-                      Integer scoreAway, Integer scoreTotal, List<String> links) {
+                      Integer scoreAway, Integer scoreTotal, List<String> links, String teamHomeLogo,
+                      String teamAwayLogo, String teamHomeColor, String teamAwayColor, String teamHomeColorAlt,
+                      String teamAwayColorAlt) {
         this.eventId = eventId;
         this.scheduleId = scheduleId;
         this.eventName = eventName;
@@ -64,6 +72,12 @@ public class EventModel {
         this.scoreAway = scoreAway;
         this.scoreTotal = scoreTotal;
         this.links = links;
+        this.teamHomeLogo = teamHomeLogo;
+        this.teamAwayLogo = teamAwayLogo;
+        this.teamHomeColor = teamHomeColor;
+        this.teamAwayColor = teamAwayColor;
+        this.teamHomeColorAlt = teamHomeColorAlt;
+        this.teamAwayColorAlt = teamAwayColorAlt;
     }
 
     public String getEventId() {
@@ -133,6 +147,29 @@ public class EventModel {
         return links;
     }
 
+    public String getTeamHomeLogo() {
+        return teamHomeLogo;
+    }
+
+    public String getTeamAwayLogo() {
+        return teamAwayLogo;
+    }
+
+    public String getTeamHomeColor() {
+        return teamHomeColor;
+    }
+
+    public String getTeamAwayColor() {
+        return teamAwayColor;
+    }
+
+    public String getTeamHomeColorAlt() {
+        return teamHomeColorAlt;
+    }
+
+    public String getTeamAwayColorAlt() {
+        return teamAwayColorAlt;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -181,6 +218,12 @@ public class EventModel {
         private Integer scoreAway;
         private Integer scoreTotal;
         private List<String> links;
+        private String teamHomelogo;
+        private String teamAwayLogo;
+        private String teamHomeColor;
+        private String teamAwayColor;
+        private String teamHomeColorAlt;
+        private String teamAwayColorAlt;
 
         public Builder withEventId(String eventId) {
             this.eventId = eventId;
@@ -267,10 +310,41 @@ public class EventModel {
             return this;
         }
 
+        public Builder withTeamHomeLogo(String teamHomeLogo) {
+            this.teamHomelogo = teamHomeLogo;
+            return this;
+        }
+
+        public Builder withTeamAwayLogo(String teamAwayLogo) {
+            this.teamAwayLogo = teamAwayLogo;
+            return this;
+        }
+
+        public Builder withTeamHomeColor(String teamHomeColor) {
+            this.teamHomeColor = teamHomeColor;
+            return this;
+        }
+
+        public Builder withTeamAwayColor(String teamAwayColor) {
+            this.teamAwayColor = teamAwayColor;
+            return this;
+        }
+
+        public Builder withTeamHomeColorAlt(String teamHomeColorAlt) {
+            this.teamHomeColorAlt = teamHomeColorAlt;
+            return this;
+        }
+
+        public Builder withTeamAwayColorAlt(String teamAwayColorAlt) {
+            this.teamAwayColorAlt = teamAwayColorAlt;
+            return this;
+        }
+
         public EventModel build() {
             return new EventModel(eventId, scheduleId, eventName, eventNameShort, eventHeadline, leagueId, eventDate,
                     eventSeasonId, teamHome, teamAway, eventStatusId, eventStatus, teamWinner, scoreHome, scoreAway,
-                    scoreTotal, links);
+                    scoreTotal, links, teamHomelogo, teamAwayLogo, teamHomeColor, teamAwayColor, teamHomeColorAlt,
+                    teamAwayColorAlt);
         }
     }
 }
