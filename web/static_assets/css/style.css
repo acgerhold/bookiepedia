@@ -584,9 +584,9 @@ Betting buttons
   display: none;
   position: relative;
   background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
   min-width: 65px;
   margin-bottom: 6px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
 }
 
 .moneyline-dropdown-content input, .spread-dropdown-content input, .total-dropdown-content input {
@@ -605,7 +605,30 @@ Betting buttons
     display: block;
 }
 
-.moneyline-dropdown-content input:hover, .spread-dropdown-content input:hover, .total-dropdown-content input:hover {
+.moneyline-dropdown-content input:hover,
+.spread-dropdown-content input:hover,
+.total-dropdown-content input:hover {
+    width: 70px;
     background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
+}
+
+.checkmark {
+    display: inline-block;
+    width: 70px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.checkmark::after {
+    content: '\2713';
+    font-size: 16px;
+}
+
+.moneyline-dropdown-content label:hover,
+.spread-dropdown-content label:hover,
+.total-dropdown-content label:hover {
+    background-color: rgba(0, 128, 0, 0.25);
 }

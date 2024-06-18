@@ -147,6 +147,7 @@ class GetEvents extends BindingClass {
               <input type="text" id="amount-wagered" placeholder="Amount">
               <input type="text" id="odds" placeholder="Odds">
               <input type="text" id="bookmaker" placeholder="Bookie">
+              <label class="checkmark" for="confirm-bet"></label>
             `;
 
             const homeColor = event.teamHomeColor;
