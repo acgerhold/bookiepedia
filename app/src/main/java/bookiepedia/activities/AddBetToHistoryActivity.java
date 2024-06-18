@@ -4,6 +4,7 @@ import bookiepedia.activities.requests.AddBetToHistoryRequest;
 import bookiepedia.activities.results.AddBetToHistoryResult;
 import bookiepedia.converters.ModelConverter;
 import bookiepedia.dynamodb.BetDAO;
+import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
 import bookiepedia.dynamodb.bettinghistory.WeeklyHistoryDAO;
 import bookiepedia.dynamodb.models.Bet;
 import bookiepedia.dynamodb.models.bettinghistory.WeeklyHistory;
@@ -31,7 +32,12 @@ public class AddBetToHistoryActivity {
         WeeklyHistory weeklyHistory = weeklyHistoryDAO.getWeeklyHistory(addBetToHistoryRequest.getWeeklyHistoryId());
 
         Bet betToAdd = new Bet();
-        betToAdd.setWeeklyHistoryId(addBetToHistoryRequest.getWeeklyHistoryId());
+
+        betToAdd.setWeeklyHistoryId(weeklyHistory.getWeeklyHistoryId());
+        // Set this to the WeeklyHistory ID that is returned from getWeeklyHistory() instead of the request
+        // This makes sure the ID is not set to a nonexistent WeeklyHistory from the request
+        // Uses the new ID generated from getWeeklyHistory() instead if WeeklyHistory doesn't exist
+
         betToAdd.setBetId(addBetToHistoryRequest.getBetId());
         betToAdd.setUserId(addBetToHistoryRequest.getUserId());
         betToAdd.setEventId(addBetToHistoryRequest.getEventId());
@@ -41,7 +47,10 @@ public class AddBetToHistoryActivity {
         betToAdd.setProjection(addBetToHistoryRequest.getProjection());
         betToAdd.setBettingMarket(addBetToHistoryRequest.getBettingMarket());
         betToAdd.setBookmakerId(addBetToHistoryRequest.getBookmakerId());
-        betToAdd.setDatePlaced(addBetToHistoryRequest.getDatePlaced());
+
+        betToAdd.setDatePlaced(String.valueOf(EspnRequestConstants.NOW));
+        // Just set this automatically to the time of the request
+
         betToAdd.setGainOrLoss(addBetToHistoryRequest.getGainOrLoss());
         betToAdd.setTeamHome(addBetToHistoryRequest.getTeamHome());
         betToAdd.setScoreHome(addBetToHistoryRequest.getScoreHome());

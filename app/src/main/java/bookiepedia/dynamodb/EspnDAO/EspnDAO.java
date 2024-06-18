@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.CENTRAL_ZONE;
+import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.yyyy_MM_dd;
 
 public class EspnDAO {
 
@@ -92,7 +93,7 @@ public class EspnDAO {
         }
         // Schedule ID
         schedule.setScheduleId(String.format("%s-%s",
-                schedule.getLeagueId(), EspnRequestConstants.START_DATE));
+                schedule.getLeagueId(), EspnRequestConstants.NOW.format(yyyy_MM_dd)));
         // League Name
         schedule.setLeagueName(leagues.optJSONObject(0).optString("abbreviation", INVALID_STRING_REPLACER));
         // Event ID List
@@ -172,7 +173,7 @@ public class EspnDAO {
                     e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
                     // Schedule ID
                     e.setScheduleId(String.format("%s-%s",
-                            leagueId, EspnRequestConstants.START_DATE));
+                            leagueId, EspnRequestConstants.NOW.format(yyyy_MM_dd)));
                     // Event Name
                     e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
                     // Event Name (Short)
