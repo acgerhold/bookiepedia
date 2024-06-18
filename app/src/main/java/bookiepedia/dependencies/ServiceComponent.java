@@ -22,5 +22,7 @@ public interface ServiceComponent {
 
     GetBetsForHistoryActivity provideGetBetsForHistoryActivity();
 
+    RemoveBetFromHistoryActivity provideRemoveBetFromHistoryActivity();
+
     EspnDAO provideEspnDAO();
 }
