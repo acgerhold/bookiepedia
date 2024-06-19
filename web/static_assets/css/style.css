@@ -439,19 +439,19 @@ Betting buttons
 }
 
 .betting-buttons-home button {
-    background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
+    background: var(--home-color-alt);
+    border-radius: 5px;
     color: white;
     border: none;
-    border-radius: 5px;
     display: block;
     width: 100%;
 }
 
 .betting-buttons-away button {
-    background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
+    background: var(--away-color-alt);
+    border-radius: 5px;
     color: white;
     border: none;
-    border-radius: 5px;
     display: block;
     width: 100%;
 }

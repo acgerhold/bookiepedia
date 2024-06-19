@@ -1,8 +1,6 @@
 package bookiepedia.dependencies;
 
-import bookiepedia.activities.FetchScheduleActivity;
-import bookiepedia.activities.GetEventsForScheduleActivity;
-import bookiepedia.activities.GetScheduleActivity;
+import bookiepedia.activities.*;
 import bookiepedia.activities.requests.GetEventsForScheduleRequest;
 import bookiepedia.dynamodb.EspnDAO.EspnDAO;
 import bookiepedia.dynamodb.assets.TeamDAO;
@@ -19,6 +17,12 @@ public interface ServiceComponent {
     FetchScheduleActivity provideFetchScheduleActivity();
 
     GetEventsForScheduleActivity provideGetEventsForScheduleActivity();
+
+    AddBetToHistoryActivity provideAddBetToHistoryActivity();
+
+    GetBetsForHistoryActivity provideGetBetsForHistoryActivity();
+
+    RemoveBetFromHistoryActivity provideRemoveBetFromHistoryActivity();
 
     EspnDAO provideEspnDAO();
 }

@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -97,11 +97,22 @@ class GetEvents extends BindingClass {
         console.log('Retrieving events...');
         try {
             const response = await this.client.getEventsForSchedule(results);
-            console.log('Events: ', response)
+            console.log('Events: ', response);
             return response;
         } catch (error) {
             console.error('error retrieving events', error);
             return [];
+        }
+    }
+
+    async addBetToHistory(bet) {
+        console.log('Adding bet to weekly history...');
+        try {
+            const response = await this.client.addBetToHistory(bet);
+            console.log('Adding bet: ', response);
+            return response;
+        } catch (error) {
+            console.error('error adding bet to weekly history ', error);
         }
     }
 
@@ -144,9 +155,9 @@ class GetEvents extends BindingClass {
         for (const event of searchResults) {
 
             let options = `
-              <input type="text" id="amount-wagered" placeholder="Amount">
-              <input type="text" id="odds" placeholder="Odds">
-              <input type="text" id="bookmaker" placeholder="Bookie">
+              <input type="text" class="amount-wagered" placeholder="Amount">
+              <input type="text" class="odds" placeholder="Odds">
+              <input type="text" class="bookmaker" placeholder="Bookie">
               <label class="checkmark" for="confirm-bet"></label>
             `;
 
@@ -157,6 +168,17 @@ class GetEvents extends BindingClass {
 
             html += `
             <div class="event-card" style="--home-color:#${homeColor}; --away-color:#${awayColor};">
+                <div class="event-data" style="display: none;"
+                    data-event-id="${event.eventId}"
+                    data-event-name="${event.eventName}"
+                    data-event-headline="${event.eventHeadline}"
+                    data-team-home="${event.teamHome}"
+                    data-team-away="${event.teamAway}"
+                    data-score-home="${event.scoreHome}"
+                    data-score-away="${event.scoreAway}"
+                    data-team-home-logo="${event.teamHomeLogo}"
+                    data-team-away-logo="${event.teamAwayLogo}">
+                </div>
                 ${event.eventStatusId.includes("2") ? `
                     <div class="live-indicator">
                         <span class="live-circle"></span>
@@ -243,10 +265,83 @@ class GetEvents extends BindingClass {
                     dropdown.classList.toggle('show');
                 }
             }
+            if (target.matches('.checkmark')) {
+                this.recordBetDetails(target);
+            }
         });
 
         return html;
     }
+
+    recordBetDetails(target) {
+        const eventCard = target.closest('.event-card');
+
+        if (!eventCard) {
+            console.error('Event card not found.');
+            return;
+        }
+
+        // Retrieve the hidden event-data div
+        const eventData = eventCard.querySelector('.event-data');
+        if (!eventData) {
+            console.error('Event data not found.');
+            return;
+        }
+
+        // Retrieve details entered in dropdown
+        const amountWagered = eventCard.querySelector('.amount-wagered').value;
+        const odds = eventCard.querySelector('.odds').value;
+        const bookmaker = eventCard.querySelector('.bookmaker').value;
+
+        // Retrieve data from the event-data div
+        const eventId = eventData.getAttribute('data-event-id');
+        const eventName = eventData.getAttribute('data-event-name');
+        const eventHeadline = eventData.getAttribute('data-event-headline');
+        const teamHome = eventData.getAttribute('data-team-home');
+        const teamAway = eventData.getAttribute('data-team-away');
+        const scoreHome = eventData.getAttribute('data-score-home');
+        const scoreAway = eventData.getAttribute('data-score-away');
+        const teamHomeLogo = eventData.getAttribute('data-team-home-logo');
+        const teamAwayLogo = eventData.getAttribute('data-team-away-logo');
+
+        // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest to the event click
+        const bettingButtons = target.closest('.betting-buttons');
+
+        // Boolean for which
+
+        const bet = {
+            weeklyHistoryId: "12345", // Update this as necessary
+            betId: "67890", // Update this as necessary
+            userId: "user123", // Update this as necessary
+            eventId,
+            amountWagered: parseFloat(amountWagered),
+            odds: parseFloat(odds),
+            teamBetOn: eventCard.getAttribute('data-teamaway'), // This needs to be determined based on the button clicked
+            projection: parseFloat(amountWagered) * parseFloat(odds),
+            bettingMarket: eventCard.querySelector('.moneyline-dropdown-content') ? 'Moneyline' :
+                eventCard.querySelector('.spread-dropdown-content') ? 'Spread' : 'Total',
+            bookmakerId: bookmaker,
+            datePlaced: new Date().toISOString(),
+            gainOrLoss: 0, // This will need to be updated based on the event outcome
+            teamHome: eventCard.getAttribute('data-teamhome'),
+            scoreHome: parseInt(scoreHome),
+            teamHomeLogo,
+            teamAway: eventCard.getAttribute('data-teamaway'),
+            scoreAway: parseInt(scoreAway),
+            teamAwayLogo,
+            teamWinner: '', // This will need to be updated based on the event outcome
+            scoreTotal: parseInt(scoreHome) + parseInt(scoreAway),
+            eventName,
+            eventHeadline,
+            eventDate: new Date().toISOString(), // Update this as necessary
+            eventStatus: 'Pending' // Update this as necessary
+        };
+
+        console.log(bet);
+        this.addBetToHistory(bet);
+    }
+
+
 
 }
 

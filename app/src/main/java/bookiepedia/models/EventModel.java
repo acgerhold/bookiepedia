@@ -185,8 +185,6 @@ public class EventModel {
                 leagueId.equals(that.leagueId) &&
                 eventDate.equals(that.eventDate) &&
                 eventSeasonId.equals(that.eventSeasonId);
-        // This may need to change for live updates on games
-        // eventStatusId?
     }
 
     @Override

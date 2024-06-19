@@ -1,9 +1,10 @@
-package bookiepedia.models;
+package bookiepedia.activities.requests;
 
-import java.math.BigDecimal;
-import java.util.Objects;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-public class BetModel {
+@JsonDeserialize(builder = AddBetToHistoryRequest.Builder.class)
+public class AddBetToHistoryRequest {
 
     private final String weeklyHistoryId;
     private final String betId;
@@ -30,38 +31,12 @@ public class BetModel {
     private final String eventDate;
     private final String eventStatus;
 
-    /**
-     * Constructor for a Bet model.
-     * @param weeklyHistoryId - The ID associated with a weekly history
-     * @param betId - The ID of the bet
-     * @param userId - The ID of the user
-     * @param eventId - The ID of the event
-     * @param amountWagered - The amount wagered
-     * @param odds - The odds of the bet
-     * @param teamBetOn - The team bet on
-     * @param projection - The projection of the bet
-     * @param bettingMarket - The betting market
-     * @param bookmakerId - The ID of the bookmaker
-     * @param datePlaced - The date the bet was placed
-     * @param gainOrLoss - The gain or loss from the bet
-     * @param teamHome - The home team
-     * @param scoreHome - The home team score
-     * @param teamHomeLogo - The home team logo
-     * @param teamAway - The away team
-     * @param scoreAway - The away team score
-     * @param teamAwayLogo - The away team logo
-     * @param teamWinner - The winning team
-     * @param scoreTotal - The total score
-     * @param eventName - The name of the event
-     * @param eventHeadline - The headline of the event
-     * @param eventDate - The date of the event
-     * @param eventStatus - The status of the event
-     */
-    public BetModel(String weeklyHistoryId, String betId, String userId, String eventId, Double amountWagered,
-                    Double odds, String teamBetOn, Double projection, String bettingMarket,
-                    String bookmakerId, String datePlaced, Double gainOrLoss, String teamHome, Integer scoreHome,
-                    String teamHomeLogo, String teamAway, Integer scoreAway, String teamAwayLogo, String teamWinner,
-                    Integer scoreTotal, String eventName, String eventHeadline, String eventDate, String eventStatus) {
+    public AddBetToHistoryRequest(String weeklyHistoryId, String betId, String userId, String eventId,
+                                  Double amountWagered, Double odds, String teamBetOn, Double projection,
+                                  String bettingMarket, String bookmakerId, String datePlaced, Double gainOrLoss,
+                                  String teamHome, Integer scoreHome, String teamHomeLogo, String teamAway,
+                                  Integer scoreAway, String teamAwayLogo, String teamWinner, Integer scoreTotal,
+                                  String eventName, String eventHeadline, String eventDate, String eventStatus) {
         this.weeklyHistoryId = weeklyHistoryId;
         this.betId = betId;
         this.userId = userId;
@@ -185,29 +160,40 @@ public class BetModel {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        BetModel betModel = (BetModel) o;
-        return weeklyHistoryId.equals(betModel.weeklyHistoryId) &&
-                betId.equals(betModel.betId) &&
-                userId.equals(betModel.userId) &&
-                eventId.equals(betModel.eventId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(weeklyHistoryId, betId, userId, eventId);
+    public String toString() {
+        return "AddBetToHistoryRequest{" +
+                "weeklyHistoryId='" + weeklyHistoryId + '\'' +
+                ", betId='" + betId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", eventId='" + eventId + '\'' +
+                ", amountWagered=" + amountWagered +
+                ", odds=" + odds +
+                ", teamBetOn='" + teamBetOn + '\'' +
+                ", projection=" + projection +
+                ", bettingMarket='" + bettingMarket + '\'' +
+                ", bookmakerId='" + bookmakerId + '\'' +
+                ", datePlaced='" + datePlaced + '\'' +
+                ", gainOrLoss=" + gainOrLoss +
+                ", teamHome='" + teamHome + '\'' +
+                ", scoreHome=" + scoreHome +
+                ", teamHomeLogo='" + teamHomeLogo + '\'' +
+                ", teamAway='" + teamAway + '\'' +
+                ", scoreAway=" + scoreAway +
+                ", teamAwayLogo='" + teamAwayLogo + '\'' +
+                ", teamWinner='" + teamWinner + '\'' +
+                ", scoreTotal=" + scoreTotal +
+                ", eventName='" + eventName + '\'' +
+                ", eventHeadline='" + eventHeadline + '\'' +
+                ", eventDate='" + eventDate + '\'' +
+                ", eventStatus='" + eventStatus + '\'' +
+                '}';
     }
 
     public static Builder builder() {
         return new Builder();
     }
 
+    @JsonPOJOBuilder
     public static class Builder {
         private String weeklyHistoryId;
         private String betId;
@@ -354,10 +340,9 @@ public class BetModel {
             return this;
         }
 
-        public BetModel build() {
-            return new BetModel(weeklyHistoryId, betId, userId, eventId, amountWagered, odds, teamBetOn, projection,
-                    bettingMarket, bookmakerId, datePlaced, gainOrLoss, teamHome, scoreHome, teamHomeLogo, teamAway,
-                    scoreAway, teamAwayLogo, teamWinner, scoreTotal, eventName, eventHeadline, eventDate, eventStatus);
+        public AddBetToHistoryRequest build() {
+            return new AddBetToHistoryRequest(weeklyHistoryId, betId, userId, eventId, amountWagered, odds, teamBetOn, projection, bettingMarket, bookmakerId, datePlaced, gainOrLoss, teamHome, scoreHome, teamHomeLogo, teamAway, scoreAway, teamAwayLogo, teamWinner, scoreTotal, eventName, eventHeadline, eventDate, eventStatus);
         }
     }
 }
+

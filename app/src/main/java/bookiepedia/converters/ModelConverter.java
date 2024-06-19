@@ -1,9 +1,14 @@
 package bookiepedia.converters;
 
+import bookiepedia.dynamodb.models.Bet;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
+import bookiepedia.models.BetModel;
 import bookiepedia.models.EventModel;
 import bookiepedia.models.ScheduleModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelConverter {
 
@@ -44,6 +49,43 @@ public class ModelConverter {
                 .withTeamHomeColorAlt(event.getTeamHomeColorAlt())
                 .withTeamAwayColorAlt(event.getTeamAwayColorAlt())
                 .build();
+    }
+
+    public BetModel toBetModel(Bet bet) {
+        return BetModel.builder()
+                .withWeeklyHistoryId(bet.getWeeklyHistoryId())
+                .withBetId(bet.getBetId())
+                .withUserId(bet.getUserId())
+                .withEventId(bet.getEventId())
+                .withAmountWagered(bet.getAmountWagered())
+                .withOdds(bet.getOdds())
+                .withTeamBetOn(bet.getTeamBetOn())
+                .withProjection(bet.getProjection())
+                .withBettingMarket(bet.getBettingMarket())
+                .withBookmakerId(bet.getBookmakerId())
+                .withDatePlaced(bet.getDatePlaced())
+                .withGainOrLoss(bet.getGainOrLoss())
+                .withTeamHome(bet.getTeamHome())
+                .withScoreHome(bet.getScoreHome())
+                .withTeamHomeLogo(bet.getTeamHomeLogo())
+                .withTeamAway(bet.getTeamAway())
+                .withScoreAway(bet.getScoreAway())
+                .withTeamAwayLogo(bet.getTeamAwayLogo())
+                .withTeamWinner(bet.getTeamWinner())
+                .withScoreTotal(bet.getScoreTotal())
+                .withEventName(bet.getEventName())
+                .withEventHeadline(bet.getEventHeadline())
+                .withEventDate(bet.getEventDate())
+                .withEventStatus(bet.getEventStatus())
+                .build();
+    }
+
+    public List<BetModel> toBetModelList(List<Bet> betList) {
+        List<BetModel> betModelList = new ArrayList<>();
+        for (Bet bet : betList) {
+            betModelList.add(toBetModel(bet));
+        }
+        return betModelList;
     }
 
 }
