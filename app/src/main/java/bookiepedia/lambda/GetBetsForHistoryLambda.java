@@ -14,14 +14,20 @@ public class GetBetsForHistoryLambda
 
     @Override
     public LambdaResponse handleRequest(LambdaRequest<GetBetsForHistoryRequest> input, Context context) {
+        context.getLogger().log("Received input: " + input);
         return super.runActivity(
                 () -> input.fromPath(path ->
                         GetBetsForHistoryRequest.builder()
-                                .withId(path.get("weeklyHistoryId"))
+                                .withWeeklyHistoryId(path.get("weeklyHistoryId"))
                                 .build()),
-                (request, serviceComponent) ->
-                        serviceComponent.provideGetBetsForHistoryActivity().handleRequest(request)
-        );
+                (request, serviceComponent) -> {
+                    try {
+                        return serviceComponent.provideGetBetsForHistoryActivity().handleRequest(request);
+                    } catch (Exception e) {
+                        context.getLogger().log("Error parsing input: " + e.getMessage());
+                        throw new RuntimeException("Error! Cause: " + e.getCause() + " - " + e.getClass() + "-" + e.getMessage());
+                    }
+                });
     }
 
 }

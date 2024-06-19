@@ -256,4 +256,49 @@ public class Bet {
     public void setEventStatus(String eventStatus) {
         this.eventStatus = eventStatus;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Bet that = (Bet) o;
+        return weeklyHistoryId.equals(that.weeklyHistoryId) &&
+                betId.equals(that.betId) &&
+                eventId.equals(that.eventId) &&
+                datePlaced.equals(that.datePlaced);
+    }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+                "weeklyHistoryId='" + weeklyHistoryId + '\'' +
+                ", betId='" + betId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", eventId='" + eventId + '\'' +
+                ", amountWagered=" + amountWagered +
+                ", odds=" + odds +
+                ", teamBetOn='" + teamBetOn + '\'' +
+                ", projection=" + projection +
+                ", bettingMarket='" + bettingMarket + '\'' +
+                ", bookmakerId='" + bookmakerId + '\'' +
+                ", datePlaced='" + datePlaced + '\'' +
+                ", gainOrLoss=" + gainOrLoss +
+                ", teamHome='" + teamHome + '\'' +
+                ", scoreHome=" + scoreHome +
+                ", teamHomeLogo='" + teamHomeLogo + '\'' +
+                ", teamAway='" + teamAway + '\'' +
+                ", scoreAway=" + scoreAway +
+                ", teamAwayLogo='" + teamAwayLogo + '\'' +
+                ", teamWinner='" + teamWinner + '\'' +
+                ", scoreTotal=" + scoreTotal +
+                ", eventName='" + eventName + '\'' +
+                ", eventHeadline='" + eventHeadline + '\'' +
+                ", eventDate='" + eventDate + '\'' +
+                ", eventStatus='" + eventStatus + '\'' +
+                '}';
+    }
 }

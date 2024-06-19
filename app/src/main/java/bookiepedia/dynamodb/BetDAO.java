@@ -25,8 +25,8 @@ public class BetDAO {
         this.dynamoDBMapper = dynamoDBMapper;
     }
 
-    public Bet getBet(String betId) {
-        return this.dynamoDBMapper.load(Bet.class, betId);
+    public Bet getBet(String weeklyHistoryId, String betId) {
+        return this.dynamoDBMapper.load(Bet.class, weeklyHistoryId, betId);
     }
 
     public List<Bet> getBetsFromHistory(String weeklyHistoryId) {
@@ -46,6 +46,10 @@ public class BetDAO {
 
     public void saveBet(Bet bet) {
         this.dynamoDBMapper.save(bet);
+    }
+
+    public void removeBet(Bet bet) {
+        this.dynamoDBMapper.delete(bet);
     }
 
 }

@@ -14,8 +14,13 @@ public class RemoveBetFromHistoryLambda
     private final Logger log = LogManager.getLogger();
     @Override
     public LambdaResponse handleRequest(LambdaRequest<RemoveBetFromHistoryRequest> input, Context context) {
+        context.getLogger().log("Received input: " + input);
         return super.runActivity(
-                () -> input.fromBody(RemoveBetFromHistoryRequest.class),
+                () -> input.fromPath(path ->
+                        RemoveBetFromHistoryRequest.builder()
+                                .withId(path.get("weeklyHistoryId"))
+                                .withBetId(path.get("betId"))
+                                .build()),
                 (request, serviceComponent) -> {
                     try {
                         return serviceComponent.provideRemoveBetFromHistoryActivity().handleRequest(request);

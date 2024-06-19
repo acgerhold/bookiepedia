@@ -28,7 +28,7 @@ public class GetBetsForHistoryActivity {
     }
 
     public GetBetsForHistoryResult handleRequest(final GetBetsForHistoryRequest getBetsForHistoryRequest) {
-        String requestedId = getBetsForHistoryRequest.getId();
+        String requestedId = getBetsForHistoryRequest.getWeeklyHistoryId();
 
         log.info("Received GetBetsForHistoryRequest " + getBetsForHistoryRequest);
 

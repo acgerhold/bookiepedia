@@ -330,7 +330,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /history/{historyId}/bets
+            Path: /history/{weeklyHistoryId}/bets
             Method: get
             Auth:
               Authorizer: 'NONE'
@@ -352,7 +352,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /history/{historyId}/bets/{betId}
+            Path: /history/{weeklyHistoryId}/bets/{betId}
             Method: delete
             Auth:
               Authorizer: 'NONE'

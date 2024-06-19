@@ -2,20 +2,20 @@ package bookiepedia.activities.requests;
 
 public class GetBetsForHistoryRequest {
 
-    private final String id;
+    private final String weeklyHistoryId;
 
-    private GetBetsForHistoryRequest(String id) {
-        this.id = id;
+    private GetBetsForHistoryRequest(String weeklyHistoryId) {
+        this.weeklyHistoryId = weeklyHistoryId;
     }
 
-    public String getId() {
-        return id;
+    public String getWeeklyHistoryId() {
+        return weeklyHistoryId;
     }
 
     @Override
     public String toString() {
         return "GetBetsForHistoryRequest{" +
-                "id='" + id + '\'' +
+                "weeklyHistoryId='" + weeklyHistoryId + '\'' +
                 '}';
     }
 
@@ -25,15 +25,15 @@ public class GetBetsForHistoryRequest {
     }
 
     public static class Builder {
-        private String id;
+        private String weeklyHistoryId;
 
-        public GetBetsForHistoryRequest.Builder withId(String id) {
-            this.id = id;
+        public GetBetsForHistoryRequest.Builder withWeeklyHistoryId(String weeklyHistoryId) {
+            this.weeklyHistoryId = weeklyHistoryId;
             return this;
         }
 
         public GetBetsForHistoryRequest build() {
-            return new GetBetsForHistoryRequest(id);
+            return new GetBetsForHistoryRequest(weeklyHistoryId);
         }
     }
 

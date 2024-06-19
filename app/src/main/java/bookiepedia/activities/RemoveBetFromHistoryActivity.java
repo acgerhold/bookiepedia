@@ -31,10 +31,12 @@ public class RemoveBetFromHistoryActivity {
 
         WeeklyHistory weeklyHistory = weeklyHistoryDAO.getWeeklyHistory(removeBetFromHistoryRequest.getId());
 
-        Bet betToRemove = betDAO.getBet(removeBetFromHistoryRequest.getBetId());
+        Bet betToRemove = betDAO.getBet(removeBetFromHistoryRequest.getId(), removeBetFromHistoryRequest.getBetId());
 
         List<Bet> betList = weeklyHistory.getWeeklyBetList();
+
         betList.remove(betToRemove);
+        betDAO.removeBet(betToRemove);
 
         weeklyHistory.setWeeklyBetList(betList);
         weeklyHistoryDAO.saveWeeklyHistory(weeklyHistory);

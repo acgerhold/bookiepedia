@@ -23,6 +23,7 @@ public class RemoveBetFromHistoryRequest {
     public String toString() {
         return "RemoveBetFromHistoryRequest{" +
                 "id='" + id + '\'' +
+                ", betId='" + betId + '\'' +
                 '}';
     }
 
