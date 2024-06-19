@@ -82,7 +82,7 @@ export default class BookiepediaClient extends BindingClass {
             console.log('API Response: ', response.data);
             return response.data.schedule?.scheduleId;
         } catch (error) {
-            this.handleError(error, errorCallback)
+            this.handleError(error, errorCallback);
         }
 
     }
@@ -90,7 +90,7 @@ export default class BookiepediaClient extends BindingClass {
     async fetchSchedule(errorCallback) {
         try {
             const response = await this.axiosClient.post(`/schedule`);
-            console.log('API Response: ', response.data)
+            console.log('API Response: ', response.data);
             return response.data;
         } catch (error) {
             this.handleError(error, errorCallback);
