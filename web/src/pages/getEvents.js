@@ -168,6 +168,17 @@ class GetEvents extends BindingClass {
 
             html += `
             <div class="event-card" style="--home-color:#${homeColor}; --away-color:#${awayColor};">
+                <div class="event-data" style="display: none;"
+                    data-event-id="${event.eventId}"
+                    data-event-name="${event.eventName}"
+                    data-event-headline="${event.eventHeadline}"
+                    data-team-home="${event.teamHome}"
+                    data-team-away="${event.teamAway}"
+                    data-score-home="${event.scoreHome}"
+                    data-score-away="${event.scoreAway}"
+                    data-team-home-logo="${event.teamHomeLogo}"
+                    data-team-away-logo="${event.teamAwayLogo}">
+                </div>
                 ${event.eventStatusId.includes("2") ? `
                     <div class="live-indicator">
                         <span class="live-circle"></span>
@@ -270,37 +281,33 @@ class GetEvents extends BindingClass {
             return;
         }
 
+        // Retrieve the hidden event-data div
+        const eventData = eventCard.querySelector('.event-data');
+        if (!eventData) {
+            console.error('Event data not found.');
+            return;
+        }
+
         // Retrieve details entered in dropdown
         const amountWagered = eventCard.querySelector('.amount-wagered').value;
         const odds = eventCard.querySelector('.odds').value;
         const bookmaker = eventCard.querySelector('.bookmaker').value;
-        // These still show up null, need to use more target.closest() for inner html from event-card
 
-        // Retrieve scores from event-card
-        let scoreHome, scoreAway;
-        const scoreStatus = eventCard.querySelector('.event-score-status');
-        if (scoreStatus) {
-            const homeScoreElement = scoreStatus.querySelector('.home-score');
-            const awayScoreElement = scoreStatus.querySelector('.away-score');
-            if (homeScoreElement && awayScoreElement) {
-                scoreHome = homeScoreElement.textContent.trim();
-                scoreAway = awayScoreElement.textContent.trim();
-            }
-        }
-        // Need to add condition if the game is live to retrieve scores, NaN otherwise
+        // Retrieve data from the event-data div
+        const eventId = eventData.getAttribute('data-event-id');
+        const eventName = eventData.getAttribute('data-event-name');
+        const eventHeadline = eventData.getAttribute('data-event-headline');
+        const teamHome = eventData.getAttribute('data-team-home');
+        const teamAway = eventData.getAttribute('data-team-away');
+        const scoreHome = eventData.getAttribute('data-score-home');
+        const scoreAway = eventData.getAttribute('data-score-away');
+        const teamHomeLogo = eventData.getAttribute('data-team-home-logo');
+        const teamAwayLogo = eventData.getAttribute('data-team-away-logo');
 
-        // Retrieve attributes from event-card
-        const eventId = eventCard.getAttribute('data-eventid');
-        const eventNameElement = eventCard.querySelector('.event-name');
-        const eventHeadlineElement = eventCard.querySelector('.event-headline');
-        const teamHomeLogoElement = eventCard.querySelector('.event-team-logo-home');
-        const teamAwayLogoElement = eventCard.querySelector('.event-team-logo-away');
+        // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest to the event click
+        const bettingButtons = target.closest('.betting-buttons');
 
-        // Extract text content from elements
-        const eventName = eventNameElement ? eventNameElement.textContent.trim() : '';
-        const eventHeadline = eventHeadlineElement ? eventHeadlineElement.textContent.trim() : '';
-        const teamHomeLogo = teamHomeLogoElement ? teamHomeLogoElement.src : '';
-        const teamAwayLogo = teamAwayLogoElement ? teamAwayLogoElement.src : '';
+        // Boolean for which
 
         const bet = {
             weeklyHistoryId: "12345", // Update this as necessary

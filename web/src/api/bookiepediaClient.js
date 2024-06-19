@@ -109,7 +109,7 @@ export default class BookiepediaClient extends BindingClass {
 
     async addBetToHistory(bet, errorCallback) {
         try {
-            const response = await this.axiosClient.get(`/history/bets`);
+            const response = await this.axiosClient.put(`/history/bets`);
             console.log('API Response: ', response.data);
             return response.data;
         } catch (error) {
