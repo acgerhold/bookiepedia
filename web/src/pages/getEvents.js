@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -97,11 +97,22 @@ class GetEvents extends BindingClass {
         console.log('Retrieving events...');
         try {
             const response = await this.client.getEventsForSchedule(results);
-            console.log('Events: ', response)
+            console.log('Events: ', response);
             return response;
         } catch (error) {
             console.error('error retrieving events', error);
             return [];
+        }
+    }
+
+    async addBetToHistory(bet) {
+        console.log('Adding bet to weekly history...');
+        try {
+            const response = await this.client.addBetToHistory(bet);
+            console.log('Adding bet: ', response);
+            return response;
+        } catch (error) {
+            console.error('error adding bet to weekly history ', error);
         }
     }
 
@@ -144,9 +155,9 @@ class GetEvents extends BindingClass {
         for (const event of searchResults) {
 
             let options = `
-              <input type="text" id="amount-wagered" placeholder="Amount">
-              <input type="text" id="odds" placeholder="Odds">
-              <input type="text" id="bookmaker" placeholder="Bookie">
+              <input type="text" class="amount-wagered" placeholder="Amount">
+              <input type="text" class="odds" placeholder="Odds">
+              <input type="text" class="bookmaker" placeholder="Bookie">
               <label class="checkmark" for="confirm-bet"></label>
             `;
 
@@ -243,10 +254,87 @@ class GetEvents extends BindingClass {
                     dropdown.classList.toggle('show');
                 }
             }
+            if (target.matches('.checkmark')) {
+                this.recordBetDetails(target);
+            }
         });
 
         return html;
     }
+
+    recordBetDetails(target) {
+        const eventCard = target.closest('.event-card');
+
+        if (!eventCard) {
+            console.error('Event card not found.');
+            return;
+        }
+
+        // Retrieve details entered in dropdown
+        const amountWagered = eventCard.querySelector('.amount-wagered').value;
+        const odds = eventCard.querySelector('.odds').value;
+        const bookmaker = eventCard.querySelector('.bookmaker').value;
+        // These still show up null, need to use more target.closest() for inner html from event-card
+
+        // Retrieve scores from event-card
+        let scoreHome, scoreAway;
+        const scoreStatus = eventCard.querySelector('.event-score-status');
+        if (scoreStatus) {
+            const homeScoreElement = scoreStatus.querySelector('.home-score');
+            const awayScoreElement = scoreStatus.querySelector('.away-score');
+            if (homeScoreElement && awayScoreElement) {
+                scoreHome = homeScoreElement.textContent.trim();
+                scoreAway = awayScoreElement.textContent.trim();
+            }
+        }
+        // Need to add condition if the game is live to retrieve scores, NaN otherwise
+
+        // Retrieve attributes from event-card
+        const eventId = eventCard.getAttribute('data-eventid');
+        const eventNameElement = eventCard.querySelector('.event-name');
+        const eventHeadlineElement = eventCard.querySelector('.event-headline');
+        const teamHomeLogoElement = eventCard.querySelector('.event-team-logo-home');
+        const teamAwayLogoElement = eventCard.querySelector('.event-team-logo-away');
+
+        // Extract text content from elements
+        const eventName = eventNameElement ? eventNameElement.textContent.trim() : '';
+        const eventHeadline = eventHeadlineElement ? eventHeadlineElement.textContent.trim() : '';
+        const teamHomeLogo = teamHomeLogoElement ? teamHomeLogoElement.src : '';
+        const teamAwayLogo = teamAwayLogoElement ? teamAwayLogoElement.src : '';
+
+        const bet = {
+            weeklyHistoryId: "12345", // Update this as necessary
+            betId: "67890", // Update this as necessary
+            userId: "user123", // Update this as necessary
+            eventId,
+            amountWagered: parseFloat(amountWagered),
+            odds: parseFloat(odds),
+            teamBetOn: eventCard.getAttribute('data-teamaway'), // This needs to be determined based on the button clicked
+            projection: parseFloat(amountWagered) * parseFloat(odds),
+            bettingMarket: eventCard.querySelector('.moneyline-dropdown-content') ? 'Moneyline' :
+                eventCard.querySelector('.spread-dropdown-content') ? 'Spread' : 'Total',
+            bookmakerId: bookmaker,
+            datePlaced: new Date().toISOString(),
+            gainOrLoss: 0, // This will need to be updated based on the event outcome
+            teamHome: eventCard.getAttribute('data-teamhome'),
+            scoreHome: parseInt(scoreHome),
+            teamHomeLogo,
+            teamAway: eventCard.getAttribute('data-teamaway'),
+            scoreAway: parseInt(scoreAway),
+            teamAwayLogo,
+            teamWinner: '', // This will need to be updated based on the event outcome
+            scoreTotal: parseInt(scoreHome) + parseInt(scoreAway),
+            eventName,
+            eventHeadline,
+            eventDate: new Date().toISOString(), // Update this as necessary
+            eventStatus: 'Pending' // Update this as necessary
+        };
+
+        console.log(bet);
+        this.addBetToHistory(bet);
+    }
+
+
 
 }
 

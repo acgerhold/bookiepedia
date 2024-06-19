@@ -107,6 +107,16 @@ export default class BookiepediaClient extends BindingClass {
         }
     }
 
+    async addBetToHistory(bet, errorCallback) {
+        try {
+            const response = await this.axiosClient.get(`/history/bets`);
+            console.log('API Response: ', response.data);
+            return response.data;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
     /**
      * Helper method to log the error and run any error functions.
      * @param error The error received from the server.
