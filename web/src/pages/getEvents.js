@@ -172,6 +172,8 @@ class GetEvents extends BindingClass {
                     data-event-id="${event.eventId}"
                     data-event-name="${event.eventName}"
                     data-event-headline="${event.eventHeadline}"
+                    data-event-date="${event.eventDate}"
+                    data-event-status="${event.eventStatus}"
                     data-team-home="${event.teamHome}"
                     data-team-away="${event.teamAway}"
                     data-score-home="${event.scoreHome}"
@@ -274,28 +276,27 @@ class GetEvents extends BindingClass {
     }
 
     recordBetDetails(target) {
+
         const eventCard = target.closest('.event-card');
 
+        // Double check there is an event-card present
         if (!eventCard) {
             console.error('Event card not found.');
             return;
         }
 
-        // Retrieve the hidden event-data div
+        // Retrieve and check the hidden event-data div to retrieve data about event dynamically
         const eventData = eventCard.querySelector('.event-data');
         if (!eventData) {
             console.error('Event data not found.');
             return;
         }
 
-        // Retrieve details entered in dropdown
-        const amountWagered = eventCard.querySelector('.amount-wagered').value;
-        const odds = eventCard.querySelector('.odds').value;
-        const bookmaker = eventCard.querySelector('.bookmaker').value;
-
-        // Retrieve data from the event-data div
+        // Retrieve data for Event from the hidden event-data div
         const eventId = eventData.getAttribute('data-event-id');
         const eventName = eventData.getAttribute('data-event-name');
+        const eventStatus = eventData.getAttribute('data-event-status')
+        const eventDate = eventData.getAttribute('data-event-date')
         const eventHeadline = eventData.getAttribute('data-event-headline');
         const teamHome = eventData.getAttribute('data-team-home');
         const teamAway = eventData.getAttribute('data-team-away');
@@ -304,8 +305,39 @@ class GetEvents extends BindingClass {
         const teamHomeLogo = eventData.getAttribute('data-team-home-logo');
         const teamAwayLogo = eventData.getAttribute('data-team-away-logo');
 
-        // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest to the event click
+        // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest (button) to the event click
         const bettingButtons = target.closest('.betting-buttons');
+
+        const isHome = bettingButtons.classList.contains('betting-buttons-home');
+        const isAway = bettingButtons.classList.contains('betting-buttons-away');
+
+        const teamBetOn = isHome ? 'teamHome' : 'teamAway';
+
+        // Retrieve betting market depending on which button was clicked
+        const bettingMarket = eventCard.querySelector('.moneyline-dropdown-content') ? 'Moneyline' :
+            eventCard.querySelector('.spread-dropdown-content') ? 'Spread' : 'Total';
+
+        // If the bettingMarket has been set, retrieve values entered by user in dropdown for corresponding dropdown content;
+        let amountWagered;
+        let odds;
+        let bookmaker;
+        if (bettingMarket) {
+            const dropdownContentClass = `.${bettingMarket.toLowerCase()}-dropdown-content.show`;
+            const dropdownContent = target.closest(dropdownContentClass);
+
+            if (dropdownContent) {
+                amountWagered = dropdownContent.querySelector('.amount-wagered').value;
+                odds = dropdownContent.querySelector('.odds').value;
+                bookmaker = dropdownContent.querySelector('.bookmaker').value;
+
+                // Now you have the amountWagered, odds, and bookmaker values
+                console.log({ amountWagered, odds, bookmaker });
+            } else {
+                console.error('Dropdown content not found');
+            }
+        } else {
+            console.error('Betting market not determined');
+        }
 
         // Boolean for which
 
@@ -316,25 +348,24 @@ class GetEvents extends BindingClass {
             eventId,
             amountWagered: parseFloat(amountWagered),
             odds: parseFloat(odds),
-            teamBetOn: eventCard.getAttribute('data-teamaway'), // This needs to be determined based on the button clicked
+            teamBetOn,
             projection: parseFloat(amountWagered) * parseFloat(odds),
-            bettingMarket: eventCard.querySelector('.moneyline-dropdown-content') ? 'Moneyline' :
-                eventCard.querySelector('.spread-dropdown-content') ? 'Spread' : 'Total',
-            bookmakerId: bookmaker,
+            bettingMarket,
+            bookmaker,
             datePlaced: new Date().toISOString(),
-            gainOrLoss: 0, // This will need to be updated based on the event outcome
-            teamHome: eventCard.getAttribute('data-teamhome'),
+            gainOrLoss: 0,
+            teamHome,
             scoreHome: parseInt(scoreHome),
             teamHomeLogo,
-            teamAway: eventCard.getAttribute('data-teamaway'),
+            teamAway,
             scoreAway: parseInt(scoreAway),
             teamAwayLogo,
-            teamWinner: '', // This will need to be updated based on the event outcome
+            teamWinner: '-',
             scoreTotal: parseInt(scoreHome) + parseInt(scoreAway),
             eventName,
             eventHeadline,
-            eventDate: new Date().toISOString(), // Update this as necessary
-            eventStatus: 'Pending' // Update this as necessary
+            eventDate,
+            eventStatus
         };
 
         console.log(bet);
