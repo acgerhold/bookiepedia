@@ -74,6 +74,7 @@ class GetEvents extends BindingClass {
         if (!leagueId) {
             return;
         }
+
         // Add a fetchSchedule() call in here to refresh when a use clicks a league too
         console.log('Retrieving schedule for league ID: ${leagueId}')
 
@@ -91,7 +92,6 @@ class GetEvents extends BindingClass {
         try {
             const response = await this.client.fetchSchedule();
             this.dataStore.setState({
-//
             [SEARCH_RESULTS_KEY]: response,
             });
         } catch (error) {
@@ -167,8 +167,6 @@ class GetEvents extends BindingClass {
         } else {
             searchResultsContainer.classList.remove('hidden');
             searchCriteriaDisplay.innerHTML = `"${searchCriteria}"`;
-
-            console.log("search results 0 : ", searchResults[0]);
 
             // If searchResults is not null, has at least one record, and the first attribute of the record is an eventId
             if (searchResults && searchResults.length > 0 && !searchResults[0].amountWagered) {

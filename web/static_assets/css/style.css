@@ -71,6 +71,7 @@ Changed to Win10 start menu widget type of look
 .validated-field:invalid {
     outline: 2px solid var(--error-color);
 }
+
 .validated-field:focus:invalid {
     color: var(--error-color);
 }
@@ -478,9 +479,9 @@ Betting buttons
 }
 
 
-
-
-
+/*
+Hover indicator for betting buttons
+*/
 
 .hover-indicator-betting {
     position: absolute;
@@ -493,9 +494,6 @@ Betting buttons
     animation: pulse 1.5s infinite;
     border-radius: 2px;
 }
-
-
-
 
 .betting-buttons-away .money-line {
     position: relative;
@@ -578,7 +576,9 @@ Betting buttons
 }
 
 
-
+/*
+Dropdowns for betting buttons
+*/
 
 .moneyline-dropdown-content, .spread-dropdown-content, .total-dropdown-content {
   display: none;
