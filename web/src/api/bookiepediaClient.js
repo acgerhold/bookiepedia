@@ -15,7 +15,7 @@ export default class BookiepediaClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory', 'removeBetFromHistory'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -87,6 +87,11 @@ export default class BookiepediaClient extends BindingClass {
 
     }
 
+    /**
+    * Pings the ESPN API to refresh Events for NBA, NHL, and MLB
+    * Creates/updates Schedule objects
+    * Schedules are a collection of events for a League on a given day
+    */
     async fetchSchedule(errorCallback) {
         try {
             const response = await this.axiosClient.post(`/schedule`);
@@ -97,6 +102,11 @@ export default class BookiepediaClient extends BindingClass {
         }
     }
 
+    /**
+    * Currently retrieves the first 20 events of a schedule, ordered by the date/time of the event
+    * Schedules are able to have a maximum of 100 events; these are broken up into chunks of 20 events in espnDAO
+    * Will eventually include pagination for other 5 chunks
+    */
     async getEventsForSchedule(scheduleId, errorCallback) {
         try {
             const response = await this.axiosClient.get(`/schedule/${scheduleId}/events`);
@@ -107,10 +117,49 @@ export default class BookiepediaClient extends BindingClass {
         }
     }
 
+    /**
+    * Returns a user's betting history for the current week
+    * Will eventually include pagination for previous weeks, or divide them by weeklyHistoryId in the same view
+    * weeklyHistoryId ex -> WH-2024-06-4
+    */
+    async getBetsForHistory(weeklyHistoryId, errorCallback) {
+        try {
+            const response = await this.axiosClient.get(`/history/${weeklyHistoryId}/bets`);
+            console.log('API Response: ', response.data);
+            return response.data.betList;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
+    /**
+    * Adds a bet to a users betting history
+    * weeklyHistoryId is automatically set to "WH" + the current year/month/week# to be added to a WeeklyHistory's bet list
+    * Triggered after entering values in betting button's dropdown window and clicking the checkmark
+    */
     async addBetToHistory(bet, errorCallback) {
         try {
-            const response = await this.axiosClient.put(`/history/bets`);
+             const response = await this.axiosClient.put('/history/bets', bet, {
+                headers: {
+                        'Content-Type': 'application/json'
+                }
+            });
             console.log('API Response: ', response.data);
+            return response.data;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
+    /**
+    * Removes a bet from a user's WeeklyHistory
+    * Triggered after clicking red X in betting history
+    */
+    async removeBetFromHistory(weeklyHistoryId, bet, errorCallback) {
+        try {
+            const response = await this.axiosClient.delete(`/history/${weeklyHistoryId}/bets/${bet}`);
+            console.log('API Response: ', response.data);
+            await this.getBetsForHistory(weeklyHistoryId);
             return response.data;
         } catch (error) {
             this.handleError(error, errorCallback);
