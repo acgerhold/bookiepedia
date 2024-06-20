@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -53,6 +53,12 @@ class GetEvents extends BindingClass {
 
         const refreshButton = document.getElementById('refresh-button');
         refreshButton.addEventListener('click', () => this.fetchSchedule());
+
+        const historyButton = document.querySelector('.weekly-history');
+        historyButton.addEventListener('click', (evt) => {
+            const weeklyHistoryId = evt.target.id;
+            this.getBetsForHistory(weeklyHistoryId);
+        });
 
         this.header.addHeaderToPage();
         this.client = new BookiepediaClient();
@@ -85,11 +91,25 @@ class GetEvents extends BindingClass {
         try {
             const response = await this.client.fetchSchedule();
             this.dataStore.setState({
-            [SEARCH_CRITERIA_KEY]: '',
-            [SEARCH_CRITERIA_KEY]: response,
+//
+            [SEARCH_RESULTS_KEY]: response,
             });
         } catch (error) {
             console.error('error fetching schedule', error);
+        }
+    }
+
+    async getBetsForHistory(weeklyHistoryId) {
+        console.log('Retrieving bets...');
+        try {
+            const response = await this.client.getBetsForHistory(weeklyHistoryId);
+            this.dataStore.setState({
+            [SEARCH_CRITERIA_KEY]: weeklyHistoryId,
+            [SEARCH_RESULTS_KEY]: response,
+            });
+            console.log('Bets: ', response);
+        } catch (error) {
+            console.error('error retrieving bets', error);
         }
     }
 
@@ -127,6 +147,8 @@ class GetEvents extends BindingClass {
         const searchCriteriaDisplay = document.getElementById('search-criteria-display');
         const searchResultsDisplay = document.getElementById('search-results-display');
 
+        console.log("Search results display: ", searchResultsDisplay);
+
         if (searchCriteria === '') {
             searchResultsContainer.classList.add('hidden');
             searchCriteriaDisplay.innerHTML = '';
@@ -134,7 +156,15 @@ class GetEvents extends BindingClass {
         } else {
             searchResultsContainer.classList.remove('hidden');
             searchCriteriaDisplay.innerHTML = `"${searchCriteria}"`;
-            searchResultsDisplay.innerHTML = this.getHTMLForSearchResults(searchResults);
+
+            console.log("search results 0 : ", searchResults[0]);
+
+            // If searchResults is not null, has at least one record, and the first attribute of the record is an eventId
+            if (searchResults && searchResults.length > 0 && !searchResults[0].amountWagered) {
+                searchResultsDisplay.innerHTML = this.getHTMLForSearchResults(searchResults);
+            } else {
+                searchResultsDisplay.innerHTML = this.getHTMLForBetHistory(searchResults);
+            }
         }
     }
 
@@ -148,7 +178,7 @@ class GetEvents extends BindingClass {
         const events = this.dataStore.get('events');
 
         if (searchResults.length === 0) {
-            return '<h4>No results found</h4>';
+            return '<h4>No upcoming events found!</h4>';
         }
 
         let html = '<div class="events-grid">';
@@ -157,6 +187,7 @@ class GetEvents extends BindingClass {
             let options = `
               <input type="text" class="amount-wagered" placeholder="Amount">
               <input type="text" class="odds" placeholder="Odds">
+              <input type="text" class="projection" placeholder="O/U, Sprd.">
               <input type="text" class="bookmaker" placeholder="Bookie">
               <label class="checkmark" for="confirm-bet"></label>
             `;
@@ -261,7 +292,7 @@ class GetEvents extends BindingClass {
         const searchResultsDisplay = document.getElementById('search-results-display');
         searchResultsDisplay.addEventListener('click', (event) => {
             const target = event.target;
-            if (target.matches('.money-line, .spread, .total')) {
+            if (target.matches('.money-line, .spread, .total, .projection')) {
                 const dropdown = target.nextElementSibling;
                 if (dropdown) {
                     dropdown.classList.toggle('show');
@@ -311,27 +342,40 @@ class GetEvents extends BindingClass {
         const isHome = bettingButtons.classList.contains('betting-buttons-home');
         const isAway = bettingButtons.classList.contains('betting-buttons-away');
 
-        const teamBetOn = isHome ? 'teamHome' : 'teamAway';
+        const teamBetOn = isHome ? teamHome : teamAway;
 
         // Retrieve betting market depending on which button was clicked
-        const bettingMarket = eventCard.querySelector('.moneyline-dropdown-content') ? 'Moneyline' :
-            eventCard.querySelector('.spread-dropdown-content') ? 'Spread' : 'Total';
+        let bettingMarket = null;
+
+        if (eventCard.querySelector('.moneyline-dropdown-content.show')) {
+            bettingMarket = 'Moneyline';
+        } else if (eventCard.querySelector('.spread-dropdown-content.show')) {
+            bettingMarket = 'Spread';
+        } else if (eventCard.querySelector('.total-dropdown-content.show')) {
+            bettingMarket = 'Total';
+        }
+
+        console.log(bettingMarket);
 
         // If the bettingMarket has been set, retrieve values entered by user in dropdown for corresponding dropdown content;
         let amountWagered;
         let odds;
-        let bookmaker;
+        let projection;
+        let bookmakerId;
         if (bettingMarket) {
             const dropdownContentClass = `.${bettingMarket.toLowerCase()}-dropdown-content.show`;
             const dropdownContent = target.closest(dropdownContentClass);
 
+            console.log(dropdownContentClass);
+
             if (dropdownContent) {
                 amountWagered = dropdownContent.querySelector('.amount-wagered').value;
                 odds = dropdownContent.querySelector('.odds').value;
-                bookmaker = dropdownContent.querySelector('.bookmaker').value;
+                projection = dropdownContent.querySelector('.projection').value;
+                bookmakerId = dropdownContent.querySelector('.bookmaker').value;
 
                 // Now you have the amountWagered, odds, and bookmaker values
-                console.log({ amountWagered, odds, bookmaker });
+                console.log({ amountWagered, odds, projection, bookmakerId });
             } else {
                 console.error('Dropdown content not found');
             }
@@ -339,20 +383,25 @@ class GetEvents extends BindingClass {
             console.error('Betting market not determined');
         }
 
-        // Boolean for which
+        // If projection is left blank (for a moneyline bet), default to ''
+        if (!projection) {
+            projection = '';
+        }
+
+        const datePlaced = new Date().toISOString();
 
         const bet = {
-            weeklyHistoryId: "12345", // Update this as necessary
-            betId: "67890", // Update this as necessary
+            weeklyHistoryId: "-", // Automatically set in back end
+            betId: eventId + "-" + bettingMarket + "-" + datePlaced, // Update this as necessary
             userId: "user123", // Update this as necessary
             eventId,
             amountWagered: parseFloat(amountWagered),
             odds: parseFloat(odds),
             teamBetOn,
-            projection: parseFloat(amountWagered) * parseFloat(odds),
+            projection,
             bettingMarket,
-            bookmaker,
-            datePlaced: new Date().toISOString(),
+            bookmakerId,
+            datePlaced,
             gainOrLoss: 0,
             teamHome,
             scoreHome: parseInt(scoreHome),
@@ -372,7 +421,61 @@ class GetEvents extends BindingClass {
         this.addBetToHistory(bet);
     }
 
+    getHTMLForBetHistory(searchResults) {
+        const history = this.dataStore.get('weeklyHistoryId');
 
+        if (searchResults.length === 0) {
+            return '<h4>No bets placed!</h4>';
+        }
+
+        let html = '<table><tr><th></th><th>Event</th><th>Event Date</th><th>Wager</th><th>Odds</th><th>Placed</th><th>Result</th><th>+/-</th><th>Remove</th></tr>';
+        for (const bet of searchResults) {
+            html += `
+            <tr id="${bet.betId}" class="bet-record">
+                <td class="bet-logos">
+                    <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-large" />
+                    <span class="bet-at-symbol">@</span>
+                    <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-large" />
+                </td>
+                <td class="bet-event-details">
+                    ${bet.eventName}</br>
+                    ${bet.eventHeadline}</br>
+                </td>
+                <td class="event-date">
+                    ${bet.eventDate}
+                </td>
+                <td class="bet-details">
+                    ${bet.amountWagered}</br>
+                    ${bet.bettingMarket}</br>
+                    ${bet.teamBetOn}
+                </td>
+                <td class="odds-details">
+                    ${bet.odds}</br>
+                    ${bet.projection}</br>
+                    ${bet.bookmakerId}
+                </td>
+                <td class="bet-date-placed">
+                    ${bet.datePlaced}
+                </td>
+                <td class="bet-result">
+                        <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-small" />
+                            ${bet.teamWinner.includes("home") ? `<span class="bet-winner-symbol"> > </span>` :
+                            bet.teamWinner.includes("away") ? `<span class="bet-winner-symbol"> > </span>` :
+                            `<span class="bet-winner-symbol">TBD</span>`}
+                        <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-small" />
+                </td>
+                <td class="bet-gain-or-loss">
+                    ${bet.gainOrLoss}
+                </td>
+                <td class="bet-remove-button">
+                    <button id="${bet.betId}" class="button remove-bet">Remove Bet</button>
+                </td>
+            </tr>`;
+        }
+        html += '</table>';
+
+        return html;
+    }
 
 }
 

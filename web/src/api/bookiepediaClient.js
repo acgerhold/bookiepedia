@@ -15,7 +15,7 @@ export default class BookiepediaClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -107,9 +107,23 @@ export default class BookiepediaClient extends BindingClass {
         }
     }
 
+    async getBetsForHistory(weeklyHistoryId, errorCallback) {
+        try {
+            const response = await this.axiosClient.get(`/history/${weeklyHistoryId}/bets`);
+            console.log('API Response: ', response.data);
+            return response.data.betList;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
     async addBetToHistory(bet, errorCallback) {
         try {
-            const response = await this.axiosClient.put(`/history/bets`);
+             const response = await this.axiosClient.put('/history/bets', bet, {
+                headers: {
+                        'Content-Type': 'application/json'
+                }
+            });
             console.log('API Response: ', response.data);
             return response.data;
         } catch (error) {
