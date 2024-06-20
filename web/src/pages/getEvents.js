@@ -29,7 +29,7 @@ class GetEvents extends BindingClass {
     constructor() {
         super();
 
-        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory'], this);
+        this.bindClassMethods(['mount', 'displaySearchResults', 'getHTMLForSearchResults', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory', 'removeBetFromHistory'], this);
 
         // Create a enw datastore with an initial "empty" state.
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
@@ -133,6 +133,17 @@ class GetEvents extends BindingClass {
             return response;
         } catch (error) {
             console.error('error adding bet to weekly history ', error);
+        }
+    }
+
+    async removeBetFromHistory(weeklyHistoryId, bet) {
+        console.log('Removing bet...')
+        try {
+            const response = await this.client.removeBetFromHistory(weeklyHistoryId, bet);
+            console.log('Removed bet: ', response);
+            return response;
+        } catch (error) {
+            console.error('error removing bet from history ', error);
         }
     }
 
@@ -342,7 +353,7 @@ class GetEvents extends BindingClass {
         const isHome = bettingButtons.classList.contains('betting-buttons-home');
         const isAway = bettingButtons.classList.contains('betting-buttons-away');
 
-        const teamBetOn = isHome ? teamHome : teamAway;
+        const teamBetOn = isHome ? 'Home Team' : 'Away Team';
 
         // Retrieve betting market depending on which button was clicked
         let bettingMarket = null;
@@ -431,6 +442,7 @@ class GetEvents extends BindingClass {
         let html = '<table><tr><th></th><th>Event</th><th>Event Date</th><th>Wager</th><th>Odds</th><th>Placed</th><th>Result</th><th>+/-</th><th>Remove</th></tr>';
         for (const bet of searchResults) {
             html += `
+            <div class="hover-indicator-history"></div>
             <tr id="${bet.betId}" class="bet-record">
                 <td class="bet-logos">
                     <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-large" />
@@ -438,24 +450,24 @@ class GetEvents extends BindingClass {
                     <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-large" />
                 </td>
                 <td class="bet-event-details">
-                    ${bet.eventName}</br>
+                    <b>${bet.eventName}</b></br>
                     ${bet.eventHeadline}</br>
                 </td>
                 <td class="event-date">
                     ${bet.eventDate}
                 </td>
                 <td class="bet-details">
-                    ${bet.amountWagered}</br>
-                    ${bet.bettingMarket}</br>
-                    ${bet.teamBetOn}
+                    <b>$ ${bet.amountWagered}</b></br>
+                    <i>${bet.bettingMarket}</i></br>
+                    <i>${bet.teamBetOn}</i>
                 </td>
                 <td class="odds-details">
-                    ${bet.odds}</br>
-                    ${bet.projection}</br>
-                    ${bet.bookmakerId}
+                    <b>${bet.odds}</b></br>
+                    <i>${bet.projection}</i></br>
+                    <i>${bet.bookmakerId}</i>
                 </td>
                 <td class="bet-date-placed">
-                    ${bet.datePlaced}
+                    <i>${bet.datePlaced}</i>
                 </td>
                 <td class="bet-result">
                         <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-small" />
@@ -468,14 +480,28 @@ class GetEvents extends BindingClass {
                     ${bet.gainOrLoss}
                 </td>
                 <td class="bet-remove-button">
-                    <button id="${bet.betId}" class="button remove-bet">Remove Bet</button>
+                    <button data-weekly-history-id="${bet.weeklyHistoryId}" id="${bet.betId}" class="button remove-bet">X</button>
                 </td>
             </tr>`;
         }
         html += '</table>';
 
+        const searchResultsDisplay = document.getElementById('search-results-display');
+        searchResultsDisplay.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.matches('.remove-bet')) {
+                const betId = target.id;
+                const weeklyHistoryId = target.dataset.weeklyHistoryId;
+                console.log(betId);
+                console.log(weeklyHistoryId);
+                this.removeBetFromHistory(weeklyHistoryId, betId);
+            }
+        });
+
         return html;
     }
+
+
 
 }
 
