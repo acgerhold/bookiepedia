@@ -79,27 +79,13 @@ export default class BookiepediaClient extends BindingClass {
     async getSchedule(leagueId, errorCallback) {
         try {
             const response = await this.axiosClient.get(`league/${leagueId}/schedule`);
-            console.log('API Response: ', response.data);
-            return response.data.schedule?.scheduleId;
+            console.log('getSchedule() Response:', response.status);
+
+            return response.data.schedule;
         } catch (error) {
             this.handleError(error, errorCallback);
         }
 
-    }
-
-    /**
-    * Pings the ESPN API to refresh Events for NBA, NHL, and MLB
-    * Creates/updates Schedule objects
-    * Schedules are a collection of events for a League on a given day
-    */
-    async fetchSchedule(errorCallback) {
-        try {
-            const response = await this.axiosClient.post(`/schedule`);
-            console.log('API Response: ', response.data);
-            return response.data;
-        } catch (error) {
-            this.handleError(error, errorCallback);
-        }
     }
 
     /**
@@ -110,8 +96,25 @@ export default class BookiepediaClient extends BindingClass {
     async getEventsForSchedule(scheduleId, errorCallback) {
         try {
             const response = await this.axiosClient.get(`/schedule/${scheduleId}/events`);
-            console.log('API Response: ', response.data);
+            console.log('getEventsForSchedule() Response:', response.status);
+
             return response.data.eventList;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
+    /**
+    * Pings the ESPN API to refresh Events for NBA, NHL, and MLB
+    * Creates/updates Schedule objects
+    * Schedules are a collection of events for a League on a given day
+    */
+    async fetchSchedule(errorCallback) {
+        try {
+            const response = await this.axiosClient.post(`/schedule`);
+            console.log('fetchSchedule() Response: ', response.status);
+
+            return response.data;
         } catch (error) {
             this.handleError(error, errorCallback);
         }

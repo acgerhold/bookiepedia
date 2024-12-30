@@ -35,7 +35,6 @@ class GetEvents extends BindingClass {
         this.dataStore = new DataStore(EMPTY_DATASTORE_STATE);
         this.header = new Header(this.dataStore);
         this.dataStore.addChangeListener(this.displaySearchResults);
-        console.log("GetEvents constructor");
     }
 
     /**
@@ -46,8 +45,8 @@ class GetEvents extends BindingClass {
         const icons = document.querySelectorAll('.test-icon')
         icons.forEach(icon => {
             icon.addEventListener('click', (evt) => {
-                const leagueId = evt.target.id;
-                this.getSchedule(leagueId);
+                const league = evt.target;
+                this.getSchedule(league);
             });
         });
 
@@ -69,31 +68,52 @@ class GetEvents extends BindingClass {
      * then updates the datastore with the criteria and results.
      * @param evt The "event" object representing the user-initiated event that triggered this method.
      */
-    async getSchedule(leagueId) {
+    async getSchedule(league) {
+
         // Prevent submitting the from from reloading the page.
-        if (!leagueId) {
+        if (!league) {
             return;
         }
 
-        // Add a fetchSchedule() call in here to refresh when a use clicks a league too
-        console.log('Retrieving schedule for league ID: ${leagueId}')
+        console.log('> Retrieving Current Schedule for', league.alt + '... <');
+        const schedule = await this.client.getSchedule(league.id);
+        console.log(`${schedule.leagueName} Schedule ${schedule.timestamp}`, schedule);
 
-        const results = await this.client.getSchedule(leagueId);
-        const events = await this.getEventsForSchedule(results);
-        console.log('Results:', results);
+        const events = await this.getEventsForSchedule(schedule);
+        // this is calling geteventsforschedule within this class
+
         this.dataStore.setState({
-                        [SEARCH_CRITERIA_KEY]: leagueId,
+                        [SEARCH_CRITERIA_KEY]: schedule,
                         [SEARCH_RESULTS_KEY]: events,
                     });
     }
 
-    async fetchSchedule() {
-        console.log('Fetching schedule...')
+    async getEventsForSchedule(schedule) {
         try {
+            console.log('> Retrieving Current Events for', schedule.leagueName + '... <');
+            const events = await this.client.getEventsForSchedule(schedule.scheduleId);
+            // this one is calling the client itself.
+
+            console.log(`${schedule.scheduleName}`, events);
+
+            return events;
+        } catch (error) {
+            console.error('error retrieving events', error);
+            return [];
+        }
+    }
+
+    async fetchSchedule() {
+        console.log('> Updating Events... <')
+        try {
+            const current = this.dataStore.get(SEARCH_CRITERIA_KEY);
+
             const response = await this.client.fetchSchedule();
-            this.dataStore.setState({
-            [SEARCH_RESULTS_KEY]: response,
-            });
+
+            if (current != "") {
+                const events = await this.getEventsForSchedule(current);
+            }
+
         } catch (error) {
             console.error('error fetching schedule', error);
         }
@@ -110,18 +130,6 @@ class GetEvents extends BindingClass {
             console.log('Bets: ', response);
         } catch (error) {
             console.error('error retrieving bets', error);
-        }
-    }
-
-    async getEventsForSchedule(results) {
-        console.log('Retrieving events...');
-        try {
-            const response = await this.client.getEventsForSchedule(results);
-            console.log('Events: ', response);
-            return response;
-        } catch (error) {
-            console.error('error retrieving events', error);
-            return [];
         }
     }
 
@@ -157,8 +165,6 @@ class GetEvents extends BindingClass {
         const searchResultsContainer = document.getElementById('search-results-container');
         const searchCriteriaDisplay = document.getElementById('search-criteria-display');
         const searchResultsDisplay = document.getElementById('search-results-display');
-
-        console.log("Search results display: ", searchResultsDisplay);
 
         if (searchCriteria === '') {
             searchResultsContainer.classList.add('hidden');
@@ -435,54 +441,54 @@ class GetEvents extends BindingClass {
 
         if (searchResults.length === 0) {
             return '<h4>No bets placed!</h4>';
+        } else {
+            let html = '<table><tr><th></th><th>Event</th><th>Event Date</th><th>Wager</th><th>Odds</th><th>Placed</th><th>Result</th><th>+/-</th><th>Remove</th></tr>';
+            for (const bet of searchResults) {
+                html += `
+                <div class="hover-indicator-history"></div>
+                <tr id="${bet.betId}" class="bet-record">
+                    <td class="bet-logos">
+                        <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-large" />
+                        <span class="bet-at-symbol">@</span>
+                        <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-large" />
+                    </td>
+                    <td class="bet-event-details">
+                        <b>${bet.eventName}</b></br>
+                        ${bet.eventHeadline}</br>
+                    </td>
+                    <td class="event-date">
+                        ${bet.eventDate}
+                    </td>
+                    <td class="bet-details">
+                        <b>$ ${bet.amountWagered}</b></br>
+                        <i>${bet.bettingMarket}</i></br>
+                        <i>${bet.teamBetOn}</i>
+                    </td>
+                    <td class="odds-details">
+                        <b>${bet.odds}</b></br>
+                        <i>${bet.projection}</i></br>
+                        <i>${bet.bookmakerId}</i>
+                    </td>
+                    <td class="bet-date-placed">
+                        <i>${bet.datePlaced}</i>
+                    </td>
+                    <td class="bet-result">
+                            <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-small" />
+                                ${bet.teamWinner.includes("home") ? `<span class="bet-winner-symbol"> > </span>` :
+                                bet.teamWinner.includes("away") ? `<span class="bet-winner-symbol"> > </span>` :
+                                `<span class="bet-winner-symbol">TBD</span>`}
+                            <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-small" />
+                    </td>
+                    <td class="bet-gain-or-loss">
+                        ${bet.gainOrLoss}
+                    </td>
+                    <td class="bet-remove-button">
+                        <button data-weekly-history-id="${bet.weeklyHistoryId}" id="${bet.betId}" class="button remove-bet">X</button>
+                    </td>
+                </tr>`;
+            }
+            html += '</table>';
         }
-
-        let html = '<table><tr><th></th><th>Event</th><th>Event Date</th><th>Wager</th><th>Odds</th><th>Placed</th><th>Result</th><th>+/-</th><th>Remove</th></tr>';
-        for (const bet of searchResults) {
-            html += `
-            <div class="hover-indicator-history"></div>
-            <tr id="${bet.betId}" class="bet-record">
-                <td class="bet-logos">
-                    <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-large" />
-                    <span class="bet-at-symbol">@</span>
-                    <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-large" />
-                </td>
-                <td class="bet-event-details">
-                    <b>${bet.eventName}</b></br>
-                    ${bet.eventHeadline}</br>
-                </td>
-                <td class="event-date">
-                    ${bet.eventDate}
-                </td>
-                <td class="bet-details">
-                    <b>$ ${bet.amountWagered}</b></br>
-                    <i>${bet.bettingMarket}</i></br>
-                    <i>${bet.teamBetOn}</i>
-                </td>
-                <td class="odds-details">
-                    <b>${bet.odds}</b></br>
-                    <i>${bet.projection}</i></br>
-                    <i>${bet.bookmakerId}</i>
-                </td>
-                <td class="bet-date-placed">
-                    <i>${bet.datePlaced}</i>
-                </td>
-                <td class="bet-result">
-                        <img src="${bet.teamAwayLogo}" class="bet-team-away-logo-small" />
-                            ${bet.teamWinner.includes("home") ? `<span class="bet-winner-symbol"> > </span>` :
-                            bet.teamWinner.includes("away") ? `<span class="bet-winner-symbol"> > </span>` :
-                            `<span class="bet-winner-symbol">TBD</span>`}
-                        <img src="${bet.teamHomeLogo}" class="bet-team-home-logo-small" />
-                </td>
-                <td class="bet-gain-or-loss">
-                    ${bet.gainOrLoss}
-                </td>
-                <td class="bet-remove-button">
-                    <button data-weekly-history-id="${bet.weeklyHistoryId}" id="${bet.betId}" class="button remove-bet">X</button>
-                </td>
-            </tr>`;
-        }
-        html += '</table>';
 
         const searchResultsDisplay = document.getElementById('search-results-display');
         searchResultsDisplay.addEventListener('click', (event) => {

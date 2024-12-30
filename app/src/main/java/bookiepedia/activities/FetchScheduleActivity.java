@@ -38,22 +38,21 @@ public class FetchScheduleActivity {
             String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                     EspnRequestConstants.MLB, startDate, endDate);
 
-            // JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
-            // processResponse(nbaResponse);
-            // NBA Season over now, breaks espn DAO trying to request for NBA
+            JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
+            processResponse(nbaResponse);
 
             JSONObject nhlResponse = espnDAO.requestQuery(nhlURL);
             processResponse(nhlResponse);
 
-            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
-            processResponse(mlbResponse);
+//            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
+//            processResponse(mlbResponse);
 
             return FetchScheduleResult.builder()
-                    .withMessage("Schedules for : " + startDate + " - Successfully created for NHL and MLB")
+                    .withMessage(EspnRequestConstants.TIMESTAMP)
                     .build();
 
         } catch (IOException ioe) {
-            throw new RuntimeException("Error occurred attempting to fetch NBA & NHL schedules");
+            throw new RuntimeException("Error occurred attempting to update events");
         }
     }
 
