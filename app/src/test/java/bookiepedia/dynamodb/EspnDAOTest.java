@@ -39,8 +39,8 @@ public class EspnDAOTest {
         String startDate = EspnRequestConstants.getStartDate();
         String endDate = EspnRequestConstants.getEndDate();
 
-        String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
-                EspnRequestConstants.NBA, startDate, endDate);
+        String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s",
+                EspnRequestConstants.NBA, startDate);
         String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                 EspnRequestConstants.NHL, startDate, endDate);
         String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",

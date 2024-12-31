@@ -194,7 +194,7 @@ public class EspnDAO {
                     String date = event.optString("date", INVALID_STRING_REPLACER);
                     ZonedDateTime dateInCentral = ZonedDateTime.parse(date, EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X)
                                     .withZoneSameInstant(EspnRequestConstants.CENTRAL_ZONE);
-                    e.setEventDate(dateInCentral.format(EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X));
+                    e.setEventDate(dateInCentral.format(EspnRequestConstants.MMMM_dd_yyyy_hh_mm_a));
                     // Event Season
                     e.setEventSeasonId(event.getJSONObject("season")
                             .optString("type", INVALID_STRING_REPLACER));
