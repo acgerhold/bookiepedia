@@ -243,11 +243,13 @@ public class EspnDAO {
                     e.setTeamHomeLogo(teamHome.getTeamLogo());
                     e.setTeamHomeColor(teamHome.getTeamColor());
                     e.setTeamHomeColorAlt(teamHome.getTeamAlternateColor());
+                    e.setTeamHomeNameAbr(teamHome.getTeamNameAbr());
                     // Team Away Logo & Colors
                     Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
                     e.setTeamAwayLogo(teamAway.getTeamLogo());
                     e.setTeamAwayColor(teamAway.getTeamColor());
                     e.setTeamAwayColorAlt(teamAway.getTeamAlternateColor());
+                    e.setTeamAwayNameAbr(teamAway.getTeamNameAbr());
 
                     try {
 

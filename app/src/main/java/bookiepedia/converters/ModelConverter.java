@@ -48,6 +48,8 @@ public class ModelConverter {
                 .withTeamAwayColor(event.getTeamAwayColor())
                 .withTeamHomeColorAlt(event.getTeamHomeColorAlt())
                 .withTeamAwayColorAlt(event.getTeamAwayColorAlt())
+                .withTeamHomeNameAbr(event.getTeamHomeNameAbr())
+                .withTeamAwayNameAbr(event.getTeamAwayNameAbr())
                 .build();
     }
 

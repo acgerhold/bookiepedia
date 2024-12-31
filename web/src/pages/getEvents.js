@@ -229,7 +229,9 @@ class GetEvents extends BindingClass {
                     data-score-home="${event.scoreHome}"
                     data-score-away="${event.scoreAway}"
                     data-team-home-logo="${event.teamHomeLogo}"
-                    data-team-away-logo="${event.teamAwayLogo}">
+                    data-team-away-logo="${event.teamAwayLogo}"
+                    data-team-home-name-abr="${event.teamHomeNameAbr}"
+                    data-team-away-name-abr="${event.teamAwayNameAbr}">
                 </div>
                 ${event.eventStatusId.includes("2") ? `
                     <div class="live-indicator">
@@ -261,16 +263,28 @@ class GetEvents extends BindingClass {
                                 ${options}
                             </div>
                     </div>
-                    <div class="event-logos" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
-                        <div class="away-logo" style="center">
-                            <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
-                            <span class="score-text">${event.scoreAway}</span>
-                        </div>
-                        <span class="at-symbol">@</span>
-                        <div class="home-logo" style="center">
-                            <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
-                            <span class="score-text">${event.scoreHome}</span>
-                        </div>
+                    <div class="event-stats" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
+                        ${event.eventStatusId.includes("2") ?
+                            `<div class="team-details">
+                                <span class="team-name">${event.teamAwayNameAbr}</span>
+                                <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
+                                <span class="score-text">${event.scoreAway}</span>
+                            </div>
+                            <div class="team-details">
+                                <span class="team-name">${event.teamHomeNameAbr}</span>
+                                <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
+                                <span class="score-text">${event.scoreHome}</span>
+                            </div>`
+                        :
+                            `<div class="team-details">
+                                <span class="team-name">${event.teamAwayNameAbr}</span>
+                                <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
+                            </div>
+                            <div class="team-details">
+                                <span class="team-name">${event.teamHomeNameAbr}</span>
+                                <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
+                            </div>`
+                        }
                     </div>
                     <div class="betting-buttons betting-buttons-home" style="--home-color-alt:#${homeColorAlt}; --home-color:#${homeColor};">
                         <button id="event-${event.teamHome}-moneyline" class="button">
@@ -298,6 +312,7 @@ class GetEvents extends BindingClass {
                 </div>
                 <div class="event-details">
                     <div class="hover-indicator"></div>
+                    <span class="event-name">${event.eventName}</span>
                 </div>
             </div>`;
         }
@@ -349,6 +364,8 @@ class GetEvents extends BindingClass {
         const scoreAway = eventData.getAttribute('data-score-away');
         const teamHomeLogo = eventData.getAttribute('data-team-home-logo');
         const teamAwayLogo = eventData.getAttribute('data-team-away-logo');
+        const teamHomeNameAbr = eventData.getAttribute('data-team-home-name-abr');
+        const teamAwayNameAbr = eventData.getAttribute('data-team-away-name-abr');
 
         // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest (button) to the event click
         const bettingButtons = target.closest('.betting-buttons');
