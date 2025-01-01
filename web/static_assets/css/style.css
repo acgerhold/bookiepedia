@@ -260,11 +260,17 @@ Each event card contained in .events-grid
 .event-container {
     background: linear-gradient(to right, var(--away-color), var(--home-color));
     display: flex;
+    align-items: center;
 }
 
 .event-details {
     flex-grow: 1;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.9) 100%);
+    display: flex; /* Enables Flexbox layout */
+    flex-direction: column; /* Stacks child elements vertically */
+    align-items: center; /* Centers child elements horizontally */
+    justify-content: center; /* Centers child elements vertically */
+    text-align: center; /* Centers text within each span */
 }
 
 
@@ -281,6 +287,12 @@ Each event card contained in .events-grid
 }
 
 
+
+.event-status {
+    width: 100px;
+    margin-top: auto;
+    margin-bottom: 4px;
+}
 
 
 
@@ -301,11 +313,50 @@ Event logo container and @ symbol
 
 
 
-.team-name {
+.team-name-text {
     font-size: 10px;
     font-weight: bold;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
+.event-status-text {
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+.score-text {
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+.team-winner-text {
+    font-weight: bold;
+    font-size: 12px;
+}
+.live-text {
+    font-weight: bold;
+    color: red;
+    font-size: 12px;
+}
+.live-circle {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+.event-name-text {
+    margins: 2px;
+    font-weight: bold;
+    font-size: 16px;
+}
+.event-date-text {
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+
 
 
 
@@ -323,9 +374,7 @@ Event logo container and @ symbol
     box-shadow: -4px 4px 2px rgba(0, 0, 0, 0.6);
 }
 
-.separator {
-    display: flex;
-}
+
 
 .event-team-logo-home {
     width: 100px;
@@ -335,11 +384,7 @@ Event logo container and @ symbol
     box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.6);
 }
 
-.score-text {
-    font-size: 30px;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
+
 
 .at-symbol {
     font-size: 20px;
@@ -347,21 +392,14 @@ Event logo container and @ symbol
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
-.event-date {
-    font-size: 10px;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
+
 
 /*
 Details about the event like the name and headline
 */
 
 
-.event-name {
-    font-weight: bold;
-    font-size: 16px;
-}
+
 
 /*
 Scores of the event and event status
@@ -376,13 +414,7 @@ Status is hidden if the game is not in progress and shows the date of the event
     position: relative;
 }
 
-.event-status {
-    font-size: 16px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-style: italic;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
+
 
 
 
@@ -392,26 +424,7 @@ to center horizontally easier
 */
 
 
-.live-indicator {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    color: red;
-    font-size: 12px;
-}
 
-.live-circle {
-    width: 8px;
-    height: 8px;
-    background-color: red;
-    border-radius: 50%;
-    margin-right: 5px;
-    animation: pulse 1s infinite;
-}
 
 /*
 Set the pulse of the live circle

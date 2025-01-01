@@ -194,7 +194,7 @@ public class EspnDAO {
                     String date = event.optString("date", INVALID_STRING_REPLACER);
                     ZonedDateTime dateInCentral = ZonedDateTime.parse(date, EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X)
                                     .withZoneSameInstant(EspnRequestConstants.CENTRAL_ZONE);
-                    e.setEventDate(dateInCentral.format(EspnRequestConstants.MMMM_dd_yyyy_hh_mm_a));
+                    e.setEventDate(dateInCentral.format(EspnRequestConstants.MMMM_d_yyyy_h_mm_a));
                     // Event Season
                     e.setEventSeasonId(event.getJSONObject("season")
                             .optString("type", INVALID_STRING_REPLACER));
@@ -232,9 +232,7 @@ public class EspnDAO {
                     e.setLinks(linksList);
                     // Winning Team
                     if (e.getEventStatusId().equals("3")) {
-                        e.setTeamWinner(homeTeam.optBoolean("winner") ?
-                                homeTeam.optString("id", INVALID_STRING_REPLACER) :
-                                awayTeam.optString("id", INVALID_STRING_REPLACER));
+                        e.setTeamWinner(homeTeam.optBoolean("winner") ? "H" : "A");
                     } else {
                         e.setTeamWinner("-1");
                     }

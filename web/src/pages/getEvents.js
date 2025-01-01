@@ -231,14 +231,9 @@ class GetEvents extends BindingClass {
                     data-team-home-logo="${event.teamHomeLogo}"
                     data-team-away-logo="${event.teamAwayLogo}"
                     data-team-home-name-abr="${event.teamHomeNameAbr}"
-                    data-team-away-name-abr="${event.teamAwayNameAbr}">
+                    data-team-away-name-abr="${event.teamAwayNameAbr}"
+                    data-team-winner="${event.teamWinner}">
                 </div>
-                ${event.eventStatusId.includes("2") ? `
-                    <div class="live-indicator">
-                        <span class="live-circle"></span>
-                        LIVE
-                    </div>
-                ` : ''}
                 <div class="event-container">
                     <div class="betting-buttons betting-buttons-away" style="--away-color-alt:#${awayColorAlt}; --away-color:#${awayColor};">
                         <button id="event-${event.teamAway}-moneyline" class="button">
@@ -264,27 +259,59 @@ class GetEvents extends BindingClass {
                             </div>
                     </div>
                     <div class="event-stats" style="--home-color-alt:#${homeColorAlt}; --away-color-alt:#${awayColorAlt}; --home-color:#${homeColor}; --away-color:#${awayColor};">
-                        ${event.eventStatusId.includes("2") ?
-                            `<div class="team-details">
-                                <span class="team-name">${event.teamAwayNameAbr}</span>
-                                <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
-                                <span class="score-text">${event.scoreAway}</span>
-                            </div>
-                            <div class="team-details">
-                                <span class="team-name">${event.teamHomeNameAbr}</span>
-                                <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
-                                <span class="score-text">${event.scoreHome}</span>
-                            </div>`
-                        :
-                            `<div class="team-details">
-                                <span class="team-name">${event.teamAwayNameAbr}</span>
-                                <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
-                            </div>
-                            <div class="team-details">
-                                <span class="team-name">${event.teamHomeNameAbr}</span>
-                                <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
-                            </div>`
-                        }
+                        ${(() => {
+                            if (event.eventStatusId.includes("2")) {
+                                // Live Event
+                                return `
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamAwayNameAbr}</span>
+                                        <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
+                                        <span class="score-text">${event.scoreAway}</span>
+                                    </div>
+                                    <div class="event-status">
+                                        <div class="live-text">
+                                            <span class="live-circle"></span>
+                                            LIVE
+                                        </div>
+                                        <span class="event-status-text">${event.eventStatus}</span>
+                                    </div>
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamHomeNameAbr}</span>
+                                        <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
+                                        <span class="score-text">${event.scoreHome}</span>
+                                    </div>`;
+                            } else if (event.eventStatusId.includes("3")) {
+                                // Final
+                                return `
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamAwayNameAbr}</span>
+                                        <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
+                                        <span class="score-text">${event.scoreAway}</span>
+                                    </div>
+                                    <div class="event-status">
+                                        <div>
+                                            <span class="team-winner-text">${event.teamWinner}</span>
+                                        </div>
+                                        <span class="event-status-text">${event.eventStatus}</span>
+                                    </div>
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamHomeNameAbr}</span>
+                                        <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
+                                        <span class="score-text">${event.scoreHome}</span>
+                                    </div>`;
+                            } else {
+                                // Scheduled
+                                return `
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamAwayNameAbr}</span>
+                                        <img src="${event.teamAwayLogo}" class="event-team-logo-away" />
+                                    </div>
+                                    <div class="team-details">
+                                        <span class="team-name-text">${event.teamHomeNameAbr}</span>
+                                        <img src="${event.teamHomeLogo}" class="event-team-logo-home" />
+                                    </div>`;
+                            }
+                        })()}
                     </div>
                     <div class="betting-buttons betting-buttons-home" style="--home-color-alt:#${homeColorAlt}; --home-color:#${homeColor};">
                         <button id="event-${event.teamHome}-moneyline" class="button">
@@ -312,7 +339,8 @@ class GetEvents extends BindingClass {
                 </div>
                 <div class="event-details">
                     <div class="hover-indicator"></div>
-                    <span class="event-name">${event.eventName}</span>
+                    <span class="event-name-text">${event.eventName}</span>
+                    <span class="event-date-text">${event.eventDate}</span>
                 </div>
             </div>`;
         }
@@ -366,6 +394,7 @@ class GetEvents extends BindingClass {
         const teamAwayLogo = eventData.getAttribute('data-team-away-logo');
         const teamHomeNameAbr = eventData.getAttribute('data-team-home-name-abr');
         const teamAwayNameAbr = eventData.getAttribute('data-team-away-name-abr');
+        const teamWinner = eventData.getAttribute('data-team-winner');
 
         // Retrieve data from betting-buttons-home or betting-buttons-away depending on the closest (button) to the event click
         const bettingButtons = target.closest('.betting-buttons');
