@@ -22,7 +22,9 @@
     "webpack-dev-server": "^4.11.1"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
     "copy-webpack-plugin": "^11.0.0",
-    "dotenv-webpack": "^8.0.1"
+    "dotenv-webpack": "^8.0.1",
+    "vite": "^6.2.5"
   }
 }
