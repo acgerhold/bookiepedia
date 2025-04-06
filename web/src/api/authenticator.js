@@ -1,56 +1,59 @@
+// web/src/authenticator.js
 import BindingClass from "../util/bindingClass";
-import { Auth } from 'aws-amplify';
+import { Auth } from "aws-amplify";
 
 export default class Authenticator extends BindingClass {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        const methodsToBind = ['getCurrentUserInfo'];
-        this.bindClassMethods(methodsToBind, this);
+    const methodsToBind = ["getCurrentUserInfo"];
+    this.bindClassMethods(methodsToBind, this);
 
-        this.configureCognito();
+    this.configureCognito();
+  }
+
+  async getCurrentUserInfo() {
+    const cognitoUser = await Auth.currentAuthenticatedUser();
+    const { email, name } = cognitoUser.signInUserSession.idToken.payload;
+    return { email, name };
+  }
+
+  async isUserLoggedIn() {
+    try {
+      await Auth.currentAuthenticatedUser();
+      return true;
+    } catch {
+      return false;
     }
+  }
 
-    async getCurrentUserInfo() {
-        const congnitoUser = await Auth.currentAuthenticatedUser();
-        const { email, name } = congnitoUser.signInUserSession.idToken.payload;
-        return { email, name };
-    }
+  async getUserToken() {
+    const cognitoSession = await Auth.currentSession();
+    return cognitoSession.getIdToken().getJwtToken();
+  }
 
-    async isUserLoggedIn() {
-        try {
-            await Auth.currentAuthenticatedUser();
-            return true;
-        } catch {
-            return false;
-        }
-    }
+  async login() {
+    await Auth.federatedSignIn();
+  }
 
-    async getUserToken() {
-        const cognitoSession = await Auth.currentSession();
-        return cognitoSession.getIdToken().getJwtToken();
-    }
+  async logout() {
+    await Auth.signOut();
+  }
 
-    async login() {
-        await Auth.federatedSignIn();
-    }
-
-    async logout() {
-        await Auth.signOut();
-    }
-
-    configureCognito() {
-        Auth.configure({
-            userPoolId: process.env.COGNITO_USER_POOL_ID,
-            userPoolWebClientId: process.env.COGNITO_USER_POOL_CLIENT_ID,
-            oauth: {
-                domain: process.env.COGNITO_DOMAIN,
-                redirectSignIn: process.env.COGNITO_REDIRECT_SIGNIN,
-                redirectSignOut: process.env.COGNITO_REDIRECT_SIGNOUT,
-                region: 'us-east-1',
-                scope: ['email', 'openid', 'phone', 'profile'],
-                responseType: 'code'
-            }
-        });
-    }
+  configureCognito() {
+    const config = {
+      region: process.env.COGNITO_REGION,
+      userPoolId: process.env.COGNITO_USER_POOL_ID,
+      userPoolWebClientId: process.env.COGNITO_USER_POOL_CLIENT_ID,
+      oauth: {
+        domain: process.env.COGNITO_DOMAIN,
+        redirectSignIn: process.env.COGNITO_REDIRECT_SIGNIN,
+        redirectSignOut: process.env.COGNITO_REDIRECT_SIGNOUT,
+        scope: ["email", "openid", "phone", "profile"],
+        responseType: "code",
+      },
+    };
+    
+    Auth.configure(config);
+  }
 }
