@@ -1,6 +1,6 @@
-// web/src/components/Header.jsx
 import BookiepediaClient from "../api/bookiepediaClient";
 import { useEffect, useState } from "react";
+import "../css/global.css";
 
 const Header = ({ client }) => {
   const [currentUser, setCurrentUser] = useState(null);

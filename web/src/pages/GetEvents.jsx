@@ -1,8 +1,17 @@
-// web/src/components/GetEvents.jsx
+// New top-level component responsible for:
+
+// Fetching data from BookiepediaClient
+// Managing the apps state (current schedule, list of events)
+// Rendering the league selector, buttons, and list of event cards
+// Passing data to child components (EventCard.jsx)
+
+// Focuses on fetching data and rendering the overall page structure
+
 import { useEffect, useState } from "react";
 import BookiepediaClient from "../api/bookiepediaClient";
 import Header from "../components/Header";
 import EventCard from "../components/EventCard";
+import "../css/GetEvents.css";
 
 const GetEvents = () => {
   const [client, setClient] = useState(null);
@@ -43,17 +52,17 @@ const GetEvents = () => {
       <div className="card">
         <h2>Select a League to View Live Events & Place Bets</h2>
         <button id="refresh-button" className="refresh-button" onClick={fetchSchedule}>
-          Update Scores & Events
+          Update Events
         </button>
         <button
           id="WH-2024-06-4"
           className="weekly-history"
           onClick={() => getBetsForHistory("WH-2024-06-4")}
         >
-          Your Betting History
+          Bet History
         </button>
-        <form className="card-content" id="search-playlists-form">
-          <div className="form-field"> {/* Changed <p> to <div> */}
+        <form className="card-content">
+          <div className="form-field">
             <div className="icon-container">
               <div className="icon-wrapper">
                 <div className="hover-indicator"></div>

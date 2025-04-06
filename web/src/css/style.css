@@ -53,13 +53,12 @@ Changed to Win10 start menu widget type of look
 */
 
 .card {
-    color: white;
-    background-color: rgba(0,0,0,0.7);
-    margin: 20px;
-    padding: 20px;
-    border-radius:10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    text-align: center;
+    background: #1a1a1a; /* Dark background for the card */
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .error {

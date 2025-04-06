@@ -1,5 +1,8 @@
-// web/src/components/EventCard.jsx
+// Focuses on rendering a single event card and handling its own logic (like betting drop downs)
+// Can be reused anywhere I need to display an event
+
 import { useState } from "react";
+import "../css/EventCard.css";
 
 const EventCard = ({ event, onAddBet }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
