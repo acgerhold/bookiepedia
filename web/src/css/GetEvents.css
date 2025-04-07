@@ -1,30 +1,44 @@
-/* web/src/css/GetEvents.css */
-.card {
-    background: #1a1a1a93;
-    border-radius: 8px;
-    padding: 1.5rem;
+.league-container {
+    padding: 1rem;
     margin: 1rem auto;
     max-width: 35%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
 
-.events-container {
-    background: #1a1a1a93;
     border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1rem auto;
-    max-width: 75%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    background: #00000027;
+    box-shadow: 0 4px 6px #0000009f;
+    backdrop-filter: blur(6px);
 }
 
-.card h2 {
-    color: #fff;
+.league-container h2 {
+    color: #ffffff;
     text-align: center;
-    margin-bottom: 1rem;
     font-size: 1.5rem;
 }
 
-.card h3 {
+.available-leagues {
+    padding: 1rem;
+
+    border-radius: 8px;
+
+    background: #00000060;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+}
+
+.events-container {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    max-width: 90%;
+
+    border-radius: 8px;
+    
+    background: #00000048;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+}
+
+.events-container h3 {
     color: #fff;
     text-align: center;
     margin-bottom: 1rem;

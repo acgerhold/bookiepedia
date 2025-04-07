@@ -49,7 +49,7 @@ const GetEvents = () => {
   return (
     <>
       <Header client={client} />
-      <div className="card">
+      <div className="league-container">
         <h2>Select a League to View Live Events & Place Bets</h2>
         <button id="refresh-button" className="refresh-button" onClick={fetchSchedule}>
           Update Events
@@ -61,7 +61,7 @@ const GetEvents = () => {
         >
           Bet History
         </button>
-        <form className="card-content">
+        <form className="available-leagues">
           <div className="form-field">
             <div className="icon-container">
               <div className="icon-wrapper">
@@ -105,7 +105,7 @@ const GetEvents = () => {
           </div>
         </form>
       </div>
-      <div className={`card ${!schedule ? "hidden" : ""}`} id="search-results-container">
+      <div className={`events-container${!schedule ? "hidden" : ""}`}>
         <h3>
           <span id="search-criteria-display">{schedule ? `"${schedule}"` : ""}</span>
         </h3>
