@@ -35,8 +35,8 @@ public class FetchScheduleActivity {
                     EspnRequestConstants.NBA, startDate);
             String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s",
                     EspnRequestConstants.NHL, startDate);
-//            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
-//                    EspnRequestConstants.MLB, startDate, endDate);
+            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
+                    EspnRequestConstants.MLB, startDate, endDate);
 
             JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
             processResponse(nbaResponse);
@@ -44,9 +44,8 @@ public class FetchScheduleActivity {
             JSONObject nhlResponse = espnDAO.requestQuery(nhlURL);
             processResponse(nhlResponse);
 
-//            Off season
-//            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
-//            processResponse(mlbResponse);
+            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
+            processResponse(mlbResponse);
 
             return FetchScheduleResult.builder()
                     .withMessage(EspnRequestConstants.TIMESTAMP)
