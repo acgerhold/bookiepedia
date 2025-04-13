@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import "../css/EventCard.css";
+import "../css/BettingButtons.css"
 
 const EventCard = ({ event, onAddBet }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -65,7 +66,7 @@ const EventCard = ({ event, onAddBet }) => {
   const renderBettingButtons = (team) => {
     const markets = ["Moneyline", "Spread", "Total"];
     return markets.map((market) => (
-      <div key={`${team}-${market}`} className="relative">
+      <div key={`${team}-${market}`} className="bet-button">
         <button
           onClick={() => toggleDropdown(market, team)}
           className={`button ${team === event.teamHome ? "betting-buttons-home" : "betting-buttons-away"}`}
@@ -126,7 +127,7 @@ const EventCard = ({ event, onAddBet }) => {
         {/* Hidden data attributes */}
       </div>
       <div className="event-container">
-        <div className="betting-buttons betting-buttons-away">
+        <div className="betting-buttons-container betting-buttons-away">
           {renderBettingButtons(event.teamAway)}
         </div>
         <div className="event-stats">
@@ -183,7 +184,7 @@ const EventCard = ({ event, onAddBet }) => {
             </>
           )}
         </div>
-        <div className="betting-buttons betting-buttons-home">
+        <div className="betting-buttons-container betting-buttons-home">
           {renderBettingButtons(event.teamHome)}
         </div>
       </div>

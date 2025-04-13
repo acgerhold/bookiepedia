@@ -1,17 +1,24 @@
-/* web/src/css/EventCard.css */
+.search-results-display {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal-width columns */
+    gap: 1rem;
+    padding: 1rem;
+}
+
 .event-card {
-    position: relative;
-    box-sizing: border-box;
+    padding: 1rem;
+    margin: 0;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--away-color) 50%, transparent),
+        color-mix(in srgb, var(--home-color) 50%, transparent)
+    );
+    backdrop-filter: blur(6px);
     box-shadow: 0 0px 8px rgba(0, 0, 0, 0.7);
-    width: 100%;
-    max-width: 400px;
-    margin: 1rem auto;
-    overflow: hidden;
+
     transition: transform 0.2s ease;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    background: #222;
 }
 
 .event-card:hover {
@@ -25,49 +32,58 @@
 }
 
 .event-container {
-    background: linear-gradient(to right, var(--away-color), var(--home-color));
     display: flex;
-    align-items: center;
-}
-
-.event-details {
-    flex-grow: 1;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.9) 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    text-align: center;
 }
 
 .event-stats {
     order: 2;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-grow: 1;
-    padding: 0.5rem 0;
-}
-
-.event-status {
-    width: 100px;
-    margin-top: auto;
-    margin-bottom: 4px;
-    text-align: center;
+    margin-bottom: .25rem;
 }
 
 .team-details {
+    margin: .5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    border-radius: 8px;
+
+    background:  rgba(0 , 0 , 0 , 0.4);
+    backdrop-filter: blur(6px);
 }
+
+.event-status {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-details {
+    padding: .5rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 8px;
+
+    background: rgba(0, 0, 0, 0.568);
+    backdrop-filter: blur(6px);
+}
+
+
+
+
 
 .event-team-logo-away {
     width: 100px;
     height: 100px;
     object-fit: fill;
     background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
-    box-shadow: -4px 4px 2px rgba(0, 0, 0, 0.6);
 }
 
 .event-team-logo-home {
@@ -75,7 +91,6 @@
     height: 100px;
     object-fit: fill;
     background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
-    box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.6);
 }
 
 .team-name-text {
@@ -138,152 +153,3 @@
     color: #ccc;
 }
 
-.betting-buttons {
-    border-radius: 5px;
-    display: flex;
-    gap: 0.5rem;
-}
-
-.betting-buttons-away {
-    order: 1;
-}
-
-.betting-buttons-home {
-    order: 3;
-}
-
-.betting-buttons-home button {
-    background: var(--home-color-alt);
-    border-radius: 5px;
-    color: white;
-    border: none;
-    display: block;
-    width: 100%;
-    padding: 0.3rem 0.6rem;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
-
-.betting-buttons-away button {
-    background: var(--away-color-alt);
-    border-radius: 5px;
-    color: white;
-    border: none;
-    display: block;
-    width: 100%;
-    padding: 0.3rem 0.6rem;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
-
-.hover-indicator-betting {
-    position: absolute;
-    width: 2px;
-    background-color: rgba(255, 215, 0, 1);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 1);
-    transition: height 0.1s ease;
-    bottom: 0;
-    height: 0;
-    animation: pulse 1.5s infinite;
-    border-radius: 2px;
-}
-
-.betting-buttons-away .money-line,
-.betting-buttons-away .spread,
-.betting-buttons-away .total {
-    position: relative;
-}
-
-.betting-buttons-away .money-line .hover-indicator-betting,
-.betting-buttons-away .spread .hover-indicator-betting,
-.betting-buttons-away .total .hover-indicator-betting {
-    left: -5px;
-}
-
-.betting-buttons-away .money-line:hover .hover-indicator-betting,
-.betting-buttons-away .spread:hover .hover-indicator-betting,
-.betting-buttons-away .total:hover .hover-indicator-betting {
-    height: 100%;
-}
-
-.betting-buttons-home .money-line,
-.betting-buttons-home .spread,
-.betting-buttons-home .total {
-    position: relative;
-}
-
-.betting-buttons-home .money-line .hover-indicator-betting,
-.betting-buttons-home .spread .hover-indicator-betting,
-.betting-buttons-home .total .hover-indicator-betting {
-    right: -5px;
-}
-
-.betting-buttons-home .money-line:hover .hover-indicator-betting,
-.betting-buttons-home .spread:hover .hover-indicator-betting,
-.betting-buttons-home .total:hover .hover-indicator-betting {
-    height: 100%;
-}
-
-.moneyline-dropdown-content,
-.spread-dropdown-content,
-.total-dropdown-content {
-    position: relative;
-    background-color: rgba(0, 0, 0, 0.4);
-    min-width: 65px;
-    margin-bottom: 6px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
-    border-radius: 4px;
-}
-
-.moneyline-dropdown-content input,
-.spread-dropdown-content input,
-.total-dropdown-content input {
-    color: white;
-    text-decoration: none;
-    display: block;
-    font-size: 12px;
-    font-style: italic;
-    background-color: transparent;
-    border: none;
-    padding: 5px;
-    max-width: 60px;
-    border-bottom: 1px solid #555;
-}
-
-.moneyline-dropdown-content input:hover,
-.spread-dropdown-content input:hover,
-.total-dropdown-content input:hover {
-    width: 70px;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.checkmark {
-    display: inline-block;
-    width: 70px;
-    height: 20px;
-    text-align: center;
-    line-height: 20px;
-    cursor: pointer;
-    color: #fff;
-    background: #28a745;
-    border-radius: 50%;
-}
-
-.checkmark::after {
-    content: '\2713';
-    font-size: 16px;
-}
-
-.moneyline-dropdown-content label:hover,
-.spread-dropdown-content label:hover,
-.total-dropdown-content label:hover {
-    background-color: rgba(0, 128, 0, 0.25);
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}

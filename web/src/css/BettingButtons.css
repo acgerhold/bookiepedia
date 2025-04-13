@@ -1,0 +1,97 @@
+.betting-buttons-container {
+    padding: 1rem;
+}
+
+.betting-buttons-home {
+    order: 3;
+}
+
+.betting-buttons-home button {
+    width: 100%;
+
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+
+    background: color-mix(in srgb, var(--home-color-alt) 50%, transparent);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.betting-buttons-away {
+    order: 1;
+}
+
+.betting-buttons-away button {
+    width: 100%;
+
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+
+    background: color-mix(in srgb, var(--away-color-alt) 50%, transparent);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+
+
+
+
+.moneyline-dropdown-content,
+.spread-dropdown-content,
+.total-dropdown-content {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.4);
+    min-width: 65px;
+    margin-bottom: 6px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+}
+
+.moneyline-dropdown-content input,
+.spread-dropdown-content input,
+.total-dropdown-content input {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    max-width: 60px;
+    border-bottom: 1px solid #555;
+}
+
+.moneyline-dropdown-content input:hover,
+.spread-dropdown-content input:hover,
+.total-dropdown-content input:hover {
+    width: 70px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.checkmark {
+    display: inline-block;
+    width: 70px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    color: #fff;
+    background: #28a745;
+    border-radius: 50%;
+}
+
+.checkmark::after {
+    content: '\2713';
+    font-size: 16px;
+}
+
+.moneyline-dropdown-content label:hover,
+.spread-dropdown-content label:hover,
+.total-dropdown-content label:hover {
+    background-color: rgba(0, 128, 0, 0.25);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
