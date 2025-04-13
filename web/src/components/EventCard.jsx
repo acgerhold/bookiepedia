@@ -69,7 +69,7 @@ const EventCard = ({ event, onAddBet }) => {
       <div key={`${team}-${market}`} className="bet-button">
         <button
           onClick={() => toggleDropdown(market, team)}
-          className={`button ${team === event.teamHome ? "betting-buttons-home" : "betting-buttons-away"}`}
+          className={`button ${team === event.teamHome ? "home" : "away"}`}
           id={`event-${team}-${market.toLowerCase()}`}
         >
           {market === "Moneyline" ? "ML" : market}
@@ -127,7 +127,7 @@ const EventCard = ({ event, onAddBet }) => {
         {/* Hidden data attributes */}
       </div>
       <div className="event-container">
-        <div className="betting-buttons-container betting-buttons-away">
+        <div className="betting-buttons-container away">
           {renderBettingButtons(event.teamAway)}
         </div>
         <div className="event-stats">
@@ -177,6 +177,9 @@ const EventCard = ({ event, onAddBet }) => {
                 <span className="team-name-text">{event.teamAwayNameAbr}</span>
                 <img src={event.teamAwayLogo} alt="away" className="event-team-logo-away" />
               </div>
+              <div className="event-status">
+                <span className="event-status-text">{event.eventStatus}</span>
+              </div>
               <div className="team-details">
                 <span className="team-name-text">{event.teamHomeNameAbr}</span>
                 <img src={event.teamHomeLogo} alt="home" className="event-team-logo-home" />
@@ -184,7 +187,7 @@ const EventCard = ({ event, onAddBet }) => {
             </>
           )}
         </div>
-        <div className="betting-buttons-container betting-buttons-home">
+        <div className="betting-buttons-container home">
           {renderBettingButtons(event.teamHome)}
         </div>
       </div>

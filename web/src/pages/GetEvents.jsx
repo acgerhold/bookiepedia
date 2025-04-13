@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import BookiepediaClient from "../api/bookiepediaClient";
 import Header from "../components/Header";
 import EventCard from "../components/EventCard";
-import "../css/GetEvents.css";
+import "../css/LeagueCard.css";
 
 const GetEvents = () => {
   const [client, setClient] = useState(null);
@@ -105,11 +105,11 @@ const GetEvents = () => {
           </div>
         </form>
       </div>
-      <div className={`events-container${!schedule ? "hidden" : ""}`}>
+      <div className={`events-container ${!schedule ? "hidden" : ""}`}>
         <h3>
-          <span id="search-criteria-display">{schedule ? `"${schedule}"` : ""}</span>
+          <span className="search-criteria-display">{schedule ? `${schedule.scheduleName}` : ""}</span>
         </h3>
-        <div id="search-results-display">
+        <div className="search-results-display">
           {events.length > 0 ? (
             events.map((event) => (
               <EventCard key={event.eventId} event={event} onAddBet={handleAddBet} />

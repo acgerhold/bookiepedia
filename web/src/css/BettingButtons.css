@@ -1,33 +1,39 @@
+.bet-button {
+    padding: .25rem;
+}
+
 .betting-buttons-container {
     padding: 1rem;
 }
 
-.betting-buttons-home {
+.betting-buttons-container.home {
     order: 3;
 }
 
-.betting-buttons-home button {
+.button {
     width: 100%;
+    border-radius: 6px;
 
     font-weight: bold;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 
-    background: color-mix(in srgb, var(--home-color-alt) 50%, transparent);
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
-.betting-buttons-away {
+.button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.home button {
+    background: color-mix(in srgb, var(--home-color-alt) 25%, transparent);
+}
+
+.betting-buttons-container.away {
     order: 1;
 }
 
-.betting-buttons-away button {
-    width: 100%;
-
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-
-    background: color-mix(in srgb, var(--away-color-alt) 50%, transparent);
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+.away button {
+    background: color-mix(in srgb, var(--away-color-alt) 15%, transparent);
 }
 
 

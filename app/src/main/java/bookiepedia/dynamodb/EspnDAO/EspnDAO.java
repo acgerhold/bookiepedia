@@ -215,8 +215,13 @@ public class EspnDAO {
                 e.setEventStatusId(status.getJSONObject("type")
                         .optString("id", INVALID_STRING_REPLACER));
                 // Event Status
-                e.setEventStatus(status.getJSONObject("type")
+                // Set status text to "Scheduled" instead of default (event date)
+                if (e.getEventStatusId().equals("1")) {
+                    e.setEventStatus("Scheduled");
+                } else {
+                    e.setEventStatus(status.getJSONObject("type")
                         .optString("shortDetail", INVALID_STRING_REPLACER));
+                }
                 // Home Team Score (Current or Final)
                 e.setScoreHome(homeTeam.optInt("score", -1));
                 // Away Team Score (Current or Final)

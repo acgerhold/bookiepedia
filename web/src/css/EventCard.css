@@ -1,8 +1,29 @@
+.events-container {
+    padding: 1rem;
+    margin: 1.25rem auto;
+    width: 95%;
+
+    border-radius: 8px;
+    background: #00000048;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(6px);
+}
+
+.events-container h3 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .search-results-display {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 equal-width columns */
+    grid-template-columns: repeat(3, 1fr); /* 4 equal-width columns */
     gap: 1rem;
     padding: 1rem;
+}
+
+.search-criteria-display {
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 .event-card {
@@ -13,6 +34,8 @@
     background: linear-gradient(
         to right,
         color-mix(in srgb, var(--away-color) 50%, transparent),
+        color-mix(in srgb, var(--away-color-alt) 50%, transparent),
+        color-mix(in srgb, var(--home-color-alt) 50%, transparent),
         color-mix(in srgb, var(--home-color) 50%, transparent)
     );
     backdrop-filter: blur(6px);
@@ -22,7 +45,7 @@
 }
 
 .event-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .event-card:hover .hover-indicator {
@@ -34,6 +57,7 @@
 .event-container {
     display: flex;
     justify-content: center;
+    min-height: 165px;
 }
 
 .event-stats {
@@ -42,20 +66,11 @@
     margin-bottom: .25rem;
 }
 
-.team-details {
-    margin: .5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
-    border-radius: 8px;
-
-    background:  rgba(0 , 0 , 0 , 0.4);
-    backdrop-filter: blur(6px);
-}
 
 .event-status {
-    padding: 1rem;
+    padding: .5rem auto;
+    width: 75px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -72,6 +87,18 @@
     border-radius: 8px;
 
     background: rgba(0, 0, 0, 0.568);
+    backdrop-filter: blur(6px);
+}
+
+.team-details {
+    margin: .5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border-radius: 8px;
+
+    background:  rgba(0 , 0 , 0 , 0.4);
     backdrop-filter: blur(6px);
 }
 
