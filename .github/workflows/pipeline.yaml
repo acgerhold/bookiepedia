@@ -8,7 +8,6 @@ on:
 
 env:
 
-env:
   API_BASE_URL: ${{ secrets.API_BASE_URL }}
   COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
   COGNITO_REDIRECT_SIGNIN: ${{ secrets.COGNITO_REDIRECT_SIGNIN }}
