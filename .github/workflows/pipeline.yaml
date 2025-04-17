@@ -72,10 +72,6 @@ jobs:
       - uses: actions/setup-node@v4
       - uses: aws-actions/setup-sam@v2
 
-      - name: Build Java Project
-        run: |
-          ./gradlew build -x test
-
       - name: Build SAM resources
         run: |
           sam build --template ${SAM_TEMPLATE}
