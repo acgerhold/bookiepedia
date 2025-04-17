@@ -379,19 +379,19 @@ public class EspnDAO {
 
         dynamoDbMapper.save(l);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String leagueJson;
+        // ObjectMapper mapper = new ObjectMapper();
+        // String leagueJson;
 
-        try {
-            // Create JSON of new League object
-            leagueJson = mapper.writeValueAsString(l);
+        // try {
+        //     // Create JSON of new League object
+        //     leagueJson = mapper.writeValueAsString(l);
 
-            // Scan for data quality
-            DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
-            dataQualityScanner.scan();
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
+        //     // Scan for data quality
+        //     //DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
+        //     //dataQualityScanner.scan();
+        // } catch (JsonProcessingException jpe) {
+        //     throw new RuntimeException(jpe);
+        // }
     }
 
 }

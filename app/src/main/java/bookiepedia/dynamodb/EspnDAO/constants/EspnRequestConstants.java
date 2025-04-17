@@ -2,7 +2,6 @@ package bookiepedia.dynamodb.EspnDAO.constants;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
@@ -20,6 +19,7 @@ public class EspnRequestConstants {
 
     // Date Formatting
     public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     public static final DateTimeFormatter yyyy_MM_dd = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter yyyy_MM_DD_T_HH_MM_X = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mmX");
     public static final DateTimeFormatter yyyy_MM = DateTimeFormatter.ofPattern("yyyy-MM");
