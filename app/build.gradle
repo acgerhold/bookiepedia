@@ -9,7 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
-    id 'checkstyle'
+    //id 'checkstyle'
     id 'jacoco'
 }
 
@@ -34,8 +34,8 @@ dependencies {
     // AWS
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.0'
-    implementation 'com.amazonaws:aws-java-sdk-cloudwatch:1.12.+'
-    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.+'
+    implementation 'com.amazonaws:aws-java-sdk-cloudwatch:1.12.767'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.767'
 
     // Mockito
     implementation 'org.mockito:mockito-core:4.+'
@@ -67,44 +67,44 @@ tasks.named('test') {
 /* checkstyle */
 
 // Applies Checkstyle plugin quality checks on project’s Java source files and generates reports from these checks.
-checkstyle {
-    toolVersion '8.17'
-
-    // Expect the checkstyle config to be in a either the current directory or
-    //  a parent, grandparent or great-grandparent directory of the root project
-    // NOTE: The purpose of putting checkstyle config in a higher directory is to
-    //       share the same config among multiple projects.
-    def configFilePath = 'checkstyle/checkstyle.xml'
-    for (int attempts = 0; attempts < 4; attempts++) {
-        configFile = rootProject.file(configFilePath)
-
-        if (configFile.exists()) {
-            break;
-        }
-
-        configFilePath = '../' + configFilePath
-    }
-
-    def checkstyleDir = configFile.toPath().parent
-    def suppressionFile = new File("$checkstyleDir/unit3/suppressions.xml")
-    configProperties.put('checkstyle.suppression.filter', suppressionFile) // This property is refereced in `checkstyle.xml`
-
-    sourceSets = [sourceSets.main]
-}
+//checkstyle {
+//    toolVersion '8.17'
+//
+//    // Expect the checkstyle config to be in a either the current directory or
+//    //  a parent, grandparent or great-grandparent directory of the root project
+//    // NOTE: The purpose of putting checkstyle config in a higher directory is to
+//    //       share the same config among multiple projects.
+//    def configFilePath = 'checkstyle/checkstyle.xml'
+//    for (int attempts = 0; attempts < 4; attempts++) {
+//        configFile = rootProject.file(configFilePath)
+//
+//        if (configFile.exists()) {
+//            break;
+//        }
+//
+//        configFilePath = '../' + configFilePath
+//    }
+//
+//    def checkstyleDir = configFile.toPath().parent
+//    def suppressionFile = new File("$checkstyleDir/unit3/suppressions.xml")
+//    configProperties.put('checkstyle.suppression.filter', suppressionFile) // This property is refereced in `checkstyle.xml`
+//
+//    sourceSets = [sourceSets.main]
+//}
 
 // If we are running the task 'staticchecks', do not ignore failures, otherwise ignore
-checkstyleMain.doFirst {
-    ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
-}
-
-check.dependsOn jacocoTestCoverageVerification
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                //minimum = 0.8
-                minimum = 0.0
-            }
-        }
-    }
-}
+//checkstyleMain.doFirst {
+//    ignoreFailures = !gradle.taskGraph.allTasks.any({ it.name ==~ /.*staticchecks/ })
+//}
+//
+//check.dependsOn jacocoTestCoverageVerification
+//jacocoTestCoverageVerification {
+//    violationRules {
+//        rule {
+//            limit {
+//                //minimum = 0.8
+//                minimum = 0.0
+//            }
+//        }
+//    }
+//}

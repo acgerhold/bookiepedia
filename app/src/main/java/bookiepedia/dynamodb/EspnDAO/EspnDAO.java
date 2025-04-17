@@ -1,13 +1,11 @@
 package bookiepedia.dynamodb.EspnDAO;
 
 import bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants;
-
 import bookiepedia.dynamodb.dataqualitycheck.DataQualityScanner;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
 import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.dynamodb.models.assets.Team;
-
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.CENTRAL_ZONE;
 import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.yyyy_MM_dd;
 
 public class EspnDAO {
@@ -139,146 +136,156 @@ public class EspnDAO {
 
         // Extract the "events" JSONArray from the response and adding each JSONObject (event) to a list
         JSONArray eventsJson = espnResponse.getJSONArray("events");
-        List<JSONObject> eventJsonList = IntStream.range(0, eventsJson.length())
-                .mapToObj(eventsJson::getJSONObject)
-                .collect(Collectors.toList());
-
-        List<List<JSONObject>> eventJsonListSplit = splitEvents(eventJsonList, 20);
-        // Splitting the list of events into chunks, 7 days of MLB events returns 100 events in the result.
-        // Calling fetchSchedule with all 100 events makes the request time out before finishing.
-        // Splitting into chunks 5 chunks of 20 still causes an issue, but retrying fetchSchedule() will...
-        // Eventually load remaining events into DynamoDB.
-        // Placeholder for threading
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        // List that will contain each created Event's JSON and their data quality scores
         List<String> eventList = new ArrayList<>();
-        List<Double> dataQualityScores = new ArrayList<>();
-        // Stream the list of Event JSONObjects to extract data for Event object attributes
-        List<JSONObject> firstChunk = eventJsonListSplit.get(0);
-        // for (List<JSONObject> chunk : eventJsonListSplit) {
+
+        if (!eventsJson.isEmpty()) {
+            List<JSONObject> eventJsonList = IntStream.range(0, eventsJson.length())
+                    .mapToObj(eventsJson::getJSONObject)
+                    .collect(Collectors.toList());
+
+            List<List<JSONObject>> eventJsonListSplit = splitEvents(eventJsonList, 20);
+            // Splitting the list of events into chunks, 7 days of MLB events returns 100 events in the result.
+            // Calling fetchSchedule with all 100 events makes the request time out before finishing.
+            // Splitting into chunks 5 chunks of 20 still causes an issue, but retrying fetchSchedule() will...
+            // Eventually load remaining events into DynamoDB.
+            // Placeholder for threading
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            // List that will contain each created Event's JSON and their data quality scores
+
+            //List<Double> dataQualityScores = new ArrayList<>();
+            // Stream the list of Event JSONObjects to extract data for Event object attributes
+            List<JSONObject> firstChunk = eventJsonListSplit.get(0);
+            // for (List<JSONObject> chunk : eventJsonListSplit) {
             firstChunk.forEach(event -> {
 
-                    Event e = new Event();
+                Event e = new Event();
 
-                    // Organize different collections of data within response
-                    JSONObject competition = event.getJSONArray("competitions").getJSONObject(0);
-                    JSONArray competitors = competition.getJSONArray("competitors");
-                    JSONObject homeTeam = competitors.getJSONObject(0);
-                    JSONObject awayTeam = competitors.getJSONObject(1);
-                    JSONObject status = event.getJSONObject("status");
+                // Organize different collections of data within response
+                JSONObject competition = event.getJSONArray("competitions").getJSONObject(0);
+                JSONArray competitors = competition.getJSONArray("competitors");
+                JSONObject homeTeam = competitors.getJSONObject(0);
+                JSONObject awayTeam = competitors.getJSONObject(1);
+                JSONObject status = event.getJSONObject("status");
 
-                    // ID
-                    e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
-                    // Schedule ID
-                    e.setScheduleId(String.format("%s-%s",
-                            leagueId, EspnRequestConstants.NOW.format(yyyy_MM_dd)));
-                    // Event Name
-                    e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
-                    // Event Name (Short)
-                    e.setEventNameShort(event.optString("shortName", INVALID_STRING_REPLACER));
-                    // Headline
-                    if (!competition.getJSONArray("notes").isEmpty()) {
-                        e.setEventHeadline(competition.getJSONArray("notes")
-                                .getJSONObject(0)
-                                .optString("headline", INVALID_STRING_REPLACER));
-                    } else {
-                        e.setEventHeadline("-");
-                    }
-                    // League ID
-                    e.setLeagueId(espnResponse.getJSONArray("leagues")
+                // ID
+                e.setEventId(event.optString("id", INVALID_STRING_REPLACER));
+                // Schedule ID
+                e.setScheduleId(String.format("%s-%s",
+                        leagueId, EspnRequestConstants.NOW.format(yyyy_MM_dd)));
+                // Event Name
+                e.setEventName(event.optString("name", INVALID_STRING_REPLACER));
+                // Event Name (Short)
+                e.setEventNameShort(event.optString("shortName", INVALID_STRING_REPLACER));
+                // Headline
+                if (!competition.getJSONArray("notes").isEmpty()) {
+                    e.setEventHeadline(competition.getJSONArray("notes")
                             .getJSONObject(0)
-                            .optString("id", INVALID_STRING_REPLACER));
-                    // Event Date
-                    String date = event.optString("date", INVALID_STRING_REPLACER);
-                    ZonedDateTime dateInCentral = ZonedDateTime.parse(date, EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X)
-                                    .withZoneSameInstant(EspnRequestConstants.CENTRAL_ZONE);
-                    e.setEventDate(dateInCentral.format(EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X));
-                    // Event Season
-                    e.setEventSeasonId(event.getJSONObject("season")
-                            .optString("type", INVALID_STRING_REPLACER));
-                    // Home Team
-                    e.setTeamHome(homeTeam.getJSONObject("team")
-                            .optString("id", INVALID_STRING_REPLACER));
-                    // Add Team info to DynamoDB if Team doesnt exist yet
-                    if (dynamoDbMapper.load(Team.class, e.getTeamHome(), e.getLeagueId()) == null) {
-                        extractTeam(homeTeam.getJSONObject("team"), e.getLeagueId());
-                    }
-                    // Away Team
-                    e.setTeamAway(awayTeam.getJSONObject("team")
-                            .optString("id", INVALID_STRING_REPLACER));
-                    if (dynamoDbMapper.load(Team.class, e.getTeamAway(), e.getLeagueId()) == null) {
-                        extractTeam(awayTeam.getJSONObject("team"), e.getLeagueId());
-                    }
-                    // Event Status ID
-                    e.setEventStatusId(status.getJSONObject("type")
-                            .optString("id", INVALID_STRING_REPLACER));
-                    // Event Status
+                            .optString("headline", INVALID_STRING_REPLACER));
+                } else {
+                    e.setEventHeadline("-");
+                }
+                // League ID
+                e.setLeagueId(espnResponse.getJSONArray("leagues")
+                        .getJSONObject(0)
+                        .optString("id", INVALID_STRING_REPLACER));
+                // Event Date
+                String date = event.optString("date", INVALID_STRING_REPLACER);
+                ZonedDateTime dateInCentral = ZonedDateTime.parse(date, EspnRequestConstants.yyyy_MM_DD_T_HH_MM_X)
+                        .withZoneSameInstant(EspnRequestConstants.CENTRAL_ZONE);
+                e.setEventDate(dateInCentral.format(EspnRequestConstants.MMMM_d_yyyy_h_mm_a));
+                // Event Season
+                e.setEventSeasonId(event.getJSONObject("season")
+                        .optString("type", INVALID_STRING_REPLACER));
+                // Home Team
+                e.setTeamHome(homeTeam.getJSONObject("team")
+                        .optString("id", INVALID_STRING_REPLACER));
+                // Add Team info to DynamoDB if Team doesnt exist yet
+                if (dynamoDbMapper.load(Team.class, e.getTeamHome(), e.getLeagueId()) == null) {
+                    extractTeam(homeTeam.getJSONObject("team"), e.getLeagueId());
+                }
+                // Away Team
+                e.setTeamAway(awayTeam.getJSONObject("team")
+                        .optString("id", INVALID_STRING_REPLACER));
+                if (dynamoDbMapper.load(Team.class, e.getTeamAway(), e.getLeagueId()) == null) {
+                    extractTeam(awayTeam.getJSONObject("team"), e.getLeagueId());
+                }
+                // Event Status ID
+                e.setEventStatusId(status.getJSONObject("type")
+                        .optString("id", INVALID_STRING_REPLACER));
+                // Event Status
+                // Set status text to "Scheduled" instead of default (event date)
+                if (e.getEventStatusId().equals("1")) {
+                    e.setEventStatus("Scheduled");
+                } else {
                     e.setEventStatus(status.getJSONObject("type")
-                            .optString("shortDetail", INVALID_STRING_REPLACER));
-                    // Home Team Score (Current or Final)
-                    e.setScoreHome(homeTeam.optInt("score", -1));
-                    // Away Team Score (Current or Final)
-                    e.setScoreAway(awayTeam.optInt("score", -1));
-                    // Total Score
-                    e.setScoreTotal(e.getScoreHome() + e.getScoreAway());
-                    // Links
-                    JSONArray links = event.getJSONArray("links");
-                    List<String> linksList = IntStream.range(0, links.length())
-                            .mapToObj(links::getJSONObject)
-                            .map(link -> link.optString("href", INVALID_STRING_REPLACER))
-                            .collect(Collectors.toList());
-                    e.setLinks(linksList);
-                    // Winning Team
-                    if (e.getEventStatusId().equals("3")) {
-                        e.setTeamWinner(homeTeam.optBoolean("winner") ?
-                                homeTeam.optString("id", INVALID_STRING_REPLACER) :
-                                awayTeam.optString("id", INVALID_STRING_REPLACER));
-                    } else {
-                        e.setTeamWinner("-1");
-                    }
-                    // Team Home Logo & Colors
-                    Team teamHome = dynamoDbMapper.load(Team.class, leagueId, e.getTeamHome());
-                    e.setTeamHomeLogo(teamHome.getTeamLogo());
-                    e.setTeamHomeColor(teamHome.getTeamColor());
-                    e.setTeamHomeColorAlt(teamHome.getTeamAlternateColor());
-                    // Team Away Logo & Colors
-                    Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
-                    e.setTeamAwayLogo(teamAway.getTeamLogo());
-                    e.setTeamAwayColor(teamAway.getTeamColor());
-                    e.setTeamAwayColorAlt(teamAway.getTeamAlternateColor());
+                        .optString("shortDetail", INVALID_STRING_REPLACER));
+                }
+                // Home Team Score (Current or Final)
+                e.setScoreHome(homeTeam.optInt("score", -1));
+                // Away Team Score (Current or Final)
+                e.setScoreAway(awayTeam.optInt("score", -1));
+                // Total Score
+                e.setScoreTotal(e.getScoreHome() + e.getScoreAway());
+                // Links
+                JSONArray links = event.getJSONArray("links");
+                List<String> linksList = IntStream.range(0, links.length())
+                        .mapToObj(links::getJSONObject)
+                        .map(link -> link.optString("href", INVALID_STRING_REPLACER))
+                        .collect(Collectors.toList());
+                e.setLinks(linksList);
+                // Winning Team
+                if (e.getEventStatusId().equals("3")) {
+                    e.setTeamWinner(homeTeam.optBoolean("winner") ? "H" : "A");
+                } else {
+                    e.setTeamWinner("-1");
+                }
+                // Team Home Logo & Colors
+                Team teamHome = dynamoDbMapper.load(Team.class, leagueId, e.getTeamHome());
+                e.setTeamHomeLogo(teamHome.getTeamLogo());
+                e.setTeamHomeColor(teamHome.getTeamColor());
+                e.setTeamHomeColorAlt(teamHome.getTeamAlternateColor());
+                e.setTeamHomeNameAbr(teamHome.getTeamNameAbr());
+                // Team Away Logo & Colors
+                Team teamAway = dynamoDbMapper.load(Team.class, leagueId, e.getTeamAway());
+                e.setTeamAwayLogo(teamAway.getTeamLogo());
+                e.setTeamAwayColor(teamAway.getTeamColor());
+                e.setTeamAwayColorAlt(teamAway.getTeamAlternateColor());
+                e.setTeamAwayNameAbr(teamAway.getTeamNameAbr());
 
-                    try {
+                try {
 
-                        // Create JSON of new Event object
-                        String eventJson = mapper.writeValueAsString(e);
+                    // Create JSON of new Event object
+                    String eventJson = mapper.writeValueAsString(e);
 
-                        // Scan each Event JSON's data quality
-                        DataQualityScanner dataQualityScanner = new DataQualityScanner(eventJson, THRESHOLD);
-                        System.out.print("(" + e.getEventId() + ") ");
-                        dataQualityScanner.scan();
+                    // Scan each Event JSON's data quality
+                    DataQualityScanner dataQualityScanner = new DataQualityScanner(eventJson, THRESHOLD);
+                    System.out.print("(" + e.getEventId() + ") ");
+                    dataQualityScanner.scan();
 
-                        // Add Event JSON to list of Event JSONs
-                        // Add Event's data quality score to list of each Event's score to calculate average
-                        eventList.add(eventJson);
-                        dataQualityScores.add(dataQualityScanner.getQualityPercentage());
+                    // Add Event JSON to list of Event JSONs
+                    // Add Event's data quality score to list of each Event's score to calculate average
+                    eventList.add(eventJson);
+                    //dataQualityScores.add(dataQualityScanner.getQualityPercentage());
 
-                    } catch (JsonProcessingException jpe) {
-                        throw new RuntimeException(jpe);
-                    }
+                } catch (JsonProcessingException jpe) {
+                    throw new RuntimeException(jpe);
+                }
             });
-        // }
+        }
+            // }
 
-        // Take average of each Event's data quality score and print result
-        // * May include data quality score as an attribute for each object
-        double avgDataQualityScore = dataQualityScores.stream()
-                .mapToDouble(Double::doubleValue)
-                .average()
-                .orElse(0.0);
-        System.out.println("\nAverage - " + avgDataQualityScore + "%");
+            // Take average of each Event's data quality score and print result
+            // * May include data quality score as an attribute for each object
+    //        double avgDataQualityScore = dataQualityScores.stream()
+    //                .mapToDouble(Double::doubleValue)
+    //                .average()
+    //                .orElse(0.0);
+    //        System.out.println("\nAverage - " + avgDataQualityScore + "%");
 
-        return eventList;
+            return eventList;
+
     }
 
     public static List<List<JSONObject>> splitEvents(List<JSONObject> eventJsonList, int chunkSize) {
@@ -372,19 +379,19 @@ public class EspnDAO {
 
         dynamoDbMapper.save(l);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String leagueJson;
+        // ObjectMapper mapper = new ObjectMapper();
+        // String leagueJson;
 
-        try {
-            // Create JSON of new League object
-            leagueJson = mapper.writeValueAsString(l);
+        // try {
+        //     // Create JSON of new League object
+        //     leagueJson = mapper.writeValueAsString(l);
 
-            // Scan for data quality
-            DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
-            dataQualityScanner.scan();
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
+        //     // Scan for data quality
+        //     //DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
+        //     //dataQualityScanner.scan();
+        // } catch (JsonProcessingException jpe) {
+        //     throw new RuntimeException(jpe);
+        // }
     }
 
 }

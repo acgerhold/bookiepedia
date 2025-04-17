@@ -72,6 +72,8 @@ public class Event {
     private String teamAwayColor;
     private String teamHomeColorAlt;
     private String teamAwayColorAlt;
+    private String teamHomeNameAbr;
+    private String teamAwayNameAbr;
 
     // GETTERS
 
@@ -194,6 +196,16 @@ public class Event {
         return teamAwayColorAlt;
     }
 
+    @DynamoDBAttribute(attributeName = "teamHomeNameAbr")
+    public String getTeamHomeNameAbr() {
+        return teamHomeNameAbr;
+    }
+
+    @DynamoDBAttribute(attributeName = "teamAwayNameAbr")
+    public String getTeamAwayNameAbr() {
+        return teamAwayNameAbr;
+    }
+
     // SETTERS
 
     public void setEventId(String eventId) {
@@ -290,5 +302,13 @@ public class Event {
 
     public void setTeamAwayColorAlt(String teamAwayColorAlt) {
         this.teamAwayColorAlt = teamAwayColorAlt;
+    }
+
+    public void setTeamHomeNameAbr(String teamHomeNameAbr) {
+        this.teamHomeNameAbr = teamHomeNameAbr;
+    }
+
+    public void setTeamAwayNameAbr(String teamAwayNameAbr) {
+        this.teamAwayNameAbr = teamAwayNameAbr;
     }
 }

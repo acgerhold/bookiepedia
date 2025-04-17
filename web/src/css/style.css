@@ -53,13 +53,12 @@ Changed to Win10 start menu widget type of look
 */
 
 .card {
-    color: white;
-    background-color: rgba(0,0,0,0.7);
-    margin: 20px;
-    padding: 20px;
-    border-radius:10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    text-align: center;
+    background: #1a1a1a; /* Dark background for the card */
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .error {
@@ -228,8 +227,7 @@ Refresh button to call ESPN API and update events and their scores for all suppo
 }
 
 /*
-Grid that the events are contained in and the cards for each event\
-Adjust the color split for event card with %s in background
+Grid that each event is contained in
 */
 
 .events-grid {
@@ -239,20 +237,63 @@ Adjust the color split for event card with %s in background
     justify-content:center;
 }
 
+/*
+Each event card contained in .events-grid
+*/
+
 .event-card {
     position: relative;
-    background: linear-gradient(to right, var(--away-color), var(--home-color)) top,
-                linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.9) 100%) bottom;
-    background-size: 100% 70%, 100% 30%;
-    background-repeat: no-repeat;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0px 8px rgba(0,0,0,0.7);
-    padding: 20px 15px;
-    width: calc(25% - 20px);
     box-sizing: border-box;
+    box-shadow: 0 0px 8px rgba(0,0,0,0.7);
+    width: calc(25% - 20px);
+    overflow: hidden;
     transition: transform 0.2s ease;
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
 }
+
+
+
+
+.event-container {
+    background: linear-gradient(to right, var(--away-color), var(--home-color));
+    display: flex;
+    align-items: center;
+}
+
+.event-details {
+    flex-grow: 1;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0.9) 100%);
+    display: flex; /* Enables Flexbox layout */
+    flex-direction: column; /* Stacks child elements vertically */
+    align-items: center; /* Centers child elements horizontally */
+    justify-content: center; /* Centers child elements vertically */
+    text-align: center; /* Centers text within each span */
+}
+
+
+
+
+
+
+.event-stats {
+    order: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+
+
+.event-status {
+    width: 100px;
+    margin-top: auto;
+    margin-bottom: 4px;
+}
+
+
 
 .event-card:hover {
     transform: scale(1.05);
@@ -269,46 +310,95 @@ Adjust the color split for event card with %s in background
 Event logo container and @ symbol
 */
 
-.event-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+
+
+.team-name-text {
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+.event-status-text {
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+.score-text {
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+.team-winner-text {
+    font-weight: bold;
+    font-size: 12px;
+}
+.live-text {
+    font-weight: bold;
+    color: red;
+    font-size: 12px;
+}
+.live-circle {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+.event-name-text {
+    margins: 2px;
+    font-weight: bold;
+    font-size: 16px;
+}
+.event-date-text {
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
-.event-logos {
-    order: 2;
+
+
+
+
+.team-details {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
+    flex-direction: column;
+    align-items: center; /* Centers items horizontally */
 }
 
 .event-team-logo-away {
     width: 100px;
     height: 100px;
     object-fit: fill;
-    margin: 0 15px;
     background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
     box-shadow: -4px 4px 2px rgba(0, 0, 0, 0.6);
-    margin-bottom: 5px;
 }
+
+
 
 .event-team-logo-home {
     width: 100px;
     height: 100px;
     object-fit: fill;
-    margin: 0 15px;
     background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
     box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.6);
-    margin-bottom: 5px;
 }
 
+
+
 .at-symbol {
-    position: relative;
     font-size: 20px;
     font-weight: bold;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
+
+
+
+/*
+Details about the event like the name and headline
+*/
+
+
+
 
 /*
 Scores of the event and event status
@@ -323,58 +413,9 @@ Status is hidden if the game is not in progress and shows the date of the event
     position: relative;
 }
 
-/*
-Split home score and away score to be able to put scores in a static position using left/right and translate?
-The large font was changing the spacing too much vs games that werent in progress
-*/
 
-.home-score {
-    position: absolute;
-    font-size: 32px;
-    left: 125px;
-    bottom: 5px;
-    top: 0;
-    transform: translateX(-100%);
-    text-shadow: -3px 3px 6px rgba(0, 0, 0, 0.7);
-}
 
-.away-score {
-    position: absolute;
-    font-size: 32px;
-    right: 125px;
-    bottom: 5px;
-    top: 0;
-    transform: translateX(100%);
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-}
 
-.event-status {
-    font-size: 16px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    font-style: italic;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
-
-/*
-Details about the event like the name and headline
-*/
-.event-details {
-    margin-top: 12.5px;
-    text-align: center;
-    width: flex;
-    height: 40px;
-}
-
-.event-name {
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.event-headline {
-    font-style: italic;
-}
 
 /*
 Live indicator, can adjust positioning with top/left/right/bottom or %s and translateX/Y
@@ -382,26 +423,7 @@ to center horizontally easier
 */
 
 
-.live-indicator {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    color: red;
-    font-size: 12px;
-}
 
-.live-circle {
-    width: 8px;
-    height: 8px;
-    background-color: red;
-    border-radius: 50%;
-    margin-right: 5px;
-    animation: pulse 1s infinite;
-}
 
 /*
 Set the pulse of the live circle
@@ -424,11 +446,7 @@ Betting buttons
 */
 
 .betting-buttons {
-    display: flex;
-    flex-direction: column;
     border-radius: 5px;
-    display: block;
-    margin-bottom: 10px;
 }
 
 .betting-buttons-away {
@@ -457,26 +475,13 @@ Betting buttons
     width: 100%;
 }
 
-.money-line {
-    margin-bottom: 6px;
+.button {
+    margin-bottom: 5px;
     font-weight: bold;
     text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
-.spread {
-    margin-bottom: 6px;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
-
-.total {
-    margin-bottom: 6px;
-    font-weight: bold;
-    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
-}
 
 
 /*

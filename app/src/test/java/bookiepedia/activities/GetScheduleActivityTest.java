@@ -5,14 +5,14 @@ import bookiepedia.activities.results.GetScheduleResult;
 import bookiepedia.dynamodb.ScheduleDAO;
 import bookiepedia.dynamodb.models.Schedule;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-import org.junit.jupiter.api.Test;
 
 public class GetScheduleActivityTest {
 
@@ -23,7 +23,7 @@ public class GetScheduleActivityTest {
 
         @BeforeEach
         public void setUp() {
-            initMocks(this);
+            MockitoAnnotations.openMocks(this);
             getScheduleActivity = new GetScheduleActivity(scheduleDAO);
         }
 

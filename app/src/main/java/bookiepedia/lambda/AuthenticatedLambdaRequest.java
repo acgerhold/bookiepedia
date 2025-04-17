@@ -29,12 +29,48 @@ public class AuthenticatedLambdaRequest<T> extends LambdaRequest<T> {
         }
     }
 
+    // New getClaims() method to handle unsafe/unchecked operation
+    @SuppressWarnings("unchecked")
     private Map<String, String> getClaims() throws JsonProcessingException {
-        // If we are running locally using SAM, we have to manually decode claims from the JWT Token.
-        return System.getenv().get("AWS_SAM_LOCAL") == null ?
-                (Map<String, String>) super.getRequestContext().getAuthorizer().get("claims") :
-                getClaimsFromAuthHeader(super.getHeaders().get("Authorization"));
+        if (System.getenv().get("AWS_SAM_LOCAL") == null) {
+            // Get the claims from the authorizer context
+            Object claimsObj = super.getRequestContext().getAuthorizer().get("claims");
+            if (claimsObj instanceof Map) {
+                // Verify that the map contains String keys and String values
+                Map<?, ?> rawClaims = (Map<?, ?>) claimsObj;
+                for (Map.Entry<?, ?> entry : rawClaims.entrySet()) {
+                    if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof String)) {
+                        throw new IllegalStateException("Claims map contains non-String key or value: " + entry);
+                    }
+                }
+                return (Map<String, String>) rawClaims;
+            } else {
+                throw new IllegalStateException("Authorizer claims are not a Map: " + claimsObj);
+            }
+        } else {
+            // Local SAM environment: decode claims from the Authorization header
+            return getClaimsFromAuthHeader(super.getHeaders().get("Authorization"));
+        }
     }
+
+//    This code was not letting the project build, was performing an unsafe/unchecked operation:
+
+//    super.getRequestContext().getAuthorizer().get("claims") returns an Object (as per the AWS Lambda Java runtime API
+//      for APIGatewayProxyRequestEvent).
+
+//    Were casting this Object directly to Map<String, String>, which is a generic type. Java’s type system cannot
+//      verify at compile time that the Object is indeed a Map<String, String>, so it issues an "unchecked cast" warning.
+
+//    This is unsafe because if the claims object is not a Map<String, String> at runtime
+//      (e.g., if it’s a Map<String, Object> or something else), you’ll get a ClassCastException
+
+    // Original
+//    private Map<String, String> getClaims() throws JsonProcessingException {
+//        // If we are running locally using SAM, we have to manually decode claims from the JWT Token.
+//        return System.getenv().get("AWS_SAM_LOCAL") == null ?
+//                (Map<String, String>) super.getRequestContext().getAuthorizer().get("claims") :
+//                getClaimsFromAuthHeader(super.getHeaders().get("Authorization"));
+//    }
 
     private Map<String, String> getClaimsFromAuthHeader(final String authorizationHeader)
             throws JsonProcessingException {

@@ -39,8 +39,8 @@ public class EspnDAOTest {
         String startDate = EspnRequestConstants.getStartDate();
         String endDate = EspnRequestConstants.getEndDate();
 
-        String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
-                EspnRequestConstants.NBA, startDate, endDate);
+        String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s",
+                EspnRequestConstants.NBA, startDate);
         String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
                 EspnRequestConstants.NHL, startDate, endDate);
         String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
@@ -100,28 +100,28 @@ public class EspnDAOTest {
 //        System.out.println("-");
 //    }
 
-//    @Test
-//    public void printEvents() {
-//        // Events Example - Values printed to terminal
-//
-//        // GIVEN & WHEN - Extracting values from ESPN API response to create an Event object for each event contained in request to ESPN API
-//        List<String> eventJsonList = espnDAO.extractEvents(result);
-//
-//        // THEN - An Event object will be created for each Event without any null or invalid attributes
-//        ObjectMapper mapper = new ObjectMapper();
-//        Event event;
-//        System.out.println("Events:\n-");
-//        for (int i = 0; i < eventJsonList.size(); i++) {
-//            System.out.println("(" + (i + 1) + "/" + eventJsonList.size() + ")");
-//            try {
-//                event = mapper.readValue(eventJsonList.get(i), Event.class);
-//            } catch (JsonProcessingException jpe) {
-//                throw new RuntimeException(jpe);
-//            }
-//            printEventAttributes(event);
-//        }
-//        System.out.println("-");
-//    }
+    @Test
+    public void printEvents() {
+        // Events Example - Values printed to terminal
+
+        // GIVEN & WHEN - Extracting values from ESPN API response to create an Event object for each event contained in request to ESPN API
+        List<String> eventJsonList = espnDAO.extractEvents(result);
+
+        // THEN - An Event object will be created for each Event without any null or invalid attributes
+        ObjectMapper mapper = new ObjectMapper();
+        Event event;
+        System.out.println("Events:\n-");
+        for (int i = 0; i < eventJsonList.size(); i++) {
+            System.out.println("(" + (i + 1) + "/" + eventJsonList.size() + ")");
+            try {
+                event = mapper.readValue(eventJsonList.get(i), Event.class);
+            } catch (JsonProcessingException jpe) {
+                throw new RuntimeException(jpe);
+            }
+            printEventAttributes(event);
+        }
+        System.out.println("-");
+    }
 
 //    @Test
 //    public void printTeams() {
@@ -236,3 +236,5 @@ public class EspnDAOTest {
     }
 
 }
+
+

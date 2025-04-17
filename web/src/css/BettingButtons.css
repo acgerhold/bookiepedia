@@ -1,0 +1,103 @@
+.bet-button {
+    padding: .25rem;
+}
+
+.betting-buttons-container {
+    padding: 1rem;
+}
+
+.betting-buttons-container.home {
+    order: 3;
+}
+
+.button {
+    width: 100%;
+    border-radius: 6px;
+
+    font-weight: bold;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.button:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.home button {
+    background: color-mix(in srgb, var(--home-color-alt) 25%, transparent);
+}
+
+.betting-buttons-container.away {
+    order: 1;
+}
+
+.away button {
+    background: color-mix(in srgb, var(--away-color-alt) 15%, transparent);
+}
+
+
+
+
+
+.moneyline-dropdown-content,
+.spread-dropdown-content,
+.total-dropdown-content {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.4);
+    min-width: 65px;
+    margin-bottom: 6px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+}
+
+.moneyline-dropdown-content input,
+.spread-dropdown-content input,
+.total-dropdown-content input {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    max-width: 60px;
+    border-bottom: 1px solid #555;
+}
+
+.moneyline-dropdown-content input:hover,
+.spread-dropdown-content input:hover,
+.total-dropdown-content input:hover {
+    width: 70px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.checkmark {
+    display: inline-block;
+    width: 70px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    color: #fff;
+    background: #28a745;
+    border-radius: 50%;
+}
+
+.checkmark::after {
+    content: '\2713';
+    font-size: 16px;
+}
+
+.moneyline-dropdown-content label:hover,
+.spread-dropdown-content label:hover,
+.total-dropdown-content label:hover {
+    background-color: rgba(0, 128, 0, 0.25);
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
