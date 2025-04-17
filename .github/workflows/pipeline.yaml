@@ -72,13 +72,13 @@ jobs:
       - uses: actions/setup-node@v4
       - uses: aws-actions/setup-sam@v2
 
-      - name: Build SAM resources
-        run: |
-          sam build --template ${SAM_TEMPLATE}
-
       - name: Build Java Project
         run: |
           ./gradlew build -x test
+
+      - name: Build SAM resources
+        run: |
+          sam build --template ${SAM_TEMPLATE}
 
       - name: Assume the pipeline user role
         uses: aws-actions/configure-aws-credentials@v4
