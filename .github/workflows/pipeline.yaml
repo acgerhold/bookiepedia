@@ -74,7 +74,11 @@ jobs:
 
       - name: Build SAM resources
         run: |
-          sam build --template ${SAM_TEMPLATE} --no-cached --skip-tests
+          sam build --template ${SAM_TEMPLATE}
+
+      - name: Build Java Project
+        run: |
+          ./gradlew build -x test
 
       - name: Assume the pipeline user role
         uses: aws-actions/configure-aws-credentials@v4
