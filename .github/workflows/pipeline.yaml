@@ -8,11 +8,11 @@ on:
 
 env:
 
-  # STUDENTS: Set these environment variables 
-  API_BASE_URL: https://c34z8gf7x4.execute-api.us-east-2.amazonaws.com/Prod/
-  COGNITO_DOMAIN: project-bookiepedia-acgerhold
-  COGNITO_REDIRECT_SIGNIN: https://d26opc8ntp7ss5.cloudfront.net
-  COGNITO_REDIRECT_SIGNOUT: https://d26opc8ntp7ss5.cloudfront.net
+env:
+  API_BASE_URL: ${{ secrets.API_BASE_URL }}
+  COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
+  COGNITO_REDIRECT_SIGNIN: ${{ secrets.COGNITO_REDIRECT_SIGNIN }}
+  COGNITO_REDIRECT_SIGNOUT: ${{ secrets.COGNITO_REDIRECT_SIGNOUT }}
 
   COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
   COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.COGNITO_USER_POOL_CLIENT_ID }}
@@ -25,10 +25,11 @@ env:
   SAM_TEMPLATE: template.yaml
 
   STACK_NAME: bookiepedia
-  PIPELINE_EXECUTION_ROLE: arn:aws:iam::891376997545:role/aws-sam-cli-managed-ServiceSt-PipelineExecutionRole-H033Dzw26MqM
-  CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::891376997545:role/aws-sam-cli-managed-Servi-CloudFormationExecutionRo-Xeq4YHihFZx6
-  ARTIFACTS_BUCKET: aws-sam-cli-managed-servicestage-p-artifactsbucket-xfw8z9ylcuxh
+  PIPELINE_EXECUTION_ROLE: ${{ secrets.PIPELINE_EXECUTION_ROLE }}
+  CLOUDFORMATION_EXECUTION_ROLE: ${{ secrets.CLOUDFORMATION_EXECUTION_ROLE }}
+  ARTIFACTS_BUCKET: ${{ secrets.ARTIFACTS_BUCKET }}
   REGION: us-east-2
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
 
 jobs:
 
@@ -38,13 +39,13 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/feature')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: aws-actions/setup-sam@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: aws-actions/setup-sam@v2
       - run: sam build --template ${SAM_TEMPLATE}
 
       - name: Assume the pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
@@ -63,17 +64,17 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: actions/setup-node@v3
-      - uses: aws-actions/setup-sam@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
+      - uses: aws-actions/setup-sam@v2
 
       - name: Build SAM resources
         run: |
           sam build --template ${SAM_TEMPLATE}
 
       - name: Assume the pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
@@ -84,7 +85,7 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Assume the pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
@@ -101,7 +102,7 @@ jobs:
             --region ${REGION} \
             --output-template-file packaged-prod.yaml
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: packaged-prod.yaml
           path: packaged-prod.yaml
@@ -130,7 +131,7 @@ jobs:
         run: npm run build
 
       - name: Upload NPM static build output
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: static-build
           path: web/build
@@ -140,16 +141,16 @@ jobs:
     needs: [build-and-package-main]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: actions/setup-node@v3
-      - uses: aws-actions/setup-sam@v1
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
+      - uses: aws-actions/setup-sam@v2
+      - uses: actions/download-artifact@v4
         with:
           name: packaged-prod.yaml
 
       - name: Assume the pipeline user role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
@@ -171,7 +172,7 @@ jobs:
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
 
       - name: Download NPM static resources
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: static-build
           path: build/static
@@ -182,3 +183,9 @@ jobs:
             build/static \
             s3://${ARTIFACTS_BUCKET}/static/ \
             --recursive
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
