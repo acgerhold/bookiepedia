@@ -258,7 +258,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.GetScheduleLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
@@ -280,7 +280,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.GetEventsForScheduleLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
@@ -302,7 +302,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.FetchScheduleLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
@@ -324,7 +324,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.AddBetToHistoryLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
@@ -346,7 +346,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.GetBetsForHistoryLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
@@ -368,7 +368,7 @@ Resources:
       Role: !GetAtt AccessRole.Arn
       CodeUri: app
       Handler: bookiepedia.lambda.RemoveBetFromHistoryLambda::handleRequest
-      Runtime: java11
+      Runtime: java17
       Architectures:
         - x86_64
       MemorySize: 512
