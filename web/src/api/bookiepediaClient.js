@@ -75,7 +75,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             console.log('Grabbing latest schedule...')
 
-            const response = await this.axiosClient.get(`league/${leagueId}/schedule`);
+            const response = await this.axiosClient.get(`/api/league/${leagueId}/schedule`);
             console.log('getSchedule() Response:', response.status);
 
             console.log('Schedule retrieved!')
@@ -96,7 +96,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             console.log("Filling in event data...")
 
-            const response = await this.axiosClient.get(`/schedule/${scheduleId}/events`);
+            const response = await this.axiosClient.get(`/api/schedule/${scheduleId}/events`);
             console.log('getEventsForSchedule() Response:', response.status);
 
             console.log('Events retrieved!')
@@ -116,7 +116,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             console.log('Fetching events...')
 
-            const response = await this.axiosClient.post(`/schedule`);
+            const response = await this.axiosClient.post(`/api/schedule`);
             console.log('fetchSchedule() Response: ', response.status);
 
             console.log('Events updated!');
@@ -133,7 +133,7 @@ export default class BookiepediaClient extends BindingClass {
     */
     async getBetsForHistory(weeklyHistoryId, errorCallback) {
         try {
-            const response = await this.axiosClient.get(`/history/${weeklyHistoryId}/bets`);
+            const response = await this.axiosClient.get(`/api/history/${weeklyHistoryId}/bets`);
             console.log('API Response: ', response.data);
             return response.data.betList;
         } catch (error) {
@@ -148,7 +148,7 @@ export default class BookiepediaClient extends BindingClass {
     */
     async addBetToHistory(bet, errorCallback) {
         try {
-             const response = await this.axiosClient.put('/history/bets', bet, {
+             const response = await this.axiosClient.put('/api/history/bets', bet, {
                 headers: {
                         'Content-Type': 'application/json'
                 }
@@ -166,7 +166,7 @@ export default class BookiepediaClient extends BindingClass {
     */
     async removeBetFromHistory(weeklyHistoryId, bet, errorCallback) {
         try {
-            const response = await this.axiosClient.delete(`/history/${weeklyHistoryId}/bets/${bet}`);
+            const response = await this.axiosClient.delete(`/api/history/${weeklyHistoryId}/bets/${bet}`);
             console.log('API Response: ', response.data);
             await this.getBetsForHistory(weeklyHistoryId);
             return response.data;
