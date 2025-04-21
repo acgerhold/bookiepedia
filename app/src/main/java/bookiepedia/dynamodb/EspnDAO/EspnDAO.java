@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import static bookiepedia.dynamodb.EspnDAO.constants.EspnRequestConstants.yyyy_MM_dd;
 
 public class EspnDAO {

@@ -157,23 +157,6 @@ Resources:
           ViewerProtocolPolicy : redirect-to-https
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
 
-  S3BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Condition: DeployCloudFront
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        # Restricting access to cloudfront only.
-        Statement:
-          -
-            Effect: Allow
-            Action: 's3:GetObject'
-            Resource:
-              - !Sub "arn:aws:s3:::${S3Bucket}/*"
-            Principal:
-              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
-
-
   #-----------------------------------------------------
   # Role/Permissions/Policy Configuration
   #-----------------------------------------------------
@@ -269,7 +252,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /league/{leagueId}/schedule
+            Path: /api/league/{leagueId}/schedule
             Method: get
             Auth:
               Authorizer: 'NONE'
@@ -291,7 +274,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /schedule/{scheduleId}/events
+            Path: /api/schedule/{scheduleId}/events
             Method: get
             Auth:
               Authorizer: 'NONE'
@@ -313,7 +296,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /schedule
+            Path: /api/schedule
             Method: post
             Auth:
               Authorizer: 'NONE'
@@ -335,7 +318,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /history/bets
+            Path: /api/history/bets
             Method: put
             Auth:
               Authorizer: 'NONE'
@@ -357,7 +340,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /history/{weeklyHistoryId}/bets
+            Path: /api/history/{weeklyHistoryId}/bets
             Method: get
             Auth:
               Authorizer: 'NONE'
@@ -379,7 +362,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /history/{weeklyHistoryId}/bets/{betId}
+            Path: /api/history/{weeklyHistoryId}/bets/{betId}
             Method: delete
             Auth:
               Authorizer: 'NONE'

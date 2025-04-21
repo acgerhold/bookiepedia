@@ -49,6 +49,10 @@ dependencies {
     // Logging
     implementation 'org.apache.commons:commons-text:1.9'
     implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
+
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    // Okhttp to handle request to espnapi
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 application {
