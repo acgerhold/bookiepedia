@@ -85,9 +85,10 @@ public class EspnDAO {
 
         // League ID
         schedule.setLeagueId(leagues.optJSONObject(0).optString("id", INVALID_STRING_REPLACER));
-        if (dynamoDbMapper.load(League.class, schedule.getLeagueId()) == null) {
-            extractLeague(leagues.optJSONObject(0));
-        }
+        // disabling this, will move to new leagues lambda
+        // if (dynamoDbMapper.load(League.class, schedule.getLeagueId()) == null) {
+        //     extractLeague(leagues.optJSONObject(0));
+        // }
         // Schedule ID
         schedule.setScheduleId(String.format("%s-%s",
                 schedule.getLeagueId(), EspnRequestConstants.NOW.format(yyyy_MM_dd)));
@@ -215,9 +216,9 @@ public class EspnDAO {
                 e.setEventStatusId(status.getJSONObject("type")
                         .optString("id", INVALID_STRING_REPLACER));
                 // Event Status
-                // Set status text to "Scheduled" instead of default (event date)
+                // Set status text to "TBD" instead of default (event date)
                 if (e.getEventStatusId().equals("1")) {
-                    e.setEventStatus("Scheduled");
+                    e.setEventStatus("TBD");
                 } else {
                     e.setEventStatus(status.getJSONObject("type")
                         .optString("shortDetail", INVALID_STRING_REPLACER));
@@ -260,9 +261,9 @@ public class EspnDAO {
                     String eventJson = mapper.writeValueAsString(e);
 
                     // Scan each Event JSON's data quality
-                    DataQualityScanner dataQualityScanner = new DataQualityScanner(eventJson, THRESHOLD);
-                    System.out.print("(" + e.getEventId() + ") ");
-                    dataQualityScanner.scan();
+                    // DataQualityScanner dataQualityScanner = new DataQualityScanner(eventJson, THRESHOLD);
+                    // System.out.print("(" + e.getEventId() + ") ");
+                    // dataQualityScanner.scan();
 
                     // Add Event JSON to list of Event JSONs
                     // Add Event's data quality score to list of each Event's score to calculate average

@@ -1,9 +1,8 @@
-@media (min-width: 768px) {
+@media (max-width: 767px) {
 
     .league-container {
         padding: 1rem;
-        margin: 1rem auto;
-        max-width: 30%;
+        margin: 1.5rem;
 
         border-radius: 8px;
 
