@@ -216,9 +216,9 @@ public class EspnDAO {
                 e.setEventStatusId(status.getJSONObject("type")
                         .optString("id", INVALID_STRING_REPLACER));
                 // Event Status
-                // Set status text to "Scheduled" instead of default (event date)
+                // Set status text to "TBD" instead of default (event date)
                 if (e.getEventStatusId().equals("1")) {
-                    e.setEventStatus("Scheduled");
+                    e.setEventStatus("TBD");
                 } else {
                     e.setEventStatus(status.getJSONObject("type")
                         .optString("shortDetail", INVALID_STRING_REPLACER));

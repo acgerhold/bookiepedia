@@ -1,11 +1,12 @@
-@media (min-width: 768px) {
+@media (max-width: 767px) {
 
     .bet-button {
         padding: .25rem;
     }
 
     .betting-buttons-container {
-        padding: 1rem;
+        align-items: center;
+        justify-content: center;
     }
 
     .betting-buttons-container.home {
@@ -15,6 +16,8 @@
     .button {
         width: 100%;
         border-radius: 6px;
+
+        font-size: 11px;
 
         font-weight: bold;
         text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
@@ -35,7 +38,7 @@
     }
 
     .away button {
-        background: color-mix(in srgb, var(--away-color-alt) 15%, transparent);
+        background: color-mix(in srgb, var(--away-color-alt) 25%, transparent);
     }
 
 

@@ -1,10 +1,15 @@
-@media (min-width: 768px) {
+/* 
+Do need to include the other parts of this class in here, not just .search-results-display.
+This is because all of the elements within the event cards are flex too
+Changing only search results display for mobile makes EVERYTHING column.
+*/
+
+@media (max-width: 767px) {
 
     .events-container {
-        padding: 1rem;
-        margin: 1.25rem auto;
-        max-width: 95%;
-
+        margin: 1.5%;
+        padding: 2%;
+    
         border-radius: 8px;
         background: #00000048;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -16,17 +21,17 @@
         font-size: 1.5rem;
         margin-bottom: 1rem;
     }
-
+    
     .search-criteria-display {
         color: #fff;
         text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
     }
 
     .search-results-display {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        display: flex;
+        flex-direction: column;
         gap: 1rem;
-
+    
         text-align: center;
         font-size: 1.2rem;
         color: #FFF;
@@ -37,7 +42,7 @@
         padding: 1rem;
         margin: 0;
         border-radius: 10px;
-
+    
         background: linear-gradient(
             to right,
             color-mix(in srgb, var(--away-color) 50%, transparent),
@@ -47,112 +52,110 @@
         );
         backdrop-filter: blur(6px);
         box-shadow: 0 0px 8px rgba(0, 0, 0, 0.7);
-
+    
         transition: transform 0.2s ease;
     }
-
+    
     .event-card:hover {
         transform: translateY(-10px);
     }
-
+    
     .event-card:hover .hover-indicator {
         display: block;
         bottom: -9px;
         width: 150px;
     }
-
+    
     .event-container {
         display: flex;
+        align-items: center;
         justify-content: center;
-        min-height: 165px;
+        min-height: 150px;
     }
-
+    
     .event-stats {
         order: 2;
         display: flex;
         margin-bottom: .25rem;
     }
-
+    
     .event-status {
         padding: .5rem auto;
-        width: 75px;
+        width: 50px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
     }
-
+    
     .event-details {
         padding: .5rem;
-
+    
         display: flex;
         flex-direction: column;
         align-items: center;
-
+    
         border-radius: 8px;
-
+    
         background: rgba(0, 0, 0, 0.568);
         backdrop-filter: blur(6px);
     }
-
+    
     .team-details {
         margin: .5rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         max-height: fit-content;
-
+    
         border-radius: 8px;
-
+    
         background:  rgba(0 , 0 , 0 , 0.4);
         backdrop-filter: blur(6px);
     }
-
-
-
-
-
+    
+    
     .event-team-logo-away {
-        width: 100px;
-        height: 100px;
+        width: 75px;
+        height: 75px;
         object-fit: fill;
         background: linear-gradient(to bottom right, var(--away-color) 10%, var(--away-color-alt) 90%);
     }
-
+    
     .event-team-logo-home {
-        width: 100px;
-        height: 100px;
+        width: 75px;
+        height: 75px;
         object-fit: fill;
         background: linear-gradient(to bottom left, var(--home-color) 10%, var(--home-color-alt) 90%);
     }
-
+    
     .team-name-text {
         font-size: 10px;
         font-weight: bold;
         text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
         color: #fff;
     }
-
+    
     .event-status-text {
         font-size: 12px;
         font-weight: bold;
         text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
         color: #ccc;
     }
-
+    
     .score-text {
         font-size: 30px;
         font-weight: bold;
         text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.7);
         color: #ccc;
     }
-
+    
     .team-winner-text {
         font-weight: bold;
         font-size: 12px;
         color: #28a745;
     }
-
+    
     .live-text {
         font-weight: bold;
         color: red;
@@ -162,7 +165,7 @@
         justify-content: center;
         gap: 0.3rem;
     }
-
+    
     .live-circle {
         display: inline-block;
         width: 8px;
@@ -171,14 +174,14 @@
         border-radius: 50%;
         animation: pulse 1s infinite;
     }
-
+    
     .event-name-text {
         margin: 2px;
         font-weight: bold;
         font-size: 16px;
         color: #fff;
     }
-
+    
     .event-date-text {
         font-size: 12px;
         font-weight: bold;

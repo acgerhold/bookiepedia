@@ -3,7 +3,9 @@
 
 import { useState } from "react";
 import "../css/EventCard.css";
-import "../css/BettingButtons.css"
+import "../css/mobile/EventCardMobile.css"
+import "../css/BettingButtons.css";
+import "../css/mobile/BettingButtonsMobile.css";
 
 const EventCard = ({ event, onAddBet }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
