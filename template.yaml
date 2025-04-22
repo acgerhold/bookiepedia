@@ -112,6 +112,19 @@ Resources:
       Domain: !Ref CognitoDomain
       UserPoolId: !Ref UserPool
 
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
+            Action: s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+
 
   #-----------------------------------------------------
   # CloudFront Configuration
@@ -127,6 +140,7 @@ Resources:
   CloudfrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Condition: DeployCloudFront
+    DeletionPolicy: Retain
     Properties:
       DistributionConfig:
         Comment: "Cloudfront distribution for serverless website"
@@ -143,6 +157,10 @@ Resources:
               # Restricting Bucket access through an origin access identity
               OriginAccessIdentity:
                 Fn::Sub: 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+          - Id: api-gateway
+            DomainName: !Sub "${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com"
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
         # To connect the CDN to the origins you need to specify behaviours
         DefaultCacheBehavior:
           # Compress resources automatically ( gzip )
@@ -155,6 +173,15 @@ Resources:
             QueryString: false
           TargetOriginId: s3-website
           ViewerProtocolPolicy : redirect-to-https
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        CacheBehaviors:
+        - PathPattern: /api/*
+          TargetOriginId: api-gateway
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE]
+          ForwardedValues:
+            QueryString: true
+            Headers: [Authorization, Content-Type]
           CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
 
   #-----------------------------------------------------
