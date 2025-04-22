@@ -12,6 +12,7 @@ Parameters:
 
   CognitoDomain:
     Type: String
+    Default: bookiepedia-acgerhold-2025
     Description: A name for the Cognito Domain
 
   S3Bucket:
@@ -140,7 +141,6 @@ Resources:
   CloudfrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Condition: DeployCloudFront
-    DeletionPolicy: Retain
     Properties:
       DistributionConfig:
         Comment: "Cloudfront distribution for serverless website"
