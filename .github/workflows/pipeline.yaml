@@ -175,7 +175,7 @@ jobs:
             --region ${REGION} \
             --s3-bucket ${ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "S3Bucket=${ARTIFACTS_BUCKET} CognitoDomain=${COGNITO_DOMAIN}" \
+            --parameter-overrides "S3Bucket=${ARTIFACTS_BUCKET} CognitoDomain=${COGNITO_DOMAIN} FrontendDeployment=remote" \
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
 
       - name: Download NPM static resources
