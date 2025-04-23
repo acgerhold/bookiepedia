@@ -33,7 +33,7 @@ export default class Authenticator extends BindingClass {
   }
 
   async login() {
-    await Auth.federatedSignIn();
+    await Auth.federatedSignIn({ provider: 'COGNITO' });
   }
 
   async logout() {
@@ -41,14 +41,12 @@ export default class Authenticator extends BindingClass {
   }
 
   configureCognito() {
-    // Strip .auth.us-east-2.amazoncognito.com from COGNITO_DOMAIN secret to be able to copy + paste like other secrets
-    const cognitoDomainPrefix = process.env.COGNITO_DOMAIN.split('.')[0];
     const config = {
       region: process.env.COGNITO_REGION,
       userPoolId: process.env.COGNITO_USER_POOL_ID,
       userPoolWebClientId: process.env.COGNITO_USER_POOL_CLIENT_ID,
       oauth: {
-        domain: cognitoDomainPrefix,
+        domain: process.env.COGNITO_DOMAIN,
         redirectSignIn: process.env.COGNITO_REDIRECT_SIGNIN,
         redirectSignOut: process.env.COGNITO_REDIRECT_SIGNOUT,
         scope: ["email", "openid", "phone", "profile"],
