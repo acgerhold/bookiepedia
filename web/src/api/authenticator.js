@@ -41,12 +41,14 @@ export default class Authenticator extends BindingClass {
   }
 
   configureCognito() {
+    // Strip .auth.us-east-2.amazoncognito.com from COGNITO_DOMAIN secret to be able to copy + paste like other secrets
+    const cognitoDomainPrefix = process.env.COGNITO_DOMAIN.split('.')[0];
     const config = {
       region: process.env.COGNITO_REGION,
       userPoolId: process.env.COGNITO_USER_POOL_ID,
       userPoolWebClientId: process.env.COGNITO_USER_POOL_CLIENT_ID,
       oauth: {
-        domain: process.env.COGNITO_DOMAIN,
+        domain: cognitoDomainPrefix,
         redirectSignIn: process.env.COGNITO_REDIRECT_SIGNIN,
         redirectSignOut: process.env.COGNITO_REDIRECT_SIGNOUT,
         scope: ["email", "openid", "phone", "profile"],
