@@ -14,6 +14,7 @@ dist/
 *.iml
 .aws-sam
 .vscode
+packaged.yaml
 
 # Ignore Gradle project-specific cache directory
 .gradle
