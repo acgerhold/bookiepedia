@@ -35,6 +35,7 @@ export default class Authenticator extends BindingClass {
 
   // Adding this didnt do anything
   async login() {
+    console.log("cognito-domain-login: ", process.env.COGNITO_DOMAIN);
     await Auth.federatedSignIn({ provider: 'COGNITO' });
   }
 
@@ -44,6 +45,7 @@ export default class Authenticator extends BindingClass {
 
 
   configureCognito() {
+    console.log("cognito domain: ", process.env.COGNITO_DOMAIN);
     const config = {
       region: process.env.COGNITO_REGION,
       userPoolId: process.env.COGNITO_USER_POOL_ID,

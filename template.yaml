@@ -12,9 +12,9 @@ Parameters:
 
   CognitoDomain:
     Type: String
-    Default: bookiepedia-acgerhold-2025
     Description: A name for the Cognito Domain
 
+  # Need to use the correct bucket!!!!!!!
   S3Bucket:
     Type: String
     Description: Parameter to specify the S3 Bucket to use for deployment
@@ -113,8 +113,9 @@ Resources:
       Domain: !Ref CognitoDomain
       UserPoolId: !Ref UserPool
 
-  S3BucketPolicy:
+  S3BucketPolicyUpdate:
     Type: AWS::S3::BucketPolicy
+    Metadata: "Test"
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
@@ -125,6 +126,7 @@ Resources:
               AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
             Action: s3:GetObject
             Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+            Sid: "CloudFrontAccess"
 
 
   #-----------------------------------------------------

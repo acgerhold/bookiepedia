@@ -121,11 +121,13 @@ jobs:
       - name: Create .env file for npm build
         working-directory: web
         run: |
+          echo "COGNITO_DOMAIN in pipeline: ${COGNITO_DOMAIN}"
+
           touch .env
 
           echo VITE_API_BASE_URL=\"$API_BASE_URL\" >> .env
 
-          echo VITE_COGNITO_DOMAIN=\"${COGNITO_DOMAIN}.auth.us-east-2.amazoncognito.com\" >> .env
+          echo VITE_COGNITO_DOMAIN=\"${COGNITO_DOMAIN}\" >> .env
 
           echo VITE_COGNITO_USER_POOL_ID=\"$COGNITO_USER_POOL_ID\" >> .env
           echo VITE_COGNITO_USER_POOL_CLIENT_ID=\"$COGNITO_USER_POOL_CLIENT_ID\" >> .env
@@ -169,6 +171,7 @@ jobs:
 
       - name: Deploy to testing account
         run: |
+          echo "cognito-domain-deploy-to-testing: ${COGNITO_DOMAIN}"
           sam deploy --stack-name ${STACK_NAME} \
             --template packaged-prod.yaml \
             --capabilities CAPABILITY_IAM \
