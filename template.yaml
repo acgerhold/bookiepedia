@@ -14,6 +14,7 @@ Parameters:
     Type: String
     Description: A name for the Cognito Domain
 
+  # Need to use the correct bucket!!!!!!!
   S3Bucket:
     Type: String
     Description: Parameter to specify the S3 Bucket to use for deployment
