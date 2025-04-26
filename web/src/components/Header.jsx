@@ -1,4 +1,4 @@
-import BookiepediaClient from "../api/bookiepediaClient";
+import BookiepediaClient from "../api/bookiepediaClient.js";
 import { useEffect, useState } from "react";
 import "../css/global.css";
 
