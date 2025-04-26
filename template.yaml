@@ -114,6 +114,7 @@ Resources:
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
+    Metadata: "Force update to restore policy, cant update manually in console"
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
