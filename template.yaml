@@ -112,19 +112,19 @@ Resources:
       Domain: !Ref CognitoDomain
       UserPoolId: !Ref UserPool
 
-  S3BucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Metadata: "Force update to restore policy, cant update manually in console"
-    Properties:
-      Bucket: !Ref S3Bucket
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
-            Action: s3:GetObject
-            Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+  # S3BucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Metadata: "Force update to restore policy, cant update manually in console"
+  #   Properties:
+  #     Bucket: !Ref S3Bucket
+  #     PolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}"
+  #           Action: s3:GetObject
+  #           Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
 
 
   #-----------------------------------------------------
