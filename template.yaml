@@ -12,7 +12,6 @@ Parameters:
 
   CognitoDomain:
     Type: String
-    Default: bookiepedia-acgerhold-2025
     Description: A name for the Cognito Domain
 
   S3Bucket:
