@@ -14,7 +14,6 @@ Parameters:
     Type: String
     Description: A name for the Cognito Domain
 
-  # Need to use the correct bucket!!!!!!!
   S3Bucket:
     Type: String
     Description: Parameter to specify the S3 Bucket to use for deployment
@@ -113,9 +112,8 @@ Resources:
       Domain: !Ref CognitoDomain
       UserPoolId: !Ref UserPool
 
-  S3BucketPolicyUpdate:
+  S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
-    Metadata: "Test"
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
