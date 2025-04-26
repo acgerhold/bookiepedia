@@ -500,7 +500,7 @@ Outputs:
     Value: !Ref UserPoolClient
     Description: "The Cognito User Pool Client ID (COGNITO_USER_POOL_CLIENT_ID)."
   CognitoDomain:
-    Value: !Sub "${CognitoDomain}.auth.us-east-2.amazoncognito.com"
+    Value: !Sub "${CognitoDomain}"
     Description: "The Cognito Domain (COGNITO_DOMAIN)."
 
   ApiBaseUrl:

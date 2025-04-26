@@ -168,17 +168,14 @@ jobs:
           role-skip-session-tagging: true
 
       - name: Deploy to testing account
-        # Added COGNITO_DOMAIN_PREFIX so that I can copy+paste the full cognito domain address into secrets like the others
-        # Referenced in --parameter-overrides 
         run: |
-          COGNITO_DOMAIN_PREFIX=$(echo ${COGNITO_DOMAIN} | cut -d'.' -f1)
           sam deploy --stack-name ${STACK_NAME} \
             --template packaged-prod.yaml \
             --capabilities CAPABILITY_IAM \
             --region ${REGION} \
             --s3-bucket ${ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
-            --parameter-overrides "S3Bucket=${ARTIFACTS_BUCKET} CognitoDomain=${COGNITO_DOMAIN_PREFIX} FrontendDeployment=remote" \
+            --parameter-overrides "S3Bucket=${ARTIFACTS_BUCKET} CognitoDomain=${COGNITO_DOMAIN} FrontendDeployment=remote" \
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
 
       - name: Download NPM static resources
