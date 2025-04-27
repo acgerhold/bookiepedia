@@ -33,7 +33,7 @@ export default class Authenticator extends BindingClass {
   }
 
   async login() {
-    await Auth.federatedSignIn({ provider: 'COGNITO' });
+    await Auth.federatedSignIn();
   }
 
   async logout() {
