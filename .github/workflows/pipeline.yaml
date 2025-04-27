@@ -125,7 +125,7 @@ jobs:
 
           echo VITE_API_BASE_URL=\"$API_BASE_URL\" >> .env
 
-          echo VITE_COGNITO_DOMAIN=\"${COGNITO_DOMAIN}\" >> .env
+          echo VITE_COGNITO_DOMAIN=\"$COGNITO_DOMAIN\" >> .env
 
           echo VITE_COGNITO_USER_POOL_ID=\"$COGNITO_USER_POOL_ID\" >> .env
           echo VITE_COGNITO_USER_POOL_CLIENT_ID=\"$COGNITO_USER_POOL_CLIENT_ID\" >> .env
