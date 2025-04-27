@@ -114,6 +114,7 @@ Resources:
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
+    Condition: DeployCloudFront
     Properties:
       Bucket: !Ref S3Bucket
       PolicyDocument:
