@@ -121,8 +121,6 @@ jobs:
       - name: Create .env file for npm build
         working-directory: web
         run: |
-          echo "COGNITO_DOMAIN in pipeline: ${COGNITO_DOMAIN}"
-
           touch .env
 
           echo VITE_API_BASE_URL=\"$API_BASE_URL\" >> .env
