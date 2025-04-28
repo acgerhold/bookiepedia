@@ -193,7 +193,7 @@ jobs:
               echo "- $(echo $commit | jq -r '.message')" >> commit_messages.txt
             done
           fi
-          echo "commit_messages=$(cat commit_messages.txt)" >> $GITHUB_ENV
+          printf "commit_messages<<EOF\n%s\nEOF\n" "$(cat commit_messages.txt)" >> $GITHUB_ENV
 
       - name: Notify Discord of Updates
         uses: discord-actions/message@v2
