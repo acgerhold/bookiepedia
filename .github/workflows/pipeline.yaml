@@ -186,19 +186,22 @@ jobs:
         id: generate_commit_messages
         run: |
           echo "### Commit Messages" > commit_messages.txt
-          for commit in $(echo '${{ toJson(github.event.commits) }}' | jq -c '.[]'); do
-            echo "- $(echo $commit | jq -r '.message')" >> commit_messages.txt
-          done
-          echo "::set-output name=commit_messages::$(cat commit_messages.txt)"
+          if [ -z "${{ github.event.commits }}" ]; then
+            echo "- No public notes available for this update." >> commit_messages.txt
+          else
+            echo '${{ toJson(github.event.commits) }}' | jq -c '.[]' | while read commit; do
+              echo "- $(echo $commit | jq -r '.message')" >> commit_messages.txt
+            done
+          fi
+          echo "commit_messages=$(cat commit_messages.txt)" >> $GITHUB_ENV
 
       - name: Notify Discord of Updates
         uses: discord-actions/message@v2
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           message: |
-            🚀 **Successful Deployment to CloudFront!**
-            Commit Messages:
-            ${{ steps.generate_commit_messages.outputs.commit_messages }}
+            🚀 **Update Notes**
+            ${{ env.commit_messages }}
 
       - name: Download NPM static resources
         uses: actions/download-artifact@v4
