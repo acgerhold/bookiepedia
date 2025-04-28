@@ -26,10 +26,22 @@ Parameters:
       - remote
     ConstraintDescription: Must specify 'local' or 'remote' for FrontendDeployment.
 
+  PreserveCloudFront:
+    Default: true
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Description: Set to 'true' to preserve the existing CloudFront distribution during deployment.
+
 Conditions:
-  DeployCloudFront: !Equals
-    - !Ref FrontendDeployment
-    - remote
+  DeployCloudFront: !Or
+    - !Equals
+      - !Ref FrontendDeployment
+      - remote
+    - !Equals
+      - !Ref PreserveCloudFront
+      - true
 
 Globals:
   Function:
@@ -114,6 +126,7 @@ Resources:
 
   S3BucketPolicy:
     Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Retain
     Condition: DeployCloudFront
     Properties:
       Bucket: !Ref S3Bucket
@@ -134,7 +147,6 @@ Resources:
 
   CloudFrontOriginAccessIdentity:
     Type: 'AWS::CloudFront::CloudFrontOriginAccessIdentity'
-    Condition: DeployCloudFront
     Properties:
       CloudFrontOriginAccessIdentityConfig:
         Comment: 'Serverless frontend website'
@@ -183,7 +195,7 @@ Resources:
           ForwardedValues:
             QueryString: true
             Headers: [Authorization, Content-Type]
-          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
 
   #-----------------------------------------------------
   # Role/Permissions/Policy Configuration
