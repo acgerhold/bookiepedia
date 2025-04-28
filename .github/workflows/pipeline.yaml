@@ -178,6 +178,27 @@ jobs:
             --no-fail-on-empty-changeset \
             --parameter-overrides "S3Bucket=${ARTIFACTS_BUCKET} CognitoDomain=${COGNITO_DOMAIN} FrontendDeployment=remote" \
             --role-arn ${CLOUDFORMATION_EXECUTION_ROLE}
+      
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Generate Commit Messages
+        id: generate_commit_messages
+        run: |
+          echo "### Commit Messages" > commit_messages.txt
+          for commit in $(echo '${{ toJson(github.event.commits) }}' | jq -c '.[]'); do
+            echo "- $(echo $commit | jq -r '.message')" >> commit_messages.txt
+          done
+          echo "::set-output name=commit_messages::$(cat commit_messages.txt)"
+
+      - name: Notify Discord of Deployment
+        uses: Ilshidur/action-discord@v2
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          message: |
+            🚀 **Successful Deployment to CloudFront!**
+            Commit Messages:
+            ${{ steps.generate_commit_messages.outputs.commit_messages }}
 
       - name: Download NPM static resources
         uses: actions/download-artifact@v4

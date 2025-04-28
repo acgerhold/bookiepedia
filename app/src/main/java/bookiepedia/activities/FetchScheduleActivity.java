@@ -14,11 +14,13 @@ import org.json.JSONObject;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class FetchScheduleActivity {
 
     private final DynamoDBMapper dynamoDBMapper;
     private final EspnDAO espnDAO;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
     public FetchScheduleActivity(DynamoDBMapper dynamoDBMapper) {
@@ -28,43 +30,41 @@ public class FetchScheduleActivity {
 
     public FetchScheduleResult handleRequest(final FetchScheduleRequest request) {
         try {
-            String startDate = EspnRequestConstants.getStartDate();
-            String endDate = EspnRequestConstants.getEndDate();
 
-            String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s",
-                    EspnRequestConstants.NBA, startDate);
-            String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s",
-                    EspnRequestConstants.NHL, startDate);
-            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard?dates=%s-%s",
-                    EspnRequestConstants.MLB, startDate, endDate);
+            String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
+                    EspnRequestConstants.NBA);
+            String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
+                    EspnRequestConstants.NHL);
+            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
+                    EspnRequestConstants.MLB);
 
-            JSONObject nbaResponse = espnDAO.requestQuery(nbaURL);
-            processResponse(nbaResponse);
-
-            JSONObject nhlResponse = espnDAO.requestQuery(nhlURL);
-            processResponse(nhlResponse);
-
-            JSONObject mlbResponse = espnDAO.requestQuery(mlbURL);
-            processResponse(mlbResponse);
+            processResponse(espnDAO.requestQuery(nbaURL));
+            processResponse(espnDAO.requestQuery(nhlURL));
+            processResponse(espnDAO.requestQuery(mlbURL));
 
             return FetchScheduleResult.builder()
                     .withMessage(EspnRequestConstants.TIMESTAMP)
                     .build();
 
         } catch (IOException ioe) {
-            throw new RuntimeException("Error occurred attempting to update events");
+            System.err.println("Error occurred while processing ESPN API response: " + ioe.getMessage());
+            throw new RuntimeException("Failled to process ESPN API response", ioe);
         }
     }
 
     private void processResponse(JSONObject response) throws JsonProcessingException {
+        List<Object> itemsToSave = new ArrayList<>();
+
         String scheduleJson = espnDAO.extractSchedule(response);
-        Schedule schedule = new ObjectMapper().readValue(scheduleJson, Schedule.class);
-        dynamoDBMapper.save(schedule);
+        Schedule schedule = objectMapper.readValue(scheduleJson, Schedule.class);
+        itemsToSave.add(schedule);
 
         List<String> eventListJson = espnDAO.extractEvents(response);
         for (String eventJson : eventListJson) {
-            Event event = new ObjectMapper().readValue(eventJson, Event.class);
-            dynamoDBMapper.save(event);
+            Event event = objectMapper.readValue(eventJson, Event.class);
+            itemsToSave.add(event);
         }
+
+        dynamoDBMapper.batchSave(itemsToSave);
     }
 }
