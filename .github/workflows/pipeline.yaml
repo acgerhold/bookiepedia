@@ -191,8 +191,8 @@ jobs:
           done
           echo "::set-output name=commit_messages::$(cat commit_messages.txt)"
 
-      - name: Notify Discord of Deployment
-        uses: Ilshidur/action-discord@v2
+      - name: Notify Discord of Updates
+        uses: discord-actions/message@v2
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           message: |
