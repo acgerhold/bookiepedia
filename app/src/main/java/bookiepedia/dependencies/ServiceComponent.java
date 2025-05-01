@@ -12,6 +12,8 @@ import javax.inject.Singleton;
 @Component(modules = {DAOModule.class, EspnModule.class})
 public interface ServiceComponent {
 
+    FetchLeaguesActivity provideFetchLeaguesActivity();
+
     GetScheduleActivity provideGetScheduleActivity();
 
     FetchScheduleActivity provideFetchScheduleActivity();

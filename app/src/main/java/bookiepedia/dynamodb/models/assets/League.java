@@ -9,8 +9,12 @@ public class League {
 
     private String leagueId;
     // leagues > 0 > id
+    private String sportName;
+    //
     private String leagueName;
     // leagues > 0 > abbreviation
+    private String leagueNameFull;
+    // leagues > 0 > name
     private String seasonStatusId;
     // leagues > 0 > season > type > id
     private String seasonStatus;
@@ -27,9 +31,19 @@ public class League {
         return leagueId;
     }
 
+    @DynamoDBAttribute(attributeName = "sportName")
+    public String getSportName() {
+        return sportName;
+    }
+
     @DynamoDBAttribute(attributeName = "leagueName")
     public String getLeagueName() {
         return leagueName;
+    }
+
+    @DynamoDBAttribute(attributeName = "leagueNameFull") 
+    public String getLeagueNameFull() {
+        return leagueNameFull;
     }
 
     @DynamoDBAttribute(attributeName = "seasonStatusId")
@@ -58,8 +72,16 @@ public class League {
         this.leagueId = leagueId;
     }
 
+    public void setSportName(String sportName) {
+        this.sportName = sportName;
+    }
+
     public void setLeagueName(String leagueName) {
         this.leagueName = leagueName;
+    }
+
+    public void setLeagueNameFull(String leagueNameFull) {
+        this.leagueNameFull = leagueNameFull;
     }
 
     public void setSeasonStatusId(String seasonStatusId) {
