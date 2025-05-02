@@ -14,6 +14,16 @@ import EventCard from "../components/EventCard";
 import "../css/LeagueCard.css";
 import "../css/mobile/LeagueCardMobile.css";
 
+// Dynamically import all .png files from the folder
+const icons = import.meta.glob("../assets/buttons/sports/*.png", { eager: true });
+
+// Convert the imported files into an object with file names as keys
+const iconPaths = Object.keys(icons).reduce((acc, path) => {
+  const fileName = path.split("/").pop().replace(".png", ""); // Extract file name without extension
+  acc[fileName] = icons[path].default || icons[path]; // Use `.default` for Vite's eager imports
+  return acc;
+}, {});
+
 const GetEvents = () => {
   const [client, setClient] = useState(null);
   const [schedule, setSchedule] = useState(null);
@@ -77,7 +87,7 @@ const GetEvents = () => {
                 <img
                   className="test-icon"
                   id="46"
-                  src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500-dark/nba.png&w=500&h=500&transparent=true"
+                  src={iconPaths["basketball1"]}
                   alt="NBA"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "46", alt: "NBA" })}
@@ -90,7 +100,7 @@ const GetEvents = () => {
                 <img
                   className="test-icon"
                   id="90"
-                  src="https://a.espncdn.com/i/teamlogos/leagues/500-dark/nhl.png"
+                  src={iconPaths["hockey1"]}
                   alt="NHL"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "90", alt: "NHL" })}
@@ -103,10 +113,43 @@ const GetEvents = () => {
                 <img
                   className="test-icon"
                   id="10"
-                  src="https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500-dark/mlb.png&w=500&h=500&transparent=true"
+                  src={iconPaths["baseball1"]}
                   alt="MLB"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "10", alt: "MLB" })}
+                />
+              </div>
+            </div>
+            <div className="icon-container">
+              <div className="icon-wrapper">
+                <div className="hover-indicator"></div>
+                <img
+                  className="test-icon"
+                  src={iconPaths["mma1"]}
+                  alt="mma"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </div>
+            <div className="icon-container">
+              <div className="icon-wrapper">
+                <div className="hover-indicator"></div>
+                <img
+                  className="test-icon"
+                  src={iconPaths["football1"]}
+                  alt="mma"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+            </div>
+            <div className="icon-container">
+              <div className="icon-wrapper">
+                <div className="hover-indicator"></div>
+                <img
+                  className="test-icon"
+                  src={iconPaths["soccer1"]}
+                  alt="mma"
+                  style={{ cursor: "pointer" }}
                 />
               </div>
             </div>
