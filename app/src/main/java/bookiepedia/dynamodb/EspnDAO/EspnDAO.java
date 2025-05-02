@@ -20,7 +20,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,6 +38,17 @@ public class EspnDAO {
     private final DynamoDBMapper dynamoDbMapper;
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
+
+    private static final Map<String, Predicate<JSONObject>> LEAGUE_FILTER = new HashMap<>();
+
+    // After extractLeagues() has extracted all in-season leagues for a sport, use this hashmap to filter results further before creating League objects
+    static {
+        // MMA - UFC
+        LEAGUE_FILTER.put("mma", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("UFC"));
+
+        // Default: Any sports/leagues not specified above will be checked for the hasStandings boolean instead
+        LEAGUE_FILTER.put("default", league -> league.optBoolean("hasStandings", false));
+    }
 
     @Inject
     public EspnDAO(DynamoDBMapper dynamoDBMapper) {
@@ -373,14 +387,17 @@ public class EspnDAO {
     public List<League> extractLeagues(JSONObject leaguesResponse, List<League> leagueKeys, String sportName) {
         JSONArray leaguesJson = leaguesResponse.getJSONArray("leagues");
 
-        List<League> newLeagues = new ArrayList<>();
+        // Apply sport-specific filtering using LEAGUE_FILTER above
+        Predicate<JSONObject> leagueFilter = LEAGUE_FILTER.getOrDefault(sportName.toLowerCase(), LEAGUE_FILTER.get("default"));
+
+        List<League> filteredLeagues = new ArrayList<>();
     
         leaguesJson.forEach(item -> {
             JSONObject league = (JSONObject) item;
 
             // If the hasStandings boolean is false for a league, there will be no 'season' JSONObject, meaning no events
             // This if() ignores the leagues with no standings. Once a league is in-season, this method will create an object for it
-            if (!league.optBoolean("hasStandings", false)) {
+            if (!leagueFilter.test(league)) {
                 return;
             }
 
@@ -401,7 +418,7 @@ public class EspnDAO {
             l.setSeasonYear(season.optString("year", INVALID_STRING_REPLACER));
             l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
     
-            newLeagues.add(l);
+            filteredLeagues.add(l);
     
             // Create another League object with only the primary key from the previously created League object
             // * batchLoad() accepts only a list of objects with primary key populated
@@ -410,7 +427,7 @@ public class EspnDAO {
             leagueKeys.add(key);
         });
 
-        return newLeagues;
+        return filteredLeagues;
     }
 
 }
