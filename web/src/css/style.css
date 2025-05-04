@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 :root {
     /* css variables: https://developer.mozilla.org/en-US/docs/Web/CSS/var */
     --primary-color: #5D5E5E;
@@ -10,11 +12,9 @@
     background-color: #8A8C8F;
     margin: 0;
     counter-reset: section;
-    font-family: "Helvetica Neue",Helvetica,sans-serif;
 }
 
 .header {
-    /* Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,12 +48,8 @@
     color: var(--secondary-color);
 }
 
-/*
-Changed to Win10 start menu widget type of look
-*/
-
 .card {
-    background: #1a1a1a; /* Dark background for the card */
+    background: #1a1a1a;
     border-radius: 8px;
     padding: 1.5rem;
     margin: 1rem auto;
@@ -113,11 +109,6 @@ Changed to Win10 start menu widget type of look
     flex: 80%;
 }
 
-/*
-Flexbox on a lists removes the numbers. We use a counter here to add them back.
-https://stackoverflow.com/a/34316093
-https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CSS_counters
-*/
 .song:before {
     counter-increment: section;
     content: counter(section) ".";
@@ -128,8 +119,6 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Lists_and_Counters/Using_CS
 .hidden {
     display: none;
 }
-
-/* table styles */ 
 
 th, td {
     padding: 15px;
@@ -143,34 +132,6 @@ th {
 a {
     color: var(--tertiary-color);
     text-decoration: none;
-}
-
-
-/*
-New .css being added to template
-*/
-
-
-/*
-League logo/button placeholders
-- .icon-wrapper for help with indicator
-*/
-
-.icon-container {
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 20px;
-}
-
-.icon-wrapper {
-    position: relative;
-}
-
-.test-icon {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
 }
 
 /*
@@ -191,14 +152,6 @@ Gold hover indicator
     border-radius: 5px;
     display: none;
     animation: linear 1s infinite running slide-in;
-}
-
-.icon-container:hover .test-icon {
-    transform: scale(1.2);
-}
-
-.icon-container:hover .hover-indicator {
-    display: block;
 }
 
 .card .form-field label,

@@ -72,85 +72,72 @@ const GetEvents = () => {
         <button id="refresh-button" className="refresh-button" onClick={fetchSchedule}>
           Update Events
         </button>
-        <button
-          id="WH-2024-06-4"
-          className="weekly-history"
-          onClick={() => getBetsForHistory("WH-2024-06-4")}
-        >
-          Bet History
-        </button>
         <form className="available-leagues">
           <div className="form-field">
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
+                <div
+                  className="sport-button basketball"
                   id="46"
-                  src={iconPaths["basketball1"]}
-                  alt="NBA"
+                  alt="Basketball"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "46", alt: "NBA" })}
-                />
+                ></div>
+                <span className="sport-title">Basketball</span>
               </div>
             </div>
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
+                <div
+                  className="sport-button hockey"
                   id="90"
-                  src={iconPaths["hockey1"]}
-                  alt="NHL"
+                  alt="Hockey"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "90", alt: "NHL" })}
-                />
+                ></div>
+                <span className="sport-title">Hockey</span>
               </div>
             </div>
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
+                <div
+                  className="sport-button baseball"
                   id="10"
-                  src={iconPaths["baseball1"]}
-                  alt="MLB"
+                  alt="Baseball"
                   style={{ cursor: "pointer" }}
                   onClick={() => getSchedule({ id: "10", alt: "MLB" })}
-                />
+                ></div>
+                <span className="sport-title">Baseball</span>
               </div>
             </div>
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
-                  src={iconPaths["mma1"]}
-                  alt="mma"
+                <div
+                  className="sport-button mma"
+                  alt="MMA"
                   style={{ cursor: "pointer" }}
-                />
+                ></div>
+                <span className="sport-title">MMA</span>
               </div>
             </div>
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
-                  src={iconPaths["football1"]}
-                  alt="mma"
+                <div
+                  className="sport-button football"
+                  alt="Football"
                   style={{ cursor: "pointer" }}
-                />
+                ></div>
+                <span className="sport-title">Football</span>
               </div>
             </div>
             <div className="icon-container">
               <div className="icon-wrapper">
-                <div className="hover-indicator"></div>
-                <img
-                  className="test-icon"
-                  src={iconPaths["soccer1"]}
-                  alt="mma"
+                <div
+                  className="sport-button soccer"
+                  alt="Soccer"
                   style={{ cursor: "pointer" }}
-                />
+                ></div>
+                <span className="sport-title">Soccer</span>
               </div>
             </div>
           </div>

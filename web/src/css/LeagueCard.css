@@ -1,103 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 @media (min-width: 768px) {
-
+    /* League Container */
     .league-container {
-        padding: 1rem;
-        margin: 1rem auto;
-        max-width: 35%;
-
-        border-radius: 8px;
-
-        background: #00000027;
-        box-shadow: 0 4px 6px #0000009f;
-        backdrop-filter: blur(6px);
-    }
-
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 37%;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.15);
+      box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
+      backdrop-filter: blur(6px);
+    } 
     .league-container h2 {
-        color: #ffffff;
-        text-align: center;
-        font-size: 1.5rem;
+      color: #ffffff;
+      text-align: center;
+      font-size: 1.5rem;
     }
-
+  
+    /* Available Leagues Section */
     .available-leagues {
-        padding: 1rem;
-
-        border-radius: 8px;
-
-        background:  rgba(0 , 0 , 0 , 0.4);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(6px);
+      padding: 1rem;
+      border-radius: 8px;
+      background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, rgb(0, 0, 0) 60%, transparent),
+        color-mix(in srgb, rgb(25, 25, 25) 50%, transparent),
+        color-mix(in srgb, rgb(50, 50, 50) 40%, transparent),
+        color-mix(in srgb, rgb(100, 100, 100) 30%, transparent),
+        color-mix(in srgb, rgb(150, 150, 150) 40%, transparent),
+        color-mix(in srgb, rgb(175, 175, 175) 50%, transparent),
+        color-mix(in srgb, rgb(200, 200, 200) 60%, transparent)
+      );
+      box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
     }
-
-    .card-content {
-        
-    }
-
+  
+    /* Form Field */
     .form-field {
-        display: flex;
-        justify-content: center;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .75rem;
     }
-
+  
+    /* Icon Container */
     .icon-container {
-        text-align: center;
-        transition: transform 0.2s ease;
-    }
 
-    .icon-container:hover {
-        transform: scale(1.1);
-    }
+    } 
 
+  
+    /* .icon-wrapper
+    Purpose: Second container layer for sports and their titles, used for styling, dynamic effects
+    Contains:   .sport-button, .sport-title 
+    */
     .icon-wrapper {
-        position: relative;
+      position: relative;
     }
 
-    .test-icon {
-        width: 100px;
-        height: 100px;
-        margin: .25rem;
-        object-fit: cover;
-        transition: opacity 0.2s ease;
+  
+    /* Test Icon */
+    .sport-button {
+      width: 100px;
+      height: 100px;
+      background-size: cover;
+      transition: transform 0.25s ease, background .25s ease;
     }
-
-    .test-icon:hover {
-        opacity: 0.8;
+    .sport-button:hover {
+        transform: scale(1.075);
     }
-
-    .hover-indicator {
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 40px;
-        height: 5px;
-        background-color: rgba(255, 215, 0, 1);
-        border-radius: 5px;
-        display: none;
-        animation: linear 1s infinite running slide-in;
+    .sport-button:active {
+        opacity: 0.5;
+        transform: scale(1.05) rotate(360deg);
     }
-
-    .icon-container:hover .hover-indicator {
+    /* Highlights corresponding sport title when hovering over button */
+    .icon-wrapper:hover .sport-title {
+        color: rgba(255, 255, 0, 0.5);
+    }
+    
+    .sport-title {
         display: block;
+        padding: .25rem;
+        margin-top: 0.5rem;
+        border-radius: 6px;
+
+        font-family: 'Bebas Neue', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+
+        color: rgb(200, 200, 200);
+        text-align: center;
+
+        background:rgba(0, 0, 0, 0.6);
     }
 
+    /* Sport Icon Logic */
+    .sport-button.basketball {
+        background-image: url("../assets/buttons/sports/10.png");
+    }
+    .sport-button.basketball:hover {
+        background-image: url("../assets/buttons/sports/11.png");
+    }
+
+    .sport-button.hockey {
+        background-image: url("../assets/buttons/sports/2.png");
+    }
+    .sport-button.hockey:hover {
+        background-image: url("../assets/buttons/sports/3.png");
+    }
+
+    .sport-button.baseball {
+        background-image: url("../assets/buttons/sports/0.png");
+    }
+    .sport-button.baseball:hover {
+        background-image: url("../assets/buttons/sports/1.png");
+    }
+
+    .sport-button.mma {
+        background-image: url("../assets/buttons/sports/4.png");
+    }
+    .sport-button.mma:hover {
+        background-image: url("../assets/buttons/sports/5.png");
+    }
+
+    .sport-button.football {
+        background-image: url("../assets/buttons/sports/8.png");
+    }
+    .sport-button.football:hover {
+        background-image: url("../assets/buttons/sports/9.png");
+    }
+
+    .sport-button.soccer {
+        background-image: url("../assets/buttons/sports/6.png");
+    }
+    .sport-button.soccer:hover {
+        background-image: url("../assets/buttons/sports/7.png");
+    }
+  
+    /* Hover Indicator (if needed in the future) */
+    .hover-indicator {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 5px;
+      background-color: rgba(255, 215, 0, 1);
+      border-radius: 5px;
+      display: none;
+    }
+  
+    .icon-container:hover .hover-indicator {
+      display: block;
+    }
+  
+    /* Buttons */
     .refresh-button,
     .weekly-history {
-        display: block;
-        margin: 1rem auto;
-        padding: 0.5rem 1rem;
-        background: rgba(0 , 0 , 0 , 0.4);
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+      display: block;
+      margin: 1rem auto;
+      padding: 0.5rem 1rem;
 
+      font-family: 'Bebas Neue', sans-serif;
+      font-weight: 400;
+      font-size: 20px;
+      color: rgb(200, 200, 200);
+
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+  
     .refresh-button:hover,
     .weekly-history:hover {
-        background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.4);
     }
-
+  
+    /* Hidden Elements */
     .hidden {
-        display: none;
+      display: none;
     }
-
-}
+  }
