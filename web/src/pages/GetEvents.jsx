@@ -56,11 +56,11 @@ const GetEvents = () => {
     }
   };
 
-  const fetchSchedule = async (sportName, leagueName) => {
+  const fetchSchedule = async (id, sportName, leagueName) => {
     if (!client) return;
     setLoading(true);
     try {
-      await client.fetchSchedule(sportName, leagueName);
+      await client.fetchSchedule(id, sportName, leagueName);
     } catch (error) {
       console.error("Error fetching schedule: ", error);
     } finally {
@@ -195,7 +195,8 @@ const GetEvents = () => {
                   style={{ cursor: "pointer" }}
                   onClick={async () => {
                     console.log(league);
-                    await fetchSchedule(league.sportName, league.leagueName.toLowerCase());
+
+                    await fetchSchedule(league.leagueId, league.leagueName, league.sportName);
                     getSchedule({ id: league.leagueId, alt: league.leagueName });
                   }}
                 >

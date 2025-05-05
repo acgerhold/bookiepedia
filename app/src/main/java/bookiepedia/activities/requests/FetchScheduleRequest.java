@@ -2,18 +2,18 @@ package bookiepedia.activities.requests;
 
 public class FetchScheduleRequest {
 
-    private final String Id;
+    private final String id;
     private final String leagueName;
     private final String sportName;
 
-    private FetchScheduleRequest(String Id, String leagueName, String sportName) {
-        this.Id = Id;
+    private FetchScheduleRequest(String id, String leagueName, String sportName) {
+        this.id = id;
         this.leagueName = leagueName;
         this.sportName = sportName;
     }
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public String getLeagueName() {
@@ -26,7 +26,7 @@ public class FetchScheduleRequest {
 
     @Override
     public String toString() {
-        return "FetchScheduleRequest {Id = " + Id + ", LeagueName = " + leagueName + ", SportName = " + sportName + "}";
+        return "FetchScheduleRequest {ID = " + id + ", leagueName = " + leagueName + ", sportName = " + sportName + "}";
     }
 
     //CHECKSTYLE:OFF:Builder
@@ -36,12 +36,12 @@ public class FetchScheduleRequest {
 
     public static class Builder {
 
-        private String Id;
+        private String id;
         private String leagueName;
         private String sportName;
 
-        public Builder withId(String Id) {
-            this.Id = Id;
+        public Builder withId(String id) {
+            this.id = id;
             return this;
         }
 
@@ -56,7 +56,7 @@ public class FetchScheduleRequest {
         }
 
         public FetchScheduleRequest build() {
-            return new FetchScheduleRequest(Id, leagueName, sportName);
+            return new FetchScheduleRequest(id, leagueName, sportName);
         }
     }
 }

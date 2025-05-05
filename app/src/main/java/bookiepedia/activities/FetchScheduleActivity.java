@@ -32,7 +32,7 @@ public class FetchScheduleActivity {
         try {
 
             String apiURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/%s/scoreboard",
-                    request.getSportName(), request.getLeagueName());
+                    request.getSportName(), request.getLeagueName().toLowerCase());
 
             System.out.println(apiURL);
             
@@ -41,7 +41,7 @@ public class FetchScheduleActivity {
             processResponse(response);
 
             return FetchScheduleResult.builder()
-                    .withMessage("Schedule updated successful for " + request.getLeagueName())
+                    .withMessage(EspnRequestConstants.TIMESTAMP)
                     .build();
 
         } catch (IOException ioe) {

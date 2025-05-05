@@ -112,14 +112,11 @@ export default class BookiepediaClient extends BindingClass {
     * Creates/updates Schedule objects
     * Schedules are a collection of events for a League on a given day
     */
-    async fetchSchedule(sportName, leagueName, errorCallback) {
+    async fetchSchedule(id, leagueName, sportName, errorCallback) {
         try {
             console.log('Fetching events...')
 
-            const response = await this.axiosClient.post(`/api/schedule`, {
-                sportName,
-                leagueName,
-            });
+            const response = await this.axiosClient.post(`/api/schedule/${id}/${leagueName}/${sportName}`);
             console.log('fetchSchedule() Response: ', response.status);
 
             console.log('Events updated!');
