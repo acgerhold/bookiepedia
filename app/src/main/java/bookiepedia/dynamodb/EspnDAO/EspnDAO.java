@@ -46,6 +46,9 @@ public class EspnDAO {
         // MMA - UFC
         LEAGUE_FILTER.put("mma", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("UFC"));
 
+        // Football - NFL
+        LEAGUE_FILTER.put("football", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NFL"));
+
         // Default: Any sports/leagues not specified above will be checked for the hasStandings boolean instead
         LEAGUE_FILTER.put("default", league -> league.optBoolean("hasStandings", false));
     }
@@ -129,6 +132,7 @@ public class EspnDAO {
 
         try {
             // Create JSON of new Schedule object
+            // * Need to remove this piece and use ScheduleModels for abstraction
             scheduleJson = mapper.writeValueAsString(schedule);
 
             // Scan Schedule JSON's data quality
@@ -248,12 +252,16 @@ public class EspnDAO {
                 // Total Score
                 e.setScoreTotal(e.getScoreHome() + e.getScoreAway());
                 // Links
-                JSONArray links = event.getJSONArray("links");
-                List<String> linksList = IntStream.range(0, links.length())
-                        .mapToObj(links::getJSONObject)
-                        .map(link -> link.optString("href", INVALID_STRING_REPLACER))
-                        .collect(Collectors.toList());
-                e.setLinks(linksList);
+                if (event.has("links") && !event.isNull("links")) { // Check if "links" exists and is not null
+                    JSONArray links = event.getJSONArray("links");
+                    List<String> linksList = IntStream.range(0, links.length())
+                            .mapToObj(links::getJSONObject)
+                            .map(link -> link.optString("href", INVALID_STRING_REPLACER))
+                            .collect(Collectors.toList());
+                    e.setLinks(linksList);
+                } else {
+                    e.setLinks(new ArrayList<>()); // Set an empty list if "links" is missing
+                }
                 // Winning Team
                 if (e.getEventStatusId().equals("3")) {
                     e.setTeamWinner(homeTeam.optBoolean("winner") ? "H" : "A");

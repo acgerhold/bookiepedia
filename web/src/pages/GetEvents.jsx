@@ -194,8 +194,6 @@ const GetEvents = () => {
                   className="league-item" 
                   style={{ cursor: "pointer" }}
                   onClick={async () => {
-                    console.log(league);
-
                     await fetchSchedule(league.leagueId, league.leagueName, league.sportName);
                     getSchedule({ id: league.leagueId, alt: league.leagueName });
                   }}
