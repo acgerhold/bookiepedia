@@ -15,7 +15,9 @@ public class FetchScheduleLambda
         return super.runActivity(
                 () -> input.fromPath(path ->
                         FetchScheduleRequest.builder()
-                                .withId(path.get("id"))
+                                .withId(path.get("Id"))
+                                .withLeagueName(path.get("leagueName"))
+                                .withSportName(path.get("sportName"))
                                 .build()),
                 (request, serviceComponent) ->
                         serviceComponent.provideFetchScheduleActivity().handleRequest(request)

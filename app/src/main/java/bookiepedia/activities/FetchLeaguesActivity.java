@@ -2,20 +2,16 @@ package bookiepedia.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bookiepedia.activities.requests.FetchLeaguesRequest;
 import bookiepedia.activities.results.FetchLeaguesResult;
@@ -28,7 +24,6 @@ public class FetchLeaguesActivity {
     
     private final DynamoDBMapper dynamoDBMapper;
     private final EspnDAO espnDAO;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
     public FetchLeaguesActivity(DynamoDBMapper dynamoDBMapper, EspnDAO espnDAO) {

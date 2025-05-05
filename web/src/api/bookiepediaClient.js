@@ -15,7 +15,7 @@ export default class BookiepediaClient extends BindingClass {
     constructor(props = {}) {
         super();
 
-        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory', 'removeBetFromHistory'];
+        const methodsToBind = ['clientLoaded', 'getIdentity', 'login', 'logout', 'getSchedule', 'fetchSchedule', 'getEventsForSchedule', 'addBetToHistory', 'getBetsForHistory', 'removeBetFromHistory', 'fetchLeagues'];
         this.bindClassMethods(methodsToBind, this);
 
         this.authenticator = new Authenticator();;
@@ -112,14 +112,29 @@ export default class BookiepediaClient extends BindingClass {
     * Creates/updates Schedule objects
     * Schedules are a collection of events for a League on a given day
     */
-    async fetchSchedule(errorCallback) {
+    async fetchSchedule(sportName, leagueName, errorCallback) {
         try {
             console.log('Fetching events...')
 
-            const response = await this.axiosClient.post(`/api/schedule`);
+            const response = await this.axiosClient.post(`/api/schedule`, {
+                sportName,
+                leagueName,
+            });
             console.log('fetchSchedule() Response: ', response.status);
 
             console.log('Events updated!');
+            return response.data;
+        } catch (error) {
+            this.handleError(error, errorCallback);
+        }
+    }
+
+    async fetchLeagues(sportName, errorCallback) {
+        try {
+            const response = await this.axiosClient.get(`/api/leagues?sportName=${sportName}`);
+            console.log('fetchLeagues() Response: ', response.status);
+
+            console.log('Available leagues for ' + sportName + ' retrieved');
             return response.data;
         } catch (error) {
             this.handleError(error, errorCallback);

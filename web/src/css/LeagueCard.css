@@ -8,7 +8,7 @@
       max-width: 37%;
       border-radius: 8px;
       background: rgba(0, 0, 0, 0.15);
-      box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
+      box-shadow: 0px 0px 5px 1px rgb(0, 0, 0);
       backdrop-filter: blur(6px);
     } 
     .league-container h2 {
@@ -23,15 +23,15 @@
       border-radius: 8px;
       background: linear-gradient(
         to bottom,
-        color-mix(in srgb, rgb(0, 0, 0) 60%, transparent),
+        color-mix(in srgb, rgb(200, 200, 200) 25%, transparent),
         color-mix(in srgb, rgb(25, 25, 25) 50%, transparent),
-        color-mix(in srgb, rgb(50, 50, 50) 40%, transparent),
-        color-mix(in srgb, rgb(100, 100, 100) 30%, transparent),
-        color-mix(in srgb, rgb(150, 150, 150) 40%, transparent),
-        color-mix(in srgb, rgb(175, 175, 175) 50%, transparent),
-        color-mix(in srgb, rgb(200, 200, 200) 60%, transparent)
+        color-mix(in srgb, rgb(0, 0, 0) 50%, transparent),
+        color-mix(in srgb, rgb(0, 0, 0) 50%, transparent),
+        color-mix(in srgb, rgb(75, 75, 75) 50%, transparent),
+        color-mix(in srgb, rgb(200, 200, 200) 50%, transparent)
       );
-      box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
+      backdrop-filter: blur(6px);
+      box-shadow: 0px 0px 5px 1px rgb(0, 0, 0);
     }
   
     /* Form Field */
@@ -61,8 +61,10 @@
     .sport-button {
       width: 100px;
       height: 100px;
+
       background-size: cover;
-      transition: transform 0.25s ease, background .25s ease;
+
+      transition: transform 0.25s ease, background .25s ease; 
     }
     .sport-button:hover {
         transform: scale(1.075);
@@ -73,31 +75,31 @@
     }
     /* Highlights corresponding sport title when hovering over button */
     .icon-wrapper:hover .sport-title {
-        color: rgba(255, 255, 0, 0.5);
+        color: rgb(255, 255, 0);
     }
     
     .sport-title {
         display: block;
         padding: .25rem;
-        margin-top: 0.5rem;
+        margin-top: 0.75rem;
         border-radius: 6px;
 
         font-family: 'Bebas Neue', sans-serif;
         font-weight: 400;
         font-size: 20px;
 
-        color: rgb(200, 200, 200);
+        color: rgb(255, 255, 255);
         text-align: center;
 
         background:rgba(0, 0, 0, 0.6);
     }
 
     /* Sport Icon Logic */
-    .sport-button.basketball {
-        background-image: url("../assets/buttons/sports/10.png");
+    .sport-button.baseball {
+      background-image: url("../assets/buttons/sports/0.png");
     }
-    .sport-button.basketball:hover {
-        background-image: url("../assets/buttons/sports/11.png");
+    .sport-button.baseball:hover {
+      background-image: url("../assets/buttons/sports/1.png");
     }
 
     .sport-button.hockey {
@@ -107,18 +109,18 @@
         background-image: url("../assets/buttons/sports/3.png");
     }
 
-    .sport-button.baseball {
-        background-image: url("../assets/buttons/sports/0.png");
-    }
-    .sport-button.baseball:hover {
-        background-image: url("../assets/buttons/sports/1.png");
-    }
-
     .sport-button.mma {
         background-image: url("../assets/buttons/sports/4.png");
     }
     .sport-button.mma:hover {
         background-image: url("../assets/buttons/sports/5.png");
+    }
+
+    .sport-button.soccer {
+      background-image: url("../assets/buttons/sports/6.png");
+    }
+    .sport-button.soccer:hover {
+      background-image: url("../assets/buttons/sports/7.png");
     }
 
     .sport-button.football {
@@ -128,13 +130,13 @@
         background-image: url("../assets/buttons/sports/9.png");
     }
 
-    .sport-button.soccer {
-        background-image: url("../assets/buttons/sports/6.png");
+    .sport-button.basketball {
+      background-image: url("../assets/buttons/sports/10.png");
     }
-    .sport-button.soccer:hover {
-        background-image: url("../assets/buttons/sports/7.png");
+    .sport-button.basketball:hover {
+      background-image: url("../assets/buttons/sports/11.png");
     }
-  
+
     /* Hover Indicator (if needed in the future) */
     .hover-indicator {
       position: absolute;
@@ -162,10 +164,12 @@
       font-family: 'Bebas Neue', sans-serif;
       font-weight: 400;
       font-size: 20px;
-      color: rgb(200, 200, 200);
+      color: rgb(255, 255, 255);
 
       background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px);
       border-radius: 6px;
+
       cursor: pointer;
       transition: background 0.2s ease;
     }

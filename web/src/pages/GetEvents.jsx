@@ -13,6 +13,7 @@ import Header from "../components/Header";
 import EventCard from "../components/EventCard";
 import "../css/LeagueCard.css";
 import "../css/mobile/LeagueCardMobile.css";
+import "../css/LeaguesCard.css";
 
 // Dynamically import all .png files from the folder
 const icons = import.meta.glob("../assets/buttons/sports/*.png", { eager: true });
@@ -26,9 +27,11 @@ const iconPaths = Object.keys(icons).reduce((acc, path) => {
 
 const GetEvents = () => {
   const [client, setClient] = useState(null);
+  const [sport, setSport] = useState(null);
+  const [leagues, setLeagues] = useState([]);
   const [schedule, setSchedule] = useState(null);
   const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     const initClient = async () => {
@@ -47,14 +50,22 @@ const GetEvents = () => {
       setSchedule(scheduleData);
       setEvents(eventData);
     } catch (error) {
-      console.error("Error fetching schedule:", error);
+      console.error("Error fetching schedule for league", league);
     } finally {
       setLoading(false); // End loading
     }
   };
 
-  const fetchSchedule = async () => {
-    if (client) await client.fetchSchedule();
+  const fetchSchedule = async (sportName, leagueName) => {
+    if (!client) return;
+    setLoading(true);
+    try {
+      await client.fetchSchedule(sportName, leagueName);
+    } catch (error) {
+      console.error("Error fetching schedule: ", error);
+    } finally {
+      setLoading(false);
+    }     
   };
 
   const getBetsForHistory = async (weeklyHistoryId) => {
@@ -63,6 +74,24 @@ const GetEvents = () => {
 
   const handleAddBet = async (bet) => {
     if (client) await client.addBetToHistory(bet);
+  };
+
+  const fetchLeagues = async (sportName) => {
+    if (!client) return;
+    console.log("Fetching leagues for sport:", sportName); // Log sportName
+    setLoading(true);
+    try {
+      setLeagues([]);
+      const response = await client.fetchLeagues(sportName);
+      console.log("Leagues response:", response); // Log the full response
+      const fetchedLeagues = response.leagueModels;
+      console.log("Fetched leagues:", fetchedLeagues);
+      setLeagues(fetchedLeagues);
+    } catch (error) {
+      console.error("Error fetching leagues for sport:", sportName, error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -114,8 +143,15 @@ const GetEvents = () => {
               <div className="icon-wrapper">
                 <div
                   className="sport-button mma"
+                  id="mma"
                   alt="MMA"
                   style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    fetchLeagues("mma");
+                    setSport("mma");
+                    setSchedule(null);
+                    setEvents([]);
+                  }}
                 ></div>
                 <span className="sport-title">MMA</span>
               </div>
@@ -124,8 +160,15 @@ const GetEvents = () => {
               <div className="icon-wrapper">
                 <div
                   className="sport-button football"
+                  id='football'
                   alt="Football"
                   style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    fetchLeagues("football");
+                    setSport("football");
+                    setSchedule(null);
+                    setEvents([]);
+                  }}
                 ></div>
                 <span className="sport-title">Football</span>
               </div>
@@ -140,6 +183,28 @@ const GetEvents = () => {
                 <span className="sport-title">Soccer</span>
               </div>
             </div>
+          </div>
+        </form>
+        <form className={`available-leagues-two ${sport || ""} ${leagues.length === 0 ? "hidden" : ""}`}>
+          <div className="form-field">
+            {leagues.length > 0 ? (
+              leagues.map((league) => (
+                <div 
+                  key={league.leagueId} 
+                  className="league-item" 
+                  style={{ cursor: "pointer" }}
+                  onClick={async () => {
+                    console.log(league);
+                    await fetchSchedule(league.sportName, league.leagueName.toLowerCase());
+                    getSchedule({ id: league.leagueId, alt: league.leagueName });
+                  }}
+                >
+                  <img className="league-button" src={league.leagueLogo} alt={league.leagueNameFull}></img>                  
+                </div>
+              ))
+            ) : (
+              <h4>No Leagues Currently Available</h4>
+            )}
           </div>
         </form>
       </div>

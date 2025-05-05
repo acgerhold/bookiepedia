@@ -20,6 +20,8 @@
     align-items: center;
     padding: 10px 20px;
 
+    font-family: 'Bebas Neue', sans-serif;
+
     background: var(--primary-color);
     color: var(--secondary-color);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -32,8 +34,6 @@
     color: var(--secondary-color);
     padding: 6px 8px 4px 8px;
     text-align: center;
-    font-weight: bold;
-    text-decoration: none;
     cursor: pointer;
 }
 
@@ -43,7 +43,6 @@
 }
 
 .header_home {
-    font-family: 'Bebas Neue', sans-serif;
     font-weight: 400;
     font-size: 36px;
     
@@ -77,5 +76,6 @@ th {
 
 a {
     color: var(--tertiary-color);
+    font-size: 20px;
     text-decoration: none;
 }

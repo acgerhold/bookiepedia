@@ -31,19 +31,17 @@ public class FetchScheduleActivity {
     public FetchScheduleResult handleRequest(final FetchScheduleRequest request) {
         try {
 
-            String nbaURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
-                    EspnRequestConstants.NBA);
-            String nhlURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
-                    EspnRequestConstants.NHL);
-            String mlbURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/scoreboard",
-                    EspnRequestConstants.MLB);
+            String apiURL = String.format("https://site.api.espn.com/apis/site/v2/sports/%s/%s/scoreboard",
+                    request.getSportName(), request.getLeagueName());
 
-            processResponse(espnDAO.requestQuery(nbaURL));
-            processResponse(espnDAO.requestQuery(nhlURL));
-            processResponse(espnDAO.requestQuery(mlbURL));
+            System.out.println(apiURL);
+            
+            JSONObject response = espnDAO.requestQuery(apiURL);
+
+            processResponse(response);
 
             return FetchScheduleResult.builder()
-                    .withMessage(EspnRequestConstants.TIMESTAMP)
+                    .withMessage("Schedule updated successful for " + request.getLeagueName())
                     .build();
 
         } catch (IOException ioe) {
