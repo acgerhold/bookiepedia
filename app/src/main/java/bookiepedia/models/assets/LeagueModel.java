@@ -5,7 +5,9 @@ import java.util.Objects;
 public class LeagueModel {
 
     private final String leagueId;
+    private final String sportName;
     private final String leagueName;
+    private final String leagueNameFull;
     private final String seasonStatusId;
     private final String seasonStatus;
     private final String seasonYear;
@@ -20,10 +22,12 @@ public class LeagueModel {
      * @param seasonYear - The year of a League's current season
      * @param leagueLogo - External link to a League's logo
      */
-    public LeagueModel(String leagueId, String leagueName, String seasonStatusId, String seasonStatus,
+    public LeagueModel(String leagueId, String sportName, String leagueName, String leagueNameFull, String seasonStatusId, String seasonStatus,
                        String seasonYear, String leagueLogo) {
         this.leagueId = leagueId;
+        this.sportName = sportName;
         this.leagueName = leagueName;
+        this.leagueNameFull = leagueNameFull;
         this.seasonStatusId = seasonStatusId;
         this.seasonStatus = seasonStatus;
         this.seasonYear = seasonYear;
@@ -34,8 +38,16 @@ public class LeagueModel {
         return leagueId;
     }
 
+    public String getSportName() {
+        return sportName;
+    }
+
     public String getLeagueName() {
         return leagueName;
+    }
+
+    public String getLeagueNameFull() {
+        return leagueNameFull;
     }
 
     public String getSeasonStatusId() {
@@ -64,13 +76,14 @@ public class LeagueModel {
         }
         LeagueModel that = (LeagueModel) o;
         return leagueId.equals(that.leagueId) &&
+                sportName.equals(that.sportName) &&
                 seasonStatusId.equals(that.seasonStatusId) &&
                 seasonYear.equals(that.seasonYear);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(leagueId, seasonStatusId, seasonYear);
+        return Objects.hash(leagueId, sportName, seasonStatusId, seasonYear);
     }
 
     // CHECKSTYLE:OFF:Builder
@@ -80,7 +93,9 @@ public class LeagueModel {
 
     public static class Builder {
         private String leagueId;
+        private String sportName;
         private String leagueName;
+        private String leagueNameFull;
         private String seasonStatusId;
         private String seasonStatus;
         private String seasonYear;
@@ -91,8 +106,18 @@ public class LeagueModel {
             return this;
         }
 
+        public Builder withSportName(String sportName) {
+            this.sportName = sportName;
+            return this;
+        }
+
         public Builder withLeagueName(String leagueName) {
             this.leagueName = leagueName;
+            return this;
+        }
+
+        public Builder withLeagueNameFull(String leagueNameFull) {
+            this.leagueNameFull = leagueNameFull;
             return this;
         }
 
@@ -117,7 +142,7 @@ public class LeagueModel {
         }
 
         public LeagueModel build() {
-            return new LeagueModel(leagueId, leagueName, seasonStatusId, seasonStatus, seasonYear, leagueLogo);
+            return new LeagueModel(leagueId, sportName, leagueName, leagueNameFull, seasonStatusId, seasonStatus, seasonYear, leagueLogo);
         }
     }
 }

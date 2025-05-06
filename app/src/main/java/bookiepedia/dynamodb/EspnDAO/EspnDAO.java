@@ -20,7 +20,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -35,6 +38,37 @@ public class EspnDAO {
     private final DynamoDBMapper dynamoDbMapper;
     private static final double THRESHOLD = 70;
     private static final String INVALID_STRING_REPLACER = "Unavailable";
+
+    private static final Map<String, Predicate<JSONObject>> LEAGUE_FILTER = new HashMap<>();
+
+    // After extractLeagues() has extracted all in-season leagues for a sport, use this hashmap to filter results further before creating League objects
+    static {
+        // MMA - UFC
+        LEAGUE_FILTER.put("mma", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("UFC"));
+
+        // Football - NFL
+        LEAGUE_FILTER.put("football", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NFL"));
+
+        // Basketball - NBA, NBL, WNBA
+        LEAGUE_FILTER.put("basketball", 
+            league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NBA") ||
+                      league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NBL") ||
+                      league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("WNBA")
+        );
+
+        // Hockey - NHL
+        LEAGUE_FILTER.put("hockey", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NHL"));
+
+        // Baseball - MLB
+        LEAGUE_FILTER.put("baseball", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("MLB"));
+
+        // Soccer - MLS
+        LEAGUE_FILTER.put("soccer", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("MLS"));
+
+
+        // Default: Any sports/leagues not specified above will be checked for the hasStandings boolean instead
+        LEAGUE_FILTER.put("default", league -> league.optBoolean("hasStandings", false));
+    }
 
     @Inject
     public EspnDAO(DynamoDBMapper dynamoDBMapper) {
@@ -115,11 +149,12 @@ public class EspnDAO {
 
         try {
             // Create JSON of new Schedule object
+            // * Need to remove this piece and use ScheduleModels for abstraction
             scheduleJson = mapper.writeValueAsString(schedule);
 
             // Scan Schedule JSON's data quality
-            DataQualityScanner dataQualityScanner = new DataQualityScanner(scheduleJson, THRESHOLD);
-            dataQualityScanner.scan();
+            // DataQualityScanner dataQualityScanner = new DataQualityScanner(scheduleJson, THRESHOLD);
+            // dataQualityScanner.scan();
         } catch (JsonProcessingException jpe) {
             throw new RuntimeException(jpe);
         }
@@ -234,12 +269,16 @@ public class EspnDAO {
                 // Total Score
                 e.setScoreTotal(e.getScoreHome() + e.getScoreAway());
                 // Links
-                JSONArray links = event.getJSONArray("links");
-                List<String> linksList = IntStream.range(0, links.length())
-                        .mapToObj(links::getJSONObject)
-                        .map(link -> link.optString("href", INVALID_STRING_REPLACER))
-                        .collect(Collectors.toList());
-                e.setLinks(linksList);
+                if (event.has("links") && !event.isNull("links")) { // Check if "links" exists and is not null
+                    JSONArray links = event.getJSONArray("links");
+                    List<String> linksList = IntStream.range(0, links.length())
+                            .mapToObj(links::getJSONObject)
+                            .map(link -> link.optString("href", INVALID_STRING_REPLACER))
+                            .collect(Collectors.toList());
+                    e.setLinks(linksList);
+                } else {
+                    e.setLinks(new ArrayList<>()); // Set an empty list if "links" is missing
+                }
                 // Winning Team
                 if (e.getEventStatusId().equals("3")) {
                     e.setTeamWinner(homeTeam.optBoolean("winner") ? "H" : "A");
@@ -339,21 +378,6 @@ public class EspnDAO {
         t.setTeamLinks(linksList);
 
         dynamoDbMapper.save(t);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String teamJson;
-
-        try {
-            // Create JSON of new Team object
-            // * Temporary, only for testing
-            teamJson = mapper.writeValueAsString(t);
-
-            // Scan for data quality
-            DataQualityScanner dataQualityScanner = new DataQualityScanner(teamJson, THRESHOLD);
-            dataQualityScanner.scan();
-        } catch (JsonProcessingException jpe) {
-            throw new RuntimeException(jpe);
-        }
     }
 
     /**
@@ -363,16 +387,16 @@ public class EspnDAO {
      * @return A JSON of a 'Schedule' object represented as a String
      */
     public void extractLeague(JSONObject league) {
-        // This method will also probably end up as a void method that gets called in extractSchedule()
-
         League l = new League();
 
         JSONObject season = league.getJSONObject("season");
 
         // League ID
         l.setLeagueId(league.optString("id", INVALID_STRING_REPLACER));
-        // League Name
+        // League Name (Abbreviated, eg. 'NCAAM')
         l.setLeagueName(league.optString("abbreviation", INVALID_STRING_REPLACER));
+        // Full League Name (eg. 'NCAA Men's Basketball')
+        l.setLeagueNameFull(league.optString("name", INVALID_STRING_REPLACER));
         // Season Status ID
         l.setSeasonStatusId(season.getJSONObject("type").optString("id", INVALID_STRING_REPLACER));
         // Season Status
@@ -383,20 +407,52 @@ public class EspnDAO {
         l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
 
         dynamoDbMapper.save(l);
+    }
 
-        // ObjectMapper mapper = new ObjectMapper();
-        // String leagueJson;
+    public List<League> extractLeagues(JSONObject leaguesResponse, List<League> leagueKeys, String sportName) {
+        JSONArray leaguesJson = leaguesResponse.getJSONArray("leagues");
 
-        // try {
-        //     // Create JSON of new League object
-        //     leagueJson = mapper.writeValueAsString(l);
+        // Apply sport-specific filtering using LEAGUE_FILTER above
+        Predicate<JSONObject> leagueFilter = LEAGUE_FILTER.getOrDefault(sportName.toLowerCase(), LEAGUE_FILTER.get("default"));
 
-        //     // Scan for data quality
-        //     //DataQualityScanner dataQualityScanner = new DataQualityScanner(leagueJson, THRESHOLD);
-        //     //dataQualityScanner.scan();
-        // } catch (JsonProcessingException jpe) {
-        //     throw new RuntimeException(jpe);
-        // }
+        List<League> filteredLeagues = new ArrayList<>();
+    
+        leaguesJson.forEach(item -> {
+            JSONObject league = (JSONObject) item;
+
+            // If the hasStandings boolean is false for a league, there will be no 'season' JSONObject, meaning no events
+            // This if() ignores the leagues with no standings. Once a league is in-season, this method will create an object for it
+            if (!leagueFilter.test(league)) {
+                return;
+            }
+
+            League l = new League();
+    
+            JSONObject season = league.getJSONObject("season");
+    
+            // Populate League object
+            l.setLeagueId(league.optString("id", INVALID_STRING_REPLACER));
+            // The sport name is not included in the league objects from ESPN, using sportName from FetchLeaguesRequest to set it dynamically
+            l.setSportName(sportName);
+            l.setLeagueName(league.optString("abbreviation", INVALID_STRING_REPLACER));
+            l.setLeagueNameFull(league.optString("name", INVALID_STRING_REPLACER));
+            l.setSeasonStatusId(season.getJSONObject("type").optString("id", INVALID_STRING_REPLACER));
+            // Season status and year aren't included in this response from the espn API, but are included in the response for events for the given league
+            // Those fields will be updated via extractLeague() when events are retrieved from the separate API call
+            l.setSeasonStatus(season.getJSONObject("type").optString("name", INVALID_STRING_REPLACER));
+            l.setSeasonYear(season.optString("year", INVALID_STRING_REPLACER));
+            l.setLeagueLogo(league.getJSONArray("logos").getJSONObject(1).optString("href", INVALID_STRING_REPLACER));
+    
+            filteredLeagues.add(l);
+    
+            // Create another League object with only the primary key from the previously created League object
+            // * batchLoad() accepts only a list of objects with primary key populated
+            League key = new League();
+            key.setLeagueId(l.getLeagueId());
+            leagueKeys.add(key);
+        });
+
+        return filteredLeagues;
     }
 
 }

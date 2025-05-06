@@ -3,14 +3,32 @@ package bookiepedia.converters;
 import bookiepedia.dynamodb.models.Bet;
 import bookiepedia.dynamodb.models.Event;
 import bookiepedia.dynamodb.models.Schedule;
+import bookiepedia.dynamodb.models.assets.League;
 import bookiepedia.models.BetModel;
 import bookiepedia.models.EventModel;
 import bookiepedia.models.ScheduleModel;
+import bookiepedia.models.assets.LeagueModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModelConverter {
+
+    public List<LeagueModel> mapToLeagueModels(List<League> leagues) {
+        return leagues.stream()
+            .map(league -> LeagueModel.builder()
+                .withLeagueId(league.getLeagueId())
+                .withSportName(league.getSportName())
+                .withLeagueName(league.getLeagueName())
+                .withLeagueNameFull(league.getLeagueNameFull())
+                .withSeasonStatusId(league.getSeasonStatusId())
+                .withSeasonStatus(league.getSeasonStatus())
+                .withSeasonYear(league.getSeasonYear())
+                .withLeagueLogo(league.getLeagueLogo())
+                .build())
+            .collect(Collectors.toList());
+    }
 
     public ScheduleModel toScheduleModel(Schedule schedule) {
         return ScheduleModel.builder()

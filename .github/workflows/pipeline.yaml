@@ -185,11 +185,12 @@ jobs:
       - name: Generate Commit Messages
         id: generate_commit_messages
         run: |
-          echo "### Commit Messages" > commit_messages.txt
+          echo "### Updates" > commit_messages.txt
           if [ -z "${{ github.event.commits }}" ]; then
             echo "- No public notes available for this update." >> commit_messages.txt
           else
             echo '${{ toJson(github.event.commits) }}' | jq -c '.[]' | while read commit; do
+              # Extract only the commit message and add it as a bullet point
               echo "- $(echo $commit | jq -r '.message')" >> commit_messages.txt
             done
           fi

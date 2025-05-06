@@ -1,8 +1,9 @@
-/* web/src/css/global.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 :root {
-    --primary-color: #5D5E5E;
-    --secondary-color: #ffffff;
-    --tertiary-color: #F5881F;
+    --primary-color: rgba(0, 0, 0, 0.3);
+    --secondary-color: rgb(255, 255, 255);
+    --tertiary-color: rgba(100, 100, 100, 0.7);
     --error-color: #EE3A23;
 }
 
@@ -17,10 +18,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+
+    font-family: 'Bebas Neue', sans-serif;
+
+    background: var(--primary-color);
     color: var(--secondary-color);
-    padding: 4px 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
 }
 
 .button {
@@ -29,8 +34,6 @@
     color: var(--secondary-color);
     padding: 6px 8px 4px 8px;
     text-align: center;
-    font-weight: bold;
-    text-decoration: none;
     cursor: pointer;
 }
 
@@ -40,9 +43,10 @@
 }
 
 .header_home {
+    font-weight: 400;
     font-size: 36px;
+    
     line-height: 40px;
-    height: 100px;
     text-decoration: none;
     color: var(--secondary-color);
 }
@@ -72,5 +76,6 @@ th {
 
 a {
     color: var(--tertiary-color);
+    font-size: 20px;
     text-decoration: none;
 }
