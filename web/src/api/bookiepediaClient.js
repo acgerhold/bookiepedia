@@ -116,7 +116,7 @@ export default class BookiepediaClient extends BindingClass {
         try {
             console.log('Fetching events...')
 
-            const response = await this.axiosClient.post(`/api/schedule/${id}/${leagueName}/${sportName}`);
+            const response = await this.axiosClient.post(`/api/data/${id}/${leagueName}/${sportName}`);
             console.log('fetchSchedule() Response: ', response.status);
 
             console.log('Events updated!');

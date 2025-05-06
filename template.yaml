@@ -346,7 +346,7 @@ Resources:
         Bookiepedia:
           Type: Api
           Properties:
-            Path: /api/schedule/{id}/{leagueName}/{sportName}
+            Path: /api/data/{id}/{leagueName}/{sportName}
             Method: post
             Auth:
               Authorizer: 'NONE'
