@@ -98,19 +98,21 @@ const GetEvents = () => {
     <>
       <Header client={client} />
       <div className="league-container">
-        <button id="refresh-button" className="refresh-button" onClick={fetchSchedule}>
-          Update Events
-        </button>
         <form className="available-leagues">
           <div className="form-field">
             <div className="icon-container">
               <div className="icon-wrapper">
                 <div
                   className="sport-button basketball"
-                  id="46"
+                  id="basketball"
                   alt="Basketball"
                   style={{ cursor: "pointer" }}
-                  onClick={() => getSchedule({ id: "46", alt: "NBA" })}
+                  onClick={() => {
+                    fetchLeagues("basketball");
+                    setSport("basketball");
+                    setSchedule(null);
+                    setEvents([]);
+                  }}
                 ></div>
                 <span className="sport-title">Basketball</span>
               </div>
@@ -119,10 +121,15 @@ const GetEvents = () => {
               <div className="icon-wrapper">
                 <div
                   className="sport-button hockey"
-                  id="90"
+                  id="hockey"
                   alt="Hockey"
                   style={{ cursor: "pointer" }}
-                  onClick={() => getSchedule({ id: "90", alt: "NHL" })}
+                  onClick={() => {
+                    fetchLeagues("hockey");
+                    setSport("hockey");
+                    setSchedule(null);
+                    setEvents([]);
+                  }}
                 ></div>
                 <span className="sport-title">Hockey</span>
               </div>
@@ -131,10 +138,15 @@ const GetEvents = () => {
               <div className="icon-wrapper">
                 <div
                   className="sport-button baseball"
-                  id="10"
+                  id="baseball"
                   alt="Baseball"
                   style={{ cursor: "pointer" }}
-                  onClick={() => getSchedule({ id: "10", alt: "MLB" })}
+                  onClick={() => {
+                    fetchLeagues("baseball");
+                    setSport("baseball");
+                    setSchedule(null);
+                    setEvents([]);
+                  }}
                 ></div>
                 <span className="sport-title">Baseball</span>
               </div>
@@ -146,12 +158,6 @@ const GetEvents = () => {
                   id="mma"
                   alt="MMA"
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    fetchLeagues("mma");
-                    setSport("mma");
-                    setSchedule(null);
-                    setEvents([]);
-                  }}
                 ></div>
                 <span className="sport-title">MMA</span>
               </div>
@@ -177,6 +183,7 @@ const GetEvents = () => {
               <div className="icon-wrapper">
                 <div
                   className="sport-button soccer"
+                  id='soccer'
                   alt="Soccer"
                   style={{ cursor: "pointer" }}
                 ></div>
@@ -186,19 +193,29 @@ const GetEvents = () => {
           </div>
         </form>
         <form className={`available-leagues-two ${sport || ""} ${leagues.length === 0 ? "hidden" : ""}`}>
-          <div className="form-field">
+          <div className="form-field-two">
             {leagues.length > 0 ? (
               leagues.map((league) => (
                 <div 
                   key={league.leagueId} 
-                  className="league-item" 
+                  className="league-item"
+                  title={league.leagueNameFull} 
                   style={{ cursor: "pointer" }}
                   onClick={async () => {
                     await fetchSchedule(league.leagueId, league.leagueName, league.sportName);
                     getSchedule({ id: league.leagueId, alt: league.leagueName });
                   }}
                 >
-                  <img className="league-button" src={league.leagueLogo} alt={league.leagueNameFull}></img>                  
+                  <img 
+                    className="league-button" 
+                    src={league.leagueLogo}  
+                    alt={league.leagueNameFull} 
+                    onError={(e) => {
+                      e.target.style.display = "none"; // Hide the broken image
+                      e.target.nextSibling.style.display = "inline"; // Show the league name
+                    }}
+                  />
+                  <span className="league-name" style={{ display: "none" }}>{league.leagueNameFull}</span>
                 </div>
               ))
             ) : (

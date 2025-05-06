@@ -49,6 +49,23 @@ public class EspnDAO {
         // Football - NFL
         LEAGUE_FILTER.put("football", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NFL"));
 
+        // Basketball - NBA, NBL, WNBA
+        LEAGUE_FILTER.put("basketball", 
+            league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NBA") ||
+                      league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NBL") ||
+                      league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("WNBA")
+        );
+
+        // Hockey - NHL
+        LEAGUE_FILTER.put("hockey", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("NHL"));
+
+        // Baseball - MLB
+        LEAGUE_FILTER.put("baseball", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("MLB"));
+
+        // Soccer - MLS
+        LEAGUE_FILTER.put("soccer", league -> league.optString("abbreviation", INVALID_STRING_REPLACER).equalsIgnoreCase("MLS"));
+
+
         // Default: Any sports/leagues not specified above will be checked for the hasStandings boolean instead
         LEAGUE_FILTER.put("default", league -> league.optBoolean("hasStandings", false));
     }

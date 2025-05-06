@@ -17,16 +17,6 @@
         font-size: 25px;
         color: rgb(255, 255, 255);
     }
-    .available-leagues-two.mma {
-        background: linear-gradient(
-            to right,
-            color-mix(in srgb, rgb(0, 0, 0) 25%, transparent),
-            color-mix(in srgb, rgb(26, 188, 156) 30%, transparent),
-            color-mix(in srgb, rgb(26, 188, 156) 30%, transparent),
-            color-mix(in srgb, rgb(26, 188, 156) 30%, transparent),
-            color-mix(in srgb, rgb(0, 0, 0) 25%, transparent)
-        );
-    }
 
     .league-button {
         width: 100px;
@@ -39,9 +29,107 @@
     }
     .league-button:active {
         opacity: 0.5;
-        transform: scale(1.05) rotate(360deg);
+        transform: scale(1.05);
     }
-    
 
+    .form-field-two {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .75rem;       
+    }
+
+    .league-item {
+    }
+
+    .league-item span {
+
+    }
+
+    .league-name {
+        display: inline-block;
+        padding: .5rem;
+        margin-top: 0.75rem;
+        border-radius: 6px;
+
+        font-family: 'Bebas Neue', sans-serif;
+        font-weight: 400;
+        font-size: 20px;
+
+        color: rgb(255, 255, 255);
+        text-align: center;
+
+        background:rgba(0, 0, 0, 0.6);
+        transition: transform 0.25s ease, color .25s ease; 
+    }
+    .league-name:hover {
+        transform: scale(2);
+    }
+    .league-name:active {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+
+    .available-leagues-two.mma {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(26, 188, 156) 50%, transparent),
+            color-mix(in srgb, rgb(26, 188, 156) 50%, transparent),
+            color-mix(in srgb, rgb(26, 188, 156) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
+    .available-leagues-two.basketball {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(41 128 185) 50%, transparent),
+            color-mix(in srgb, rgb(41 128 185) 50%, transparent),
+            color-mix(in srgb, rgb(41 128 185) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
+    .available-leagues-two.hockey {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(235, 152, 78) 50%, transparent),
+            color-mix(in srgb, rgb(235, 152, 78) 50%, transparent),
+            color-mix(in srgb, rgb(235, 152, 78) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
+    .available-leagues-two.football {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(39 174 96) 50%, transparent),
+            color-mix(in srgb, rgb(39 174 96) 50%, transparent),
+            color-mix(in srgb, rgb(39 174 96) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
+    .available-leagues-two.soccer {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(155 89 182) 50%, transparent),
+            color-mix(in srgb, rgb(155 89 182) 50%, transparent),
+            color-mix(in srgb, rgb(155 89 182) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
+    .available-leagues-two.baseball {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent),
+            color-mix(in srgb, rgb(231 76 60) 50%, transparent),
+            color-mix(in srgb, rgb(231 76 60) 50%, transparent),
+            color-mix(in srgb, rgb(231 76 60) 50%, transparent),
+            color-mix(in srgb, rgb(255, 255, 255) 25%, transparent)
+        );
+    }
 
 }

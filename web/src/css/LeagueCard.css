@@ -38,6 +38,7 @@
     .form-field {
       display: flex;
       justify-content: center;
+      align-items: center;
       flex-wrap: wrap;
       gap: .75rem;
     }
@@ -111,6 +112,7 @@
 
     .sport-button.mma {
         background-image: url("../assets/buttons/sports/4.png");
+        opacity: 25%;
     }
     .sport-button.mma:hover {
         background-image: url("../assets/buttons/sports/5.png");
@@ -118,6 +120,7 @@
 
     .sport-button.soccer {
       background-image: url("../assets/buttons/sports/6.png");
+      opacity: 25%;
     }
     .sport-button.soccer:hover {
       background-image: url("../assets/buttons/sports/7.png");
